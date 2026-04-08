@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>E&V Listing Intelligence Engine — Bozeman</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --black: #0a0a0a;
+    --white: #ffffff;
+    --gold: #c9a84c;
+    --gold-light: #e8d5a3;
+    --paper: #f8f6f2;
+    --cream: #fdfcfa;
+    --mid: #6b6560;
+    --border: #e0dbd2;
+    --red: #8b1a1a;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--paper);
+    color: var(--black);
+    font-family: 'Inter', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--black);
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-gold-line {
+    height: 3px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+  }
+  .header-inner {
+    padding: 40px 56px 44px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  .ev-logo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    border-right: 1px solid rgba(201,168,76,0.3);
+    padding-right: 40px;
+  }
+  .ev-e {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .ev-ampersand {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--gold);
+    line-height: 1;
+    letter-spacing: 0.1em;
+  }
+  .ev-v {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .ev-wordmark {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.22em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+  .header-text { }
+  .header-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: var(--gold); text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .header-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(32px, 5vw, 58px);
+    font-weight: 300;
+    color: var(--white);
+    line-height: 1.1;
+    letter-spacing: 0.01em;
+  }
+  .header-title em {
+    font-style: italic;
+    color: var(--gold-light);
+  }
+  .header-sub {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    margin-top: 14px;
+    line-height: 1.7;
+    max-width: 500px;
+    font-weight: 300;
+  }
+  .header-badge {
+    display: inline-block;
+    margin-top: 18px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.14em;
+    text-transform: uppercase;
+    border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold);
+    padding: 5px 14px;
+  }
+
+  /* MAIN */
+  main { max-width: 1060px; margin: 0 auto; padding: 48px 32px 80px; }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    padding: 32px;
+    margin-bottom: 20px;
+  }
+  .card-head {
+    display: flex; align-items: center; gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 42px; font-weight: 300;
+    color: var(--border); line-height: 1;
+  }
+  .card-info h2 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 400;
+    letter-spacing: 0.01em;
+  }
+  .card-info p { font-size: 12px; color: var(--mid); margin-top: 2px; }
+
+  .field { margin-bottom: 16px; }
+  label {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--mid);
+    margin-bottom: 6px;
+  }
+  input[type="text"], textarea, select {
+    width: 100%;
+    background: var(--cream);
+    border: 1px solid var(--border);
+    padding: 11px 14px;
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; color: var(--black);
+    outline: none; transition: border-color 0.2s;
+    border-radius: 0; -webkit-appearance: none;
+  }
+  input[type="text"]:focus, textarea:focus, select:focus {
+    border-color: var(--gold); background: var(--white);
+  }
+  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
+  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+  /* CHIPS */
+  .chip-group { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
+  .chip {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.06em; padding: 6px 13px;
+    border: 1px solid var(--border); background: var(--cream);
+    color: var(--mid); cursor: pointer; user-select: none; transition: all 0.15s;
+  }
+  .chip:hover { border-color: var(--gold); color: var(--black); }
+  .chip.on { background: var(--black); border-color: var(--black); color: var(--gold); }
+
+  /* ERROR */
+  .err-box {
+    background: #fff5f5; border: 1px solid #e8c0c0;
+    border-left: 3px solid var(--red);
+    padding: 14px 18px; margin: 16px 0;
+    font-size: 13px; line-height: 1.6; display: none;
+  }
+  .err-box.on { display: block; }
+  .err-box strong { color: var(--red); display: block; margin-bottom: 4px; font-weight: 600; }
+
+  /* GENERATE */
+  .gen-row { display: flex; align-items: center; gap: 24px; margin-top: 36px; }
+  .gen-btn {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 20px; font-weight: 400;
+    letter-spacing: 0.08em;
+    background: var(--black); color: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 16px 52px; cursor: pointer; transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .gen-btn:hover { background: var(--gold); color: var(--black); }
+  .gen-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .gen-note { font-size: 12px; color: var(--mid); line-height: 1.6; max-width: 300px; }
+
+  /* OUTPUT */
+  .out-section { margin-top: 48px; border: 1px solid var(--border); display: none; }
+  .out-header {
+    background: var(--black);
+    padding: 20px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .out-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px; font-weight: 300;
+    color: var(--gold); letter-spacing: 0.06em;
+    font-style: italic;
+  }
+  .out-actions { display: flex; gap: 10px; }
+  .out-btn {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    background: transparent; border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold); padding: 7px 16px; cursor: pointer; transition: all 0.2s;
+  }
+  .out-btn:hover { background: var(--gold); color: var(--black); }
+  .out-btn.done { background: #2d6a2d; border-color: #2d6a2d; color: white; }
+
+  .gold-line-anim {
+    height: 2px; display: none;
+    background: linear-gradient(90deg, var(--black), var(--gold), var(--gold-light), var(--gold), var(--black));
+    background-size: 300%;
+    animation: goldflow 2s infinite;
+  }
+  .gold-line-anim.on { display: block; }
+  @keyframes goldflow { 0%{background-position:0%} 100%{background-position:300%} }
+
+  #brief-out {
+    background: var(--white); padding: 40px 44px;
+    font-family: 'Inter', sans-serif; font-size: 14px;
+    line-height: 1.9; color: var(--black);
+    white-space: pre-wrap; word-break: break-word;
+    max-height: 78vh; overflow-y: auto;
+    scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+    min-height: 120px;
+  }
+
+  .status-bar {
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    color: var(--mid); padding: 10px 32px;
+    background: var(--paper); border-top: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px; min-height: 36px;
+  }
+  .dot {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--gold); display: none; animation: pulse 1.2s infinite;
+  }
+  .dot.on { display: block; }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.1} }
+
+  /* FOOTER */
+  footer {
+    text-align: center; padding: 32px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px; letter-spacing: 0.12em;
+    color: var(--mid); text-transform: uppercase;
+    border-top: 1px solid var(--border);
+    margin-top: 60px;
+  }
+
+  @media(max-width:640px){
+    .header-inner { grid-template-columns: 1fr; padding: 28px 24px; gap: 24px; }
+    .ev-logo { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.3); padding-right: 0; padding-bottom: 20px; flex-direction: row; justify-content: center; }
+    main { padding: 28px 18px 60px; }
+    .g2,.g3 { grid-template-columns: 1fr; }
+    #brief-out { padding: 24px 20px; }
+    .gen-row { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-gold-line"></div>
+  <div class="header-inner">
+    <div class="ev-logo">
+      <div class="ev-e">E</div>
+      <div class="ev-ampersand">&amp;</div>
+      <div class="ev-v">V</div>
+      <div class="ev-wordmark">Engel &amp; Völkers</div>
+    </div>
+    <div class="header-text">
+      <div class="header-eyebrow">Bozeman · Montana · Real Estate Intelligence</div>
+      <div class="header-title">Listing <em>Intelligence</em><br/>Engine</div>
+      <p class="header-sub">Enter a property address. The AI researches cadastral records, zoning, demographics, comparable sales, and delivers a complete marketing brief — ready to act on.</p>
+      <span class="header-badge">AI-Powered Research Platform</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- 01 PROPERTY -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">01</div>
+      <div class="card-info">
+        <h2>Property Details</h2>
+        <p>Enter everything you have — more detail produces a sharper brief</p>
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Full Property Address *</label>
+      <input type="text" id="address" placeholder="123 Bridger Canyon Rd, Bozeman, MT 59715"/>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label>List Price</label>
+        <input type="text" id="price" placeholder="$1,250,000"/>
+      </div>
+      <div class="field">
+        <label>Property Type</label>
+        <select id="proptype">
+          <option value="">Select type</option>
+          <option>Single Family Residential</option>
+          <option>Condo / Townhome</option>
+          <option>Multi-Family (2–4 units)</option>
+          <option>Vacant Land / Lot</option>
+          <option>Acreage / Rural Residential</option>
+          <option>Commercial</option>
+          <option>New Construction</option>
+          <option>Luxury Estate</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>MLS #</label>
+        <input type="text" id="mls" placeholder="Optional"/>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label>Beds / Baths</label>
+        <input type="text" id="bedbath" placeholder="4 bed / 3.5 bath"/>
+      </div>
+      <div class="field">
+        <label>Square Footage</label>
+        <input type="text" id="sqft" placeholder="3,800 sq ft"/>
+      </div>
+      <div class="field">
+        <label>Lot Size</label>
+        <input type="text" id="lot" placeholder="1.2 acres"/>
+      </div>
+    </div>
+    <div class="g3">
+      <div class="field">
+        <label>Year Built</label>
+        <input type="text" id="yearbuilt" placeholder="2018"/>
+      </div>
+      <div class="field">
+        <label>Garage / Parking</label>
+        <input type="text" id="garage" placeholder="3-car attached"/>
+      </div>
+      <div class="field">
+        <label>Neighborhood / Subdivision</label>
+        <input type="text" id="neighborhood" placeholder="Bridger Canyon, Story Mill, etc."/>
+      </div>
+    </div>
+    <div class="field">
+      <label>Key Features & Upgrades</label>
+      <textarea id="features" placeholder="Panoramic mountain views, chef's kitchen, heated floors, infinity pool, wine cellar, smart home, guest suite..."></textarea>
+    </div>
+    <div class="field">
+      <label>Special Circumstances</label>
+      <textarea id="circumstances" placeholder="Estate sale, relocation, STR-permitted, seller financing possible, new construction, etc." style="min-height:52px;"></textarea>
+    </div>
+  </div>
+
+  <!-- 02 MODULES -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">02</div>
+      <div class="card-info">
+        <h2>Intelligence Modules</h2>
+        <p>All active by default — tap to deactivate sections you don't need</p>
+      </div>
+    </div>
+
+    <label style="margin-bottom:7px;">Research & Data</label>
+    <div class="chip-group" id="g-research">
+      <div class="chip on" data-val="cadastral">🏔 Cadastral Deep Dive</div>
+      <div class="chip on" data-val="zoning">📐 Zoning & Dev Potential</div>
+      <div class="chip on" data-val="tax">💰 Tax & Assessment</div>
+      <div class="chip on" data-val="flood">🌊 Flood / Hazard Zone</div>
+      <div class="chip on" data-val="permits">🔧 Permit History</div>
+      <div class="chip on" data-val="comps">📊 Comps & Market Data</div>
+    </div>
+
+    <label style="margin-top:18px; margin-bottom:7px;">Buyer Intelligence</label>
+    <div class="chip-group" id="g-buyer">
+      <div class="chip on" data-val="demographics">👥 Demographics</div>
+      <div class="chip on" data-val="idealbuyer">🎯 Ideal Buyer Profile</div>
+      <div class="chip on" data-val="lifestyle">🏔 Lifestyle Analysis</div>
+      <div class="chip on" data-val="schools">🏫 School Ratings</div>
+      <div class="chip on" data-val="commute">🚗 Commute & Walkability</div>
+      <div class="chip on" data-val="amenities">☕ Nearby Amenities</div>
+    </div>
+
+    <label style="margin-top:18px; margin-bottom:7px;">Marketing & Strategy</label>
+    <div class="chip-group" id="g-marketing">
+      <div class="chip on" data-val="cons">⚠️ Honest Cons</div>
+      <div class="chip on" data-val="objections">🛡 Objection Handlers</div>
+      <div class="chip on" data-val="headlines">✍️ Listing Headlines</div>
+      <div class="chip on" data-val="mlsdesc">📝 MLS Description</div>
+      <div class="chip on" data-val="email">📧 Email Campaign</div>
+      <div class="chip on" data-val="social">📱 Social Content</div>
+      <div class="chip on" data-val="farming">🏘 Farming Strategy</div>
+      <div class="chip on" data-val="openhouse">🏠 Open House Plan</div>
+      <div class="chip on" data-val="offermax">🔥 Max-Offer Strategy</div>
+      <div class="chip on" data-val="lender">💳 Loan Program Angles</div>
+    </div>
+
+    <label style="margin-top:18px; margin-bottom:7px;">Likely Buyer Types</label>
+    <div class="chip-group" id="g-buyertypes">
+      <div class="chip" data-val="relocators">Out-of-State Relocators</div>
+      <div class="chip" data-val="remote">Remote Workers</div>
+      <div class="chip" data-val="families">Growing Families</div>
+      <div class="chip" data-val="retirees">Active Retirees</div>
+      <div class="chip" data-val="investors">Investors / STR</div>
+      <div class="chip" data-val="luxury">Luxury / Second Home</div>
+      <div class="chip" data-val="firsttime">First-Time Buyers</div>
+      <div class="chip" data-val="moveup">Move-Up Buyers</div>
+      <div class="chip" data-val="outdoor">Outdoor Lifestyle</div>
+      <div class="chip" data-val="msu">MSU-Connected</div>
+    </div>
+  </div>
+
+  <!-- 03 SETTINGS -->
+  <div class="card">
+    <div class="card-head">
+      <div class="card-num">03</div>
+      <div class="card-info">
+        <h2>Settings & Context</h2>
+        <p>Additional context that sharpens the output</p>
+      </div>
+    </div>
+    <div class="g2">
+      <div class="field">
+        <label>Seller's Timeline</label>
+        <select id="timeline">
+          <option value="ASAP">ASAP — maximum urgency</option>
+          <option value="30 days">30 days</option>
+          <option value="60 days">60 days</option>
+          <option value="90+ days">90+ days — strategic play</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Brief Depth</label>
+        <select id="depth">
+          <option value="thorough">Thorough (recommended)</option>
+          <option value="exhaustive">Exhaustive — leave nothing out</option>
+          <option value="focused">Focused — key insights only</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Agent Notes / Extra Context</label>
+      <textarea id="extra" placeholder="Competing listings, seller's story, neighborhood nuances, upcoming developments, anything the AI should factor in..."></textarea>
+    </div>
+  </div>
+
+  <!-- ERROR -->
+  <div class="err-box" id="err-box">
+    <strong>Error</strong>
+    <span id="err-msg"></span>
+  </div>
+
+  <!-- GENERATE -->
+  <div class="gen-row">
+    <button class="gen-btn" id="gen-btn" onclick="runBrief()">Generate Brief</button>
+    <p class="gen-note">The AI searches live data and writes a complete intelligence brief. Takes 45–90 seconds.</p>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="out-section" id="out-section">
+    <div class="out-header">
+      <div class="out-title" id="out-title">Generating Intelligence Brief...</div>
+      <div class="out-actions">
+        <button class="out-btn" id="copy-btn" onclick="copyBrief()">Copy</button>
+        <button class="out-btn" onclick="printBrief()">Print / PDF</button>
+      </div>
+    </div>
+    <div class="gold-line-anim" id="gold-anim"></div>
+    <div id="brief-out">Initializing research engine...</div>
+    <div class="status-bar">
+      <div class="dot" id="dot"></div>
+      <span id="status-txt"></span>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  Engel &amp; Völkers · Bozeman, Montana · Listing Intelligence Platform
+</footer>
+
+<script>
+// ── CHIPS ────────────────────────────────────────────
+document.querySelectorAll('.chip').forEach(c =>
+  c.addEventListener('click', () => c.classList.toggle('on'))
+);
+function on(gid) {
+  return [...document.querySelectorAll(`#${gid} .chip.on`)].map(c => c.dataset.val);
+}
+function onLabels(gid) {
+  return [...document.querySelectorAll(`#${gid} .chip.on`)].map(c => c.textContent.trim());
+}
+
+// ── PROMPT ───────────────────────────────────────────
+function buildPrompt() {
+  const v = id => document.getElementById(id).value.trim();
+  const modules = on('g-research').concat(on('g-buyer')).concat(on('g-marketing'));
+  const buyerTypes = onLabels('g-buyertypes');
+  const inc = key => modules.includes(key);
+
+  const propBlock = [
+    `Address: ${v('address')}`,
+    v('price') && `List Price: ${v('price')}`,
+    v('proptype') && `Type: ${v('proptype')}`,
+    v('mls') && `MLS #: ${v('mls')}`,
+    v('bedbath') && `Beds/Baths: ${v('bedbath')}`,
+    v('sqft') && `Sq Ft: ${v('sqft')}`,
+    v('lot') && `Lot: ${v('lot')}`,
+    v('yearbuilt') && `Year Built: ${v('yearbuilt')}`,
+    v('garage') && `Parking: ${v('garage')}`,
+    v('neighborhood') && `Neighborhood: ${v('neighborhood')}`,
+    v('features') && `Key Features: ${v('features')}`,
+    v('circumstances') && `Special Circumstances: ${v('circumstances')}`,
+    `Seller Timeline: ${v('timeline') || 'ASAP'}`,
+    buyerTypes.length && `Target Buyer Types: ${buyerTypes.join(', ')}`,
+    v('extra') && `Agent Notes: ${v('extra')}`,
+  ].filter(Boolean).join('\n');
+
+  return `You are acting as three experts simultaneously:
+1. A Montana real estate data analyst specializing in Gallatin County cadastral records, zoning, and market data
+2. A top-producing Bozeman listing agent and marketer with 300+ closed Montana transactions, currently with Engel & Völkers
+3. An elite real estate copywriter and digital strategist specializing in luxury and lifestyle properties
+
+Produce the most comprehensive, specific, and actionable listing intelligence brief possible for the property below. Use web search aggressively — search for real, current data before writing each section. Do not generalize or pad. Flag any data you cannot verify rather than guessing.
+
+PROPERTY DETAILS
+────────────────
+${propBlock}
+
+RESEARCH SOURCES — search each before writing:
+• Montana Cadastral: svc.mt.gov/msl/mtcadastral — parcel ID, ownership, assessed value, last sale
+• Bozeman GIS Planning Viewer: gisweb.bozeman.net/Html5Viewer/?viewer=planning — zoning, overlays, flood zone
+• Montana DOR: mtrevenue.gov/property — tax history, taxable value, mill levy
+• GreatSchools.org — assigned school ratings for this address
+• Walk Score — walkability, transit, bike scores
+• Census Reporter: censusreporter.org — demographics for this zip/census tract
+• Redfin — recent comps, days on market, list-to-sale ratio, active inventory
+• Local Montana news — upcoming developments, zoning changes near this address
+
+DEPTH: ${v('depth') || 'thorough'}
+
+SECTIONS TO WRITE:
+══════════════════
+
+${inc('cadastral') ? `▸ CADASTRAL & OWNERSHIP ANALYSIS
+Search Montana Cadastral. Report: parcel ID, legal description, owner of record, assessed market value vs. list price, last arms-length sale date and price, 3-year taxable value trend, estimated annual taxes, any liens, deed restrictions, easements, or red flags.
+` : ''}
+${inc('zoning') ? `▸ ZONING & DEVELOPMENT POTENTIAL
+Current zoning in plain English. Permitted uses by-right and conditional. ADU eligibility under BMC 38.360.040. STR restrictions. Min lot size, max height, setbacks, coverage. Pending rezones or growth policy changes. Highest-and-best use conclusion.
+` : ''}
+${inc('tax') ? `▸ TAX & ASSESSMENT ANALYSIS
+3-year taxable value trend. Effective tax rate as % of list price. Any SID, LID, or TIF assessments. Comparison to similar properties at this price point.
+` : ''}
+${inc('flood') ? `▸ FLOOD & HAZARD ZONE
+FEMA flood zone. Flood insurance requirement and estimated cost. Wildfire hazard overlay or WUI designation. Radon risk. Known geologic hazards.
+` : ''}
+${inc('permits') ? `▸ PERMIT HISTORY
+Known permits on record. Open or expired permits. Signs of unpermitted work. Code enforcement history.
+` : ''}
+${inc('comps') ? `▸ COMPARABLE SALES & MARKET POSITION
+5–7 relevant recent solds: address | beds/baths | SF | price | $/SF | DOM | date. Price range vs. list price. Active competition and absorption rate. Avg DOM last 90 days. List-to-sale ratio trend. Market temperature verdict.
+` : ''}
+${inc('demographics') ? `▸ NEIGHBORHOOD DEMOGRAPHICS
+From Census Reporter: median household income, age distribution, owner vs. renter rate, education, top employment sectors, population growth, in-migration patterns. What this tells us about who lives here and who's moving in.
+` : ''}
+${inc('idealbuyer') ? `▸ IDEAL BUYER PROFILES (2–3 personas)
+For each: name/archetype, age/income/family status, origin, what they value, biggest fears, media consumption, messaging that resonates, how to reach them, conversion probability ranking.
+` : ''}
+${inc('lifestyle') ? `▸ LIFESTYLE ANALYSIS — "IF I LIVED HERE"
+Specific daily life: morning spots, weekday commutes to downtown/MSU/airport, weekend outdoor activities within 30–45 min, dining/nightlife, neighborhood character, all four seasons, the hidden gem angle most listings miss.
+` : ''}
+${inc('schools') ? `▸ SCHOOLS & FAMILY APPEAL
+Assigned schools with GreatSchools ratings. Test scores vs. state/national. Specialty programs. Distance to private options. MSU proximity. Overall strength as a marketing asset.
+` : ''}
+${inc('commute') || inc('amenities') ? `▸ COMMUTE, WALKABILITY & AMENITIES
+Walk/Transit/Bike scores and what's walkable. Drive times to: downtown Bozeman, BZN airport, MSU, Bridger Bowl, Big Sky. Nearest grocery, pharmacy, hospital. Parks and trails. Any negatives: noise, industrial, view impacts.
+` : ''}
+${inc('cons') ? `▸ HONEST CONS ANALYSIS
+Every realistic negative — property-specific, neighborhood-level, market-level, Montana-specific. Ranked most to least likely to be raised by a serious buyer. Do not sugarcoat.
+` : ''}
+${inc('objections') ? `▸ OBJECTION HANDLERS
+For each con:
+OBJECTION: [Exact concern buyer raises]
+HANDLER: [Acknowledge → reframe with data → redirect to value → forward-moving close]
+Be honest. Use data. Build a "despite this, here's why buyers still win" case where needed.
+` : ''}
+${inc('headlines') ? `▸ LISTING HEADLINES (8 variations)
+Specific to THIS property. Vary angles: lifestyle, investment, aspiration, urgency, community, FOMO, data-driven, emotional. No generic Montana language. Tone should reflect Engel & Völkers luxury positioning.
+` : ''}
+${inc('mlsdesc') ? `▸ MLS LISTING DESCRIPTION
+Full 250–350 word MLS-ready description: vivid specific opening hook, features, neighborhood/lifestyle, practical details woven in naturally, strong CTA. Confident, sophisticated, zero clichés. Tone befitting an Engel & Völkers listing. Plus a 100-word social teaser version.
+` : ''}
+${inc('email') ? `▸ 3-PART EMAIL DRIP CAMPAIGN
+Email 1 "The Discovery" (launch day): 3 subject lines + full body
+Email 2 "The Deep Dive" (days 4–5): 3 subject lines + full body
+Email 3 "The Last Call" (pre-deadline): 3 subject lines + full body
+` : ''}
+${inc('social') ? `▸ SOCIAL MEDIA CONTENT PLAN
+Instagram: launch carousel + caption + hashtags; Reel 15-sec script; 5-frame Story arc
+Facebook: launch post + neighborhood spotlight
+TikTok: 30–45 sec script with hook, b-roll, CTA
+25 targeted hashtags (local + lifestyle + property type)
+` : ''}
+${inc('openhouse') ? `▸ OPEN HOUSE STRATEGY
+Timing and rationale. Pre-event marketing. Physical setup: atmosphere, materials, staging. Conversation openers and qualifying questions. Follow-up: 2hr / 24hr / 72hr. Broker open strategy.
+` : ''}
+${inc('offermax') ? `▸ MAXIMUM OFFER STRATEGY
+Pre-market outreach. Offer deadline recommendation. Ethical competition tactics. Escalation clause guidance. Terms beyond price that matter. Multiple offer protocol. What the perfect offer looks like.
+` : ''}
+${inc('farming') ? `▸ 90-DAY NEIGHBORHOOD FARMING PLAN
+Farm area definition. Database build. 5-touch sequence: Just Listed mailer, door knock script, market update, referral ask, Just Sold announcement. Digital layer: Facebook groups, Nextdoor, geo-ads. Long-game: 3–5 additional listings over 12 months. Script for "I've been thinking about selling..."
+` : ''}
+${inc('lender') ? `▸ LOAN PROGRAM ANGLES
+FHA/VA/USDA eligibility. Conforming vs. jumbo threshold. DSCR potential if investor angle exists. Montana down payment assistance. Seller-paid 2-1 buydown math and talking points. Seller financing viability. Co-marketing collateral ideas.
+` : ''}
+
+▸ EXECUTIVE SUMMARY
+- TOP 5 SELLING POINTS (specific, not generic)
+- TOP 3 RISKS TO MONITOR + mitigation
+- 30-DAY AGENT ACTION CHECKLIST in priority order
+- WEEKLY METRICS TO TRACK
+- ONE SENTENCE LISTING THESIS
+
+FORMAT: Clear section headers. Confident expert prose — no hedging, no filler. Note unavailable data in one sentence and move on. This brief is used by an Engel & Völkers agent in Bozeman, Montana. Every word matters.`;
+}
+
+// ── UI HELPERS ────────────────────────────────────────
+function showErr(msg) {
+  document.getElementById('err-msg').textContent = msg;
+  document.getElementById('err-box').classList.add('on');
+  document.getElementById('err-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function clearErr() { document.getElementById('err-box').classList.remove('on'); }
+
+const statusMessages = [
+  'Searching Montana Cadastral records...',
+  'Pulling Bozeman GIS zoning data...',
+  'Analyzing tax and assessment history...',
+  'Researching neighborhood demographics...',
+  'Fetching school ratings...',
+  'Finding comparable sales...',
+  'Building ideal buyer personas...',
+  'Writing objection handlers...',
+  'Crafting MLS description and headlines...',
+  'Building email and social campaigns...',
+  'Assembling farming strategy...',
+  'Finalizing executive summary...',
+];
+let statusTimer = null;
+let si = 0;
+
+function startStatus() {
+  si = 0;
+  document.getElementById('status-txt').textContent = statusMessages[0];
+  document.getElementById('dot').classList.add('on');
+  document.getElementById('gold-anim').classList.add('on');
+  statusTimer = setInterval(() => {
+    si = (si + 1) % statusMessages.length;
+    document.getElementById('status-txt').textContent = statusMessages[si];
+  }, 5500);
+}
+function stopStatus(msg) {
+  clearInterval(statusTimer);
+  document.getElementById('dot').classList.remove('on');
+  document.getElementById('gold-anim').classList.remove('on');
+  document.getElementById('status-txt').textContent = msg || '';
+}
+
+// ── MAIN GENERATE ─────────────────────────────────────
+async function runBrief() {
+  clearErr();
+  const address = document.getElementById('address').value.trim();
+  if (!address) {
+    showErr('Please enter a property address before generating.');
+    return;
+  }
+
+  const btn = document.getElementById('gen-btn');
+  const outSection = document.getElementById('out-section');
+  const briefOut = document.getElementById('brief-out');
+  const outTitle = document.getElementById('out-title');
+
+  btn.disabled = true;
+  btn.textContent = 'Generating...';
+  outSection.style.display = 'block';
+  briefOut.textContent = 'Launching research engine — please wait...';
+  outTitle.textContent = 'Generating Intelligence Brief...';
+  outSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  startStatus();
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 8000,
+        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
+        messages: [{ role: 'user', content: buildPrompt() }],
+      }),
+    });
+
+    const rawText = await res.text();
+
+    if (!res.ok) {
+      let msg = `Server error (${res.status})`;
+      try { msg = JSON.parse(rawText).error?.message || msg; } catch(e) {}
+      throw new Error(msg);
+    }
+
+    let data;
+    try { data = JSON.parse(rawText); } catch(e) {
+      throw new Error('Could not parse response — please try again.');
+    }
+
+    let fullText = '';
+    if (Array.isArray(data.content)) {
+      for (const block of data.content) {
+        if (block.type === 'text' && block.text) {
+          fullText += (fullText ? '\n' : '') + block.text;
+        }
+      }
+    }
+
+    if (!fullText) throw new Error('Empty response from AI — please try again.');
+
+    briefOut.textContent = fullText;
+    outTitle.textContent = `Intelligence Brief — ${address.split(',')[0]}`;
+    stopStatus(`✓ Complete — ${fullText.length.toLocaleString()} characters`);
+
+  } catch (err) {
+    outSection.style.display = 'none';
+    stopStatus('');
+    showErr(err.message || 'Something went wrong — please try again.');
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Generate Brief';
+  }
+}
+
+// ── COPY & PRINT ──────────────────────────────────────
+function copyBrief() {
+  const text = document.getElementById('brief-out').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('done');
+    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 2500);
+  });
+}
+
+function printBrief() {
+  const address = document.getElementById('address').value.trim() || 'Property Brief';
+  const content = document.getElementById('brief-out').textContent;
+  const win = window.open('', '_blank');
+  win.document.write(`<!DOCTYPE html><html><head>
+  <title>${address} — E&V Listing Brief</title>
+  <style>
+    body{font-family:Georgia,serif;font-size:13px;line-height:1.85;max-width:860px;margin:40px auto;padding:0 40px;color:#1a1a1a;}
+    h1{font-size:22px;border-bottom:2px solid #c9a84c;padding-bottom:10px;margin-bottom:20px;font-family:Georgia,serif;}
+    pre{white-space:pre-wrap;word-break:break-word;font-family:Georgia,serif;font-size:13px;line-height:1.85;}
+    .ev{font-size:11px;color:#999;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px;}
+    @media print{body{margin:20px;padding:0;}}
+  </style></head><body>
+  <div class="ev">Engel &amp; Völkers · Bozeman, Montana</div>
+  <h1>Listing Intelligence Brief<br/><span style="font-size:14px;color:#666;font-weight:normal;">${address}</span></h1>
+  <pre>${content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
+  </body></html>`);
+  win.document.close();
+  setTimeout(() => win.print(), 400);
+}
+</script>
+</body>
+</html>
