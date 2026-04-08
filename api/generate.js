@@ -25,6 +25,10 @@ export default async function handler(req, res) {
   try {
     const body = { ...req.body };
     delete body.tools;
+    body.max_tokens = 4000;
+
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 55000);
 
     const response = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -34,7 +38,10 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01',
       },
       body: JSON.stringify(body),
+      signal: controller.signal,
     });
+
+    clearTimeout(timeout);
 
     const data = await response.json();
 
@@ -44,6 +51,9 @@ export default async function handler(req, res) {
 
     return res.status(200).json(data);
   } catch (err) {
+    if (err.name === 'AbortError') {
+      return res.status(504).json({ error: 'Request timed out. Try selecting fewer modules and generating again.' });
+    }
     return res.status(500).json({ error: err.message || 'Server error' });
   }
 }
