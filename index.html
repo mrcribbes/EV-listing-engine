@@ -3,804 +3,1031 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>E&V Listing Intelligence Engine — Bozeman</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@400;500&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<title>ELA — Elite Listing Application</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;1,200;1,300;1,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
-  :root {
-    --black: #0a0a0a;
-    --white: #ffffff;
-    --gold: #c9a84c;
-    --gold-light: #e8d5a3;
-    --paper: #f8f6f2;
-    --cream: #fdfcfa;
-    --mid: #6b6560;
-    --border: #e0dbd2;
-    --red: #8b1a1a;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--paper);
-    color: var(--black);
-    font-family: 'Inter', sans-serif;
-    font-weight: 300;
-    min-height: 100vh;
-  }
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --black:#050505;
+  --gold:#c9a84c;
+  --gold2:#e8d5a3;
+  --gold3:#8a6a1f;
+  --goldDim:rgba(201,168,76,0.06);
+  --goldMid:rgba(201,168,76,0.35);
+  --goldBorder:rgba(201,168,76,0.15);
+  --white:#faf8f2;
+  --offwhite:rgba(250,248,242,0.7);
+}
 
-  /* HEADER */
-  header {
-    background: var(--black);
-    padding: 0;
-    position: relative;
-    overflow: hidden;
-  }
-  .header-gold-line {
-    height: 3px;
-    background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
-  }
-  .header-inner {
-    padding: 40px 56px 44px;
-    display: grid;
-    grid-template-columns: auto 1fr;
-    gap: 40px;
-    align-items: center;
-  }
-  .ev-logo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    border-right: 1px solid rgba(201,168,76,0.3);
-    padding-right: 40px;
-  }
-  .ev-e {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 72px;
-    font-weight: 300;
-    color: var(--white);
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .ev-ampersand {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 28px;
-    font-weight: 300;
-    color: var(--gold);
-    line-height: 1;
-    letter-spacing: 0.1em;
-  }
-  .ev-v {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 72px;
-    font-weight: 300;
-    color: var(--white);
-    line-height: 1;
-    letter-spacing: -0.02em;
-  }
-  .ev-wordmark {
-    font-family: 'DM Mono', monospace;
-    font-size: 9px;
-    letter-spacing: 0.22em;
-    color: var(--gold);
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-  .header-text { }
-  .header-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.2em;
-    color: var(--gold); text-transform: uppercase;
-    margin-bottom: 14px;
-  }
-  .header-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(32px, 5vw, 58px);
-    font-weight: 300;
-    color: var(--white);
-    line-height: 1.1;
-    letter-spacing: 0.01em;
-  }
-  .header-title em {
-    font-style: italic;
-    color: var(--gold-light);
-  }
-  .header-sub {
-    font-size: 13px;
-    color: rgba(255,255,255,0.4);
-    margin-top: 14px;
-    line-height: 1.7;
-    max-width: 500px;
-    font-weight: 300;
-  }
-  .header-badge {
-    display: inline-block;
-    margin-top: 18px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.14em;
-    text-transform: uppercase;
-    border: 1px solid rgba(201,168,76,0.4);
-    color: var(--gold);
-    padding: 5px 14px;
-  }
+html,body{
+  width:100%;height:100%;
+  background:var(--black);
+  color:var(--white);
+  font-family:'Cormorant Garamond',serif;
+  overflow:hidden;
+}
 
-  /* MAIN */
-  main { max-width: 1060px; margin: 0 auto; padding: 48px 32px 80px; }
+/* ANIMATED BACKGROUND */
+.bg-canvas{position:fixed;inset:0;z-index:0;overflow:hidden;}
+.bg-ring{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.04);
+  top:50%;left:50%;transform:translate(-50%,-50%);
+  animation:expandRing 8s ease-out infinite;
+}
+.bg-ring:nth-child(1){width:200px;height:200px;animation-delay:0s;}
+.bg-ring:nth-child(2){width:400px;height:400px;animation-delay:1.5s;}
+.bg-ring:nth-child(3){width:650px;height:650px;animation-delay:3s;}
+.bg-ring:nth-child(4){width:900px;height:900px;animation-delay:4.5s;}
+.bg-ring:nth-child(5){width:1200px;height:1200px;animation-delay:6s;}
+@keyframes expandRing{
+  0%{opacity:0;transform:translate(-50%,-50%) scale(0.8);}
+  20%{opacity:1;}
+  100%{opacity:0;transform:translate(-50%,-50%) scale(1.15);}
+}
 
-  .card {
-    background: var(--white);
-    border: 1px solid var(--border);
-    padding: 32px;
-    margin-bottom: 20px;
-  }
-  .card-head {
-    display: flex; align-items: center; gap: 16px;
-    margin-bottom: 24px;
-    padding-bottom: 18px;
-    border-bottom: 1px solid var(--border);
-  }
-  .card-num {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 42px; font-weight: 300;
-    color: var(--border); line-height: 1;
-  }
-  .card-info h2 {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 400;
-    letter-spacing: 0.01em;
-  }
-  .card-info p { font-size: 12px; color: var(--mid); margin-top: 2px; }
+/* GRID LINES */
+.bg-grid{
+  position:fixed;inset:0;z-index:0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.025) 1px, transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 70% 70% at 50% 50%, black 0%, transparent 100%);
+}
 
-  .field { margin-bottom: 16px; }
-  label {
-    display: block;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.12em;
-    text-transform: uppercase; color: var(--mid);
-    margin-bottom: 6px;
-  }
-  input[type="text"], textarea, select {
-    width: 100%;
-    background: var(--cream);
-    border: 1px solid var(--border);
-    padding: 11px 14px;
-    font-family: 'Inter', sans-serif;
-    font-size: 14px; color: var(--black);
-    outline: none; transition: border-color 0.2s;
-    border-radius: 0; -webkit-appearance: none;
-  }
-  input[type="text"]:focus, textarea:focus, select:focus {
-    border-color: var(--gold); background: var(--white);
-  }
-  textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
-  .g2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-  .g3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+/* SCAN LINE */
+.scan-line{
+  position:fixed;top:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,rgba(201,168,76,0.15),transparent);
+  z-index:1;
+  animation:scanDown 6s linear infinite;
+}
+@keyframes scanDown{
+  0%{top:-2px;}
+  100%{top:100%;}
+}
 
-  /* CHIPS */
-  .chip-group { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 6px; }
-  .chip {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    letter-spacing: 0.06em; padding: 6px 13px;
-    border: 1px solid var(--border); background: var(--cream);
-    color: var(--mid); cursor: pointer; user-select: none; transition: all 0.15s;
-  }
-  .chip:hover { border-color: var(--gold); color: var(--black); }
-  .chip.on { background: var(--black); border-color: var(--black); color: var(--gold); }
+/* CORNER BRACKETS */
+.corner{position:fixed;z-index:10;width:40px;height:40px;}
+.corner.tl{top:20px;left:20px;border-top:1px solid var(--goldMid);border-left:1px solid var(--goldMid);}
+.corner.tr{top:20px;right:20px;border-top:1px solid var(--goldMid);border-right:1px solid var(--goldMid);}
+.corner.bl{bottom:20px;left:20px;border-bottom:1px solid var(--goldMid);border-left:1px solid var(--goldMid);}
+.corner.br{bottom:20px;right:20px;border-bottom:1px solid var(--goldMid);border-right:1px solid var(--goldMid);}
 
-  /* ERROR */
-  .err-box {
-    background: #fff5f5; border: 1px solid #e8c0c0;
-    border-left: 3px solid var(--red);
-    padding: 14px 18px; margin: 16px 0;
-    font-size: 13px; line-height: 1.6; display: none;
-  }
-  .err-box.on { display: block; }
-  .err-box strong { color: var(--red); display: block; margin-bottom: 4px; font-weight: 600; }
+/* TOP BAR */
+.top-bar{
+  position:fixed;top:0;left:0;right:0;
+  padding:24px 52px;
+  display:flex;align-items:center;justify-content:space-between;
+  z-index:20;
+  border-bottom:1px solid rgba(201,168,76,0.06);
+  background:linear-gradient(180deg,rgba(5,5,5,0.9) 0%,transparent 100%);
+}
+.ela-mark{display:flex;flex-direction:column;gap:3px;}
+.ela-letters{
+  font-family:'DM Mono',monospace;
+  font-size:13px;letter-spacing:0.45em;
+  color:var(--gold);text-transform:uppercase;
+}
+.ela-sub{
+  font-size:11px;font-style:italic;font-weight:200;
+  color:rgba(201,168,76,0.3);letter-spacing:0.08em;
+}
+.top-right{display:flex;gap:10px;align-items:center;}
+.top-btn{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  background:transparent;
+  border:1px solid var(--goldBorder);
+  color:var(--goldMid);padding:7px 18px;
+  cursor:pointer;transition:all 0.25s;
+}
+.top-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--goldDim);}
 
-  /* GENERATE */
-  .gen-row { display: flex; align-items: center; gap: 24px; margin-top: 36px; }
-  .gen-btn {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 20px; font-weight: 400;
-    letter-spacing: 0.08em;
-    background: var(--black); color: var(--gold);
-    border: 1px solid var(--gold);
-    padding: 16px 52px; cursor: pointer; transition: all 0.2s;
-    text-transform: uppercase;
-  }
-  .gen-btn:hover { background: var(--gold); color: var(--black); }
-  .gen-btn:disabled { opacity: 0.35; cursor: not-allowed; }
-  .gen-note { font-size: 12px; color: var(--mid); line-height: 1.6; max-width: 300px; }
+/* MAIN */
+#main{
+  position:fixed;inset:0;z-index:5;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:0;
+}
 
-  /* OUTPUT */
-  .out-section { margin-top: 48px; border: 1px solid var(--border); display: none; }
-  .out-header {
-    background: var(--black);
-    padding: 20px 32px;
-    display: flex; align-items: center; justify-content: space-between;
-  }
-  .out-title {
-    font-family: 'Cormorant Garamond', serif;
-    font-size: 22px; font-weight: 300;
-    color: var(--gold); letter-spacing: 0.06em;
-    font-style: italic;
-  }
-  .out-actions { display: flex; gap: 10px; }
-  .out-btn {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    background: transparent; border: 1px solid rgba(201,168,76,0.4);
-    color: var(--gold); padding: 7px 16px; cursor: pointer; transition: all 0.2s;
-  }
-  .out-btn:hover { background: var(--gold); color: var(--black); }
-  .out-btn.done { background: #2d6a2d; border-color: #2d6a2d; color: white; }
+/* ORB */
+#orb-wrap{
+  position:relative;width:320px;height:320px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;margin-bottom:36px;
+}
+#orb-svg{position:absolute;width:320px;height:320px;overflow:visible;}
 
-  .gold-line-anim {
-    height: 2px; display: none;
-    background: linear-gradient(90deg, var(--black), var(--gold), var(--gold-light), var(--gold), var(--black));
-    background-size: 300%;
-    animation: goldflow 2s infinite;
-  }
-  .gold-line-anim.on { display: block; }
-  @keyframes goldflow { 0%{background-position:0%} 100%{background-position:300%} }
+/* PULSE RINGS */
+.pr{
+  position:absolute;border-radius:50%;
+  border:1px solid rgba(201,168,76,0.2);
+  pointer-events:none;display:none;
+  top:50%;left:50%;transform:translate(-50%,-50%);
+}
+.listening .pr,.thinking .pr{display:block;}
+.pr:nth-child(1){animation:prOut 3s ease-out infinite 0s;}
+.pr:nth-child(2){animation:prOut 3s ease-out infinite 1s;}
+.pr:nth-child(3){animation:prOut 3s ease-out infinite 2s;}
+@keyframes prOut{
+  0%{width:180px;height:180px;opacity:0.6;}
+  100%{width:380px;height:380px;opacity:0;}
+}
 
-  #brief-out {
-    background: var(--white); padding: 40px 44px;
-    font-family: 'Inter', sans-serif; font-size: 14px;
-    line-height: 1.9; color: var(--black);
-    white-space: pre-wrap; word-break: break-word;
-    max-height: 78vh; overflow-y: auto;
-    scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
-    min-height: 120px;
-  }
+#orb-path{transition:d 1.6s cubic-bezier(0.34,1.4,0.64,1);}
 
-  .status-bar {
-    font-family: 'DM Mono', monospace; font-size: 10px;
-    color: var(--mid); padding: 10px 32px;
-    background: var(--paper); border-top: 1px solid var(--border);
-    display: flex; align-items: center; gap: 8px; min-height: 36px;
-  }
-  .dot {
-    width: 5px; height: 5px; border-radius: 50%;
-    background: var(--gold); display: none; animation: pulse 1.2s infinite;
-  }
-  .dot.on { display: block; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.1} }
+/* ORB CENTER */
+#orb-center{
+  position:absolute;
+  display:flex;align-items:center;justify-content:center;
+  pointer-events:none;
+}
+.c-mic{transition:opacity 0.6s,transform 0.6s;}
+.c-home{position:absolute;transition:opacity 0.6s,transform 0.6s;opacity:0;transform:scale(0.5);}
+.c-think{position:absolute;transition:opacity 0.6s;opacity:0;}
 
-  /* FOOTER */
-  footer {
-    text-align: center; padding: 32px;
-    font-family: 'DM Mono', monospace;
-    font-size: 10px; letter-spacing: 0.12em;
-    color: var(--mid); text-transform: uppercase;
-    border-top: 1px solid var(--border);
-    margin-top: 60px;
-  }
+/* THINKING DOTS */
+.think-dots{display:flex;gap:6px;align-items:center;}
+.td{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:tdPulse 1.4s ease-in-out infinite;}
+.td:nth-child(1){animation-delay:0s;}
+.td:nth-child(2){animation-delay:0.2s;}
+.td:nth-child(3){animation-delay:0.4s;}
+@keyframes tdPulse{0%,100%{opacity:0.2;transform:scale(0.7);}50%{opacity:1;transform:scale(1.2);}}
 
-  @media(max-width:640px){
-    .header-inner { grid-template-columns: 1fr; padding: 28px 24px; gap: 24px; }
-    .ev-logo { border-right: none; border-bottom: 1px solid rgba(201,168,76,0.3); padding-right: 0; padding-bottom: 20px; flex-direction: row; justify-content: center; }
-    main { padding: 28px 18px 60px; }
-    .g2,.g3 { grid-template-columns: 1fr; }
-    #brief-out { padding: 24px 20px; }
-    .gen-row { flex-direction: column; align-items: flex-start; }
-  }
+/* STATUS AREA */
+#status-area{
+  text-align:center;
+  display:flex;flex-direction:column;
+  align-items:center;gap:10px;
+  min-height:100px;
+}
+#greeting{
+  font-size:28px;font-weight:200;font-style:italic;
+  color:var(--gold2);letter-spacing:0.03em;
+  opacity:0;
+  animation:fadeUp 2s ease 0.8s forwards;
+}
+#status-line{
+  font-family:'DM Mono',monospace;
+  font-size:10px;letter-spacing:0.2em;
+  text-transform:uppercase;
+  color:rgba(201,168,76,0.4);
+  transition:all 0.5s;
+}
+#transcript-line{
+  font-size:18px;font-style:italic;font-weight:300;
+  color:rgba(201,168,76,0.6);
+  min-height:28px;transition:all 0.4s;
+  max-width:500px;line-height:1.4;
+}
+
+/* WAVE BARS */
+#wave{display:flex;align-items:center;gap:4px;height:32px;}
+.wb{
+  display:inline-block;width:2px;
+  background:linear-gradient(180deg,var(--gold2),var(--gold));
+  border-radius:2px;opacity:0;transition:opacity 0.3s;
+}
+.wb.on{opacity:1;}
+.wb:nth-child(1){height:8px;animation:wv 1s ease-in-out infinite 0s;}
+.wb:nth-child(2){height:16px;animation:wv 1s ease-in-out infinite 0.1s;}
+.wb:nth-child(3){height:22px;animation:wv 1s ease-in-out infinite 0.2s;}
+.wb:nth-child(4){height:28px;animation:wv 1s ease-in-out infinite 0.15s;}
+.wb:nth-child(5){height:22px;animation:wv 1s ease-in-out infinite 0.25s;}
+.wb:nth-child(6){height:16px;animation:wv 1s ease-in-out infinite 0.1s;}
+.wb:nth-child(7){height:8px;animation:wv 1s ease-in-out infinite 0s;}
+@keyframes wv{0%,100%{transform:scaleY(0.3);}50%{transform:scaleY(1);}}
+
+/* KEY BAR */
+#key-bar{
+  position:fixed;bottom:32px;left:50%;transform:translateX(-50%);
+  display:flex;align-items:center;gap:10px;
+  z-index:20;
+  opacity:0;animation:fadeUp 2s ease 1.5s forwards;
+}
+#key-in{
+  background:rgba(201,168,76,0.04);
+  border:1px solid rgba(201,168,76,0.12);
+  color:rgba(250,248,242,0.7);
+  font-family:'DM Mono',monospace;font-size:10px;
+  padding:9px 16px;outline:none;
+  width:320px;letter-spacing:0.04em;
+  border-radius:0;transition:border-color 0.2s;
+}
+#key-in:focus{border-color:var(--gold);}
+#key-in::placeholder{color:rgba(201,168,76,0.18);}
+#key-pill{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:rgba(201,168,76,0.3);white-space:nowrap;
+  transition:color 0.3s;
+}
+#key-pill.ok{color:#6abf6a;}
+
+/* SETTINGS PANEL */
+#settings-panel{
+  position:fixed;inset:0;z-index:50;
+  background:rgba(5,5,5,0.97);
+  display:none;flex-direction:column;
+  opacity:0;transition:opacity 0.4s;
+  overflow-y:auto;
+}
+#settings-panel.open{display:flex;opacity:1;}
+.sp-top{
+  padding:36px 52px 28px;
+  border-bottom:1px solid var(--goldBorder);
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+  background:linear-gradient(180deg,rgba(10,8,2,0.8) 0%,transparent 100%);
+}
+.sp-heading{}
+.sp-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.sp-title{font-size:28px;font-weight:200;font-style:italic;color:var(--white);}
+.sp-x{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.14em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--goldBorder);
+  color:var(--goldMid);padding:8px 20px;
+  cursor:pointer;transition:all 0.2s;
+}
+.sp-x:hover{border-color:var(--gold);color:var(--gold);}
+.sp-body{
+  padding:40px 52px 80px;
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:24px 44px;max-width:1020px;
+}
+.sp-field{display:flex;flex-direction:column;gap:6px;}
+.sp-field.full{grid-column:1/-1;}
+.sp-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(201,168,76,0.4);}
+.sp-in,.sp-sel,.sp-ta{
+  background:rgba(201,168,76,0.03);
+  border:1px solid var(--goldBorder);
+  color:var(--white);
+  font-family:'Cormorant Garamond',serif;
+  font-size:15px;padding:10px 14px;
+  outline:none;transition:border-color 0.2s;
+  border-radius:0;-webkit-appearance:none;width:100%;
+}
+.sp-in:focus,.sp-sel:focus,.sp-ta:focus{border-color:var(--gold);}
+.sp-in::placeholder,.sp-ta::placeholder{color:rgba(250,248,242,0.15);}
+.sp-ta{resize:vertical;min-height:60px;line-height:1.6;}
+.sp-sel option{background:#0a0a05;}
+
+/* CHIP GROUPS */
+.chip-label{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(201,168,76,0.4);margin-bottom:8px;display:block;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;}
+.chip{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.06em;padding:5px 12px;
+  border:1px solid rgba(201,168,76,0.12);
+  background:transparent;color:rgba(201,168,76,0.3);
+  cursor:pointer;user-select:none;transition:all 0.15s;
+}
+.chip:hover{border-color:var(--goldMid);color:var(--goldMid);}
+.chip.on{background:rgba(201,168,76,0.1);border-color:var(--gold);color:var(--gold);}
+
+/* RUN BTN */
+.run-btn{
+  font-family:'Cormorant Garamond',serif;
+  font-size:20px;font-weight:300;font-style:italic;
+  letter-spacing:0.08em;text-transform:uppercase;
+  background:transparent;
+  border:1px solid var(--gold);
+  color:var(--gold);padding:16px 52px;
+  cursor:pointer;transition:all 0.25s;
+  width:100%;margin-top:8px;
+}
+.run-btn:hover{background:var(--gold);color:var(--black);}
+
+/* BRIEF PANEL */
+#brief-panel{
+  position:fixed;inset:0;z-index:60;
+  background:rgba(5,5,5,0.98);
+  display:none;flex-direction:column;
+  opacity:0;transition:opacity 0.5s;
+}
+#brief-panel.open{display:flex;opacity:1;}
+.bp-top{
+  background:linear-gradient(135deg,#060503,#0c0a03);
+  border-bottom:1px solid var(--goldBorder);
+  padding:28px 48px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+.bp-left{}
+.bp-ela{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.25em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
+.bp-addr{font-size:24px;font-weight:200;font-style:italic;color:var(--white);}
+.bp-acts{display:flex;gap:10px;}
+.bp-btn{
+  font-family:'DM Mono',monospace;font-size:9px;
+  letter-spacing:0.12em;text-transform:uppercase;
+  background:transparent;cursor:pointer;
+  padding:8px 18px;transition:all 0.2s;
+}
+.bp-btn.g{border:1px solid var(--gold);color:var(--gold);}
+.bp-btn.g:hover{background:var(--gold);color:var(--black);}
+.bp-btn.o{border:1px solid var(--goldBorder);color:var(--goldMid);}
+.bp-btn.o:hover{border-color:var(--gold);color:var(--gold);}
+
+/* PROGRESS BAR */
+#bp-progress{
+  height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--gold2),var(--gold),transparent);
+  background-size:300%;
+  animation:progressFlow 2.5s infinite;
+  display:none;
+  flex-shrink:0;
+}
+#bp-progress.on{display:block;}
+@keyframes progressFlow{0%{background-position:0%;}100%{background-position:300%;}}
+
+#brief-scroll{
+  flex:1;overflow-y:auto;
+  padding:52px 60px;
+  scrollbar-width:thin;
+  scrollbar-color:var(--gold3) transparent;
+}
+#brief-text{
+  font-size:15px;line-height:2;
+  color:rgba(250,248,242,0.8);
+  white-space:pre-wrap;word-break:break-word;
+  max-width:860px;margin:0 auto;
+}
+
+/* BOTTOM STATUS BAR */
+.bp-bottom{
+  border-top:1px solid var(--goldBorder);
+  padding:12px 48px;
+  display:flex;align-items:center;gap:10px;
+  flex-shrink:0;
+  background:rgba(5,5,5,0.8);
+}
+.bp-status-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0;}
+.bp-status-txt{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:rgba(201,168,76,0.4);}
+
+/* NOTIFICATION TOAST */
+#toast{
+  position:fixed;bottom:80px;left:50%;transform:translateX(-50%);
+  background:rgba(10,8,2,0.95);
+  border:1px solid var(--goldBorder);
+  padding:12px 24px;
+  font-family:'DM Mono',monospace;font-size:10px;
+  letter-spacing:0.1em;text-transform:uppercase;
+  color:var(--gold);
+  z-index:100;white-space:nowrap;
+  opacity:0;transition:opacity 0.3s;
+  pointer-events:none;
+}
+#toast.show{opacity:1;}
+
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(12px);}
+  to{opacity:1;transform:translateY(0);}
+}
 </style>
 </head>
 <body>
 
-<header>
-  <div class="header-gold-line"></div>
-  <div class="header-inner">
-    <div class="ev-logo">
-      <div class="ev-e">E</div>
-      <div class="ev-ampersand">&amp;</div>
-      <div class="ev-v">V</div>
-      <div class="ev-wordmark">Engel &amp; Völkers</div>
-    </div>
-    <div class="header-text">
-      <div class="header-eyebrow">Bozeman · Montana · Real Estate Intelligence</div>
-      <div class="header-title">Listing <em>Intelligence</em><br/>Engine</div>
-      <p class="header-sub">Enter a property address. The AI researches cadastral records, zoning, demographics, comparable sales, and delivers a complete marketing brief — ready to act on.</p>
-      <span class="header-badge">AI-Powered Research Platform</span>
-    </div>
+<!-- BACKGROUND -->
+<div class="bg-canvas">
+  <div class="bg-ring"></div><div class="bg-ring"></div>
+  <div class="bg-ring"></div><div class="bg-ring"></div>
+  <div class="bg-ring"></div>
+</div>
+<div class="bg-grid"></div>
+<div class="scan-line"></div>
+
+<!-- CORNERS -->
+<div class="corner tl"></div>
+<div class="corner tr"></div>
+<div class="corner bl"></div>
+<div class="corner br"></div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="ela-mark">
+    <div class="ela-letters">E · L · A</div>
+    <div class="ela-sub">Elite Listing Application</div>
   </div>
-</header>
-
-<main>
-
-  <!-- 01 PROPERTY -->
-  <div class="card">
-    <div class="card-head">
-      <div class="card-num">01</div>
-      <div class="card-info">
-        <h2>Property Details</h2>
-        <p>Enter everything you have — more detail produces a sharper brief</p>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Full Property Address *</label>
-      <input type="text" id="address" placeholder="123 Bridger Canyon Rd, Bozeman, MT 59715"/>
-    </div>
-    <div class="g3">
-      <div class="field">
-        <label>List Price</label>
-        <input type="text" id="price" placeholder="$1,250,000"/>
-      </div>
-      <div class="field">
-        <label>Property Type</label>
-        <select id="proptype">
-          <option value="">Select type</option>
-          <option>Single Family Residential</option>
-          <option>Condo / Townhome</option>
-          <option>Multi-Family (2–4 units)</option>
-          <option>Vacant Land / Lot</option>
-          <option>Acreage / Rural Residential</option>
-          <option>Commercial</option>
-          <option>New Construction</option>
-          <option>Luxury Estate</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>MLS #</label>
-        <input type="text" id="mls" placeholder="Optional"/>
-      </div>
-    </div>
-    <div class="g3">
-      <div class="field">
-        <label>Beds / Baths</label>
-        <input type="text" id="bedbath" placeholder="4 bed / 3.5 bath"/>
-      </div>
-      <div class="field">
-        <label>Square Footage</label>
-        <input type="text" id="sqft" placeholder="3,800 sq ft"/>
-      </div>
-      <div class="field">
-        <label>Lot Size</label>
-        <input type="text" id="lot" placeholder="1.2 acres"/>
-      </div>
-    </div>
-    <div class="g3">
-      <div class="field">
-        <label>Year Built</label>
-        <input type="text" id="yearbuilt" placeholder="2018"/>
-      </div>
-      <div class="field">
-        <label>Garage / Parking</label>
-        <input type="text" id="garage" placeholder="3-car attached"/>
-      </div>
-      <div class="field">
-        <label>Neighborhood / Subdivision</label>
-        <input type="text" id="neighborhood" placeholder="Bridger Canyon, Story Mill, etc."/>
-      </div>
-    </div>
-    <div class="field">
-      <label>Key Features & Upgrades</label>
-      <textarea id="features" placeholder="Panoramic mountain views, chef's kitchen, heated floors, infinity pool, wine cellar, smart home, guest suite..."></textarea>
-    </div>
-    <div class="field">
-      <label>Special Circumstances</label>
-      <textarea id="circumstances" placeholder="Estate sale, relocation, STR-permitted, seller financing possible, new construction, etc." style="min-height:52px;"></textarea>
-    </div>
+  <div class="top-right">
+    <button class="top-btn" onclick="openSettings()">⚙ Property Details</button>
   </div>
+</div>
 
-  <!-- 02 MODULES -->
-  <div class="card">
-    <div class="card-head">
-      <div class="card-num">02</div>
-      <div class="card-info">
-        <h2>Intelligence Modules</h2>
-        <p>All active by default — tap to deactivate sections you don't need</p>
+<!-- MAIN -->
+<div id="main">
+  <div id="orb-wrap" onclick="handleOrb()">
+    <div class="pr"></div><div class="pr"></div><div class="pr"></div>
+    <svg id="orb-svg" viewBox="0 0 320 320">
+      <defs>
+        <radialGradient id="og" cx="35%" cy="30%" r="70%">
+          <stop offset="0%" stop-color="#f0e0b0" stop-opacity="1"/>
+          <stop offset="30%" stop-color="#e8d5a3" stop-opacity="0.9"/>
+          <stop offset="65%" stop-color="#c9a84c" stop-opacity="0.75"/>
+          <stop offset="100%" stop-color="#2a1a05" stop-opacity="0.8"/>
+        </radialGradient>
+        <radialGradient id="gg" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.35"/>
+          <stop offset="60%" stop-color="#c9a84c" stop-opacity="0.08"/>
+          <stop offset="100%" stop-color="#c9a84c" stop-opacity="0"/>
+        </radialGradient>
+        <radialGradient id="inner-glow" cx="40%" cy="35%" r="55%">
+          <stop offset="0%" stop-color="#fff8e0" stop-opacity="0.15"/>
+          <stop offset="100%" stop-color="#fff8e0" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="gblur"><feGaussianBlur stdDeviation="24"/></filter>
+        <filter id="softblur"><feGaussianBlur stdDeviation="3"/></filter>
+      </defs>
+
+      <!-- OUTER GLOW -->
+      <circle cx="160" cy="160" r="140" fill="url(#gg)" filter="url(#gblur)"/>
+
+      <!-- DECORATIVE RINGS -->
+      <circle cx="160" cy="160" r="152" fill="none" stroke="rgba(201,168,76,0.06)" stroke-width="1" stroke-dasharray="3 14"/>
+      <circle cx="160" cy="160" r="138" fill="none" stroke="rgba(201,168,76,0.04)" stroke-width="1" stroke-dasharray="1 22"/>
+
+      <!-- TICK MARKS -->
+      <g stroke="rgba(201,168,76,0.2)" stroke-width="1">
+        <line x1="160" y1="8" x2="160" y2="18"/>
+        <line x1="160" y1="302" x2="160" y2="312"/>
+        <line x1="8" y1="160" x2="18" y2="160"/>
+        <line x1="302" y1="160" x2="312" y2="160"/>
+        <line x1="47" y1="47" x2="54" y2="54"/>
+        <line x1="266" y1="47" x2="273" y2="54"/>
+        <line x1="47" y1="273" x2="54" y2="266"/>
+        <line x1="266" y1="273" x2="273" y2="266"/>
+      </g>
+
+      <!-- MAIN ORB -->
+      <path id="orb-path"
+        d="M160,55 C215,55 265,100 265,160 C265,220 215,265 160,265 C105,265 55,220 55,160 C55,100 105,55 160,55 Z"
+        fill="url(#og)"
+        stroke="rgba(201,168,76,0.5)"
+        stroke-width="0.8"
+      />
+
+      <!-- INNER GLOW OVERLAY -->
+      <path
+        d="M160,55 C215,55 265,100 265,160 C265,220 215,265 160,265 C105,265 55,220 55,160 C55,100 105,55 160,55 Z"
+        fill="url(#inner-glow)"
+      />
+
+      <!-- SPECULAR HIGHLIGHT -->
+      <ellipse cx="136" cy="110" rx="28" ry="16"
+        fill="rgba(255,252,230,0.22)"
+        transform="rotate(-30,136,110)"
+        filter="url(#softblur)"
+      />
+      <ellipse cx="128" cy="102" rx="10" ry="6"
+        fill="rgba(255,252,230,0.35)"
+        transform="rotate(-30,128,102)"
+      />
+    </svg>
+
+    <div id="orb-center">
+      <div class="c-mic">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
+          <rect x="12" y="4" width="12" height="18" rx="6" fill="rgba(201,168,76,0.95)"/>
+          <path d="M6 18c0 6.6 5.4 12 12 12s12-5.4 12-12" stroke="rgba(201,168,76,0.8)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
+          <line x1="18" y1="30" x2="18" y2="34" stroke="rgba(201,168,76,0.8)" stroke-width="1.8" stroke-linecap="round"/>
+          <line x1="12" y1="34" x2="24" y2="34" stroke="rgba(201,168,76,0.8)" stroke-width="1.8" stroke-linecap="round"/>
+        </svg>
       </div>
-    </div>
-
-    <label style="margin-bottom:7px;">Research & Data</label>
-    <div class="chip-group" id="g-research">
-      <div class="chip on" data-val="cadastral">🏔 Cadastral Deep Dive</div>
-      <div class="chip on" data-val="zoning">📐 Zoning & Dev Potential</div>
-      <div class="chip on" data-val="tax">💰 Tax & Assessment</div>
-      <div class="chip on" data-val="flood">🌊 Flood / Hazard Zone</div>
-      <div class="chip on" data-val="permits">🔧 Permit History</div>
-      <div class="chip on" data-val="comps">📊 Comps & Market Data</div>
-    </div>
-
-    <label style="margin-top:18px; margin-bottom:7px;">Buyer Intelligence</label>
-    <div class="chip-group" id="g-buyer">
-      <div class="chip on" data-val="demographics">👥 Demographics</div>
-      <div class="chip on" data-val="idealbuyer">🎯 Ideal Buyer Profile</div>
-      <div class="chip on" data-val="lifestyle">🏔 Lifestyle Analysis</div>
-      <div class="chip on" data-val="schools">🏫 School Ratings</div>
-      <div class="chip on" data-val="commute">🚗 Commute & Walkability</div>
-      <div class="chip on" data-val="amenities">☕ Nearby Amenities</div>
-    </div>
-
-    <label style="margin-top:18px; margin-bottom:7px;">Marketing & Strategy</label>
-    <div class="chip-group" id="g-marketing">
-      <div class="chip on" data-val="cons">⚠️ Honest Cons</div>
-      <div class="chip on" data-val="objections">🛡 Objection Handlers</div>
-      <div class="chip on" data-val="headlines">✍️ Listing Headlines</div>
-      <div class="chip on" data-val="mlsdesc">📝 MLS Description</div>
-      <div class="chip on" data-val="email">📧 Email Campaign</div>
-      <div class="chip on" data-val="social">📱 Social Content</div>
-      <div class="chip on" data-val="farming">🏘 Farming Strategy</div>
-      <div class="chip on" data-val="openhouse">🏠 Open House Plan</div>
-      <div class="chip on" data-val="offermax">🔥 Max-Offer Strategy</div>
-      <div class="chip on" data-val="lender">💳 Loan Program Angles</div>
-    </div>
-
-    <label style="margin-top:18px; margin-bottom:7px;">Likely Buyer Types</label>
-    <div class="chip-group" id="g-buyertypes">
-      <div class="chip" data-val="relocators">Out-of-State Relocators</div>
-      <div class="chip" data-val="remote">Remote Workers</div>
-      <div class="chip" data-val="families">Growing Families</div>
-      <div class="chip" data-val="retirees">Active Retirees</div>
-      <div class="chip" data-val="investors">Investors / STR</div>
-      <div class="chip" data-val="luxury">Luxury / Second Home</div>
-      <div class="chip" data-val="firsttime">First-Time Buyers</div>
-      <div class="chip" data-val="moveup">Move-Up Buyers</div>
-      <div class="chip" data-val="outdoor">Outdoor Lifestyle</div>
-      <div class="chip" data-val="msu">MSU-Connected</div>
+      <div class="c-home">
+        <svg width="40" height="38" viewBox="0 0 40 38" fill="none">
+          <path d="M20 4L2 18h5v16h10v-10h6v10h10V18h5L20 4Z" fill="rgba(201,168,76,0.95)" stroke="rgba(232,213,163,0.5)" stroke-width="0.8"/>
+        </svg>
+      </div>
+      <div class="c-think">
+        <div class="think-dots">
+          <div class="td"></div><div class="td"></div><div class="td"></div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <!-- 03 SETTINGS -->
-  <div class="card">
-    <div class="card-head">
-      <div class="card-num">03</div>
-      <div class="card-info">
-        <h2>Settings & Context</h2>
-        <p>Additional context that sharpens the output</p>
-      </div>
-    </div>
-    <div class="g2">
-      <div class="field">
-        <label>Seller's Timeline</label>
-        <select id="timeline">
-          <option value="ASAP">ASAP — maximum urgency</option>
-          <option value="30 days">30 days</option>
-          <option value="60 days">60 days</option>
-          <option value="90+ days">90+ days — strategic play</option>
-        </select>
-      </div>
-      <div class="field">
-        <label>Brief Depth</label>
-        <select id="depth">
-          <option value="thorough">Thorough (recommended)</option>
-          <option value="exhaustive">Exhaustive — leave nothing out</option>
-          <option value="focused">Focused — key insights only</option>
-        </select>
-      </div>
-    </div>
-    <div class="field">
-      <label>Agent Notes / Extra Context</label>
-      <textarea id="extra" placeholder="Competing listings, seller's story, neighborhood nuances, upcoming developments, anything the AI should factor in..."></textarea>
+  <div id="status-area">
+    <div id="greeting"></div>
+    <div id="status-line">Tap to speak a property address</div>
+    <div id="transcript-line"></div>
+    <div id="wave">
+      <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+      <div class="wb"></div><div class="wb"></div><div class="wb"></div>
+      <div class="wb"></div>
     </div>
   </div>
+</div>
 
-  <!-- ERROR -->
-  <div class="err-box" id="err-box">
-    <strong>Error</strong>
-    <span id="err-msg"></span>
+<!-- KEY BAR -->
+<div id="key-bar">
+  <input type="password" id="key-in" placeholder="Anthropic API key — sk-ant-..." oninput="updateKey()"/>
+  <span id="key-pill">NOT SET</span>
+</div>
+
+<!-- SETTINGS PANEL -->
+<div id="settings-panel">
+  <div class="sp-top">
+    <div class="sp-heading">
+      <div class="sp-eyebrow">Property Intelligence</div>
+      <div class="sp-title">Refine ELA's Brief</div>
+    </div>
+    <button class="sp-x" onclick="closeSettings()">✕ Close</button>
   </div>
+  <div class="sp-body">
+    <div class="sp-field">
+      <label class="sp-lbl">Property Address</label>
+      <input type="text" class="sp-in" id="s-addr" placeholder="123 Bridger Canyon Rd, Bozeman, MT"/>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">List Price</label>
+      <input type="text" class="sp-in" id="s-price" placeholder="$1,250,000"/>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Property Type</label>
+      <select class="sp-sel" id="s-type">
+        <option value="">Select</option>
+        <option>Single Family Residential</option>
+        <option>Condo / Townhome</option>
+        <option>Multi-Family</option>
+        <option>Vacant Land / Lot</option>
+        <option>Acreage / Rural Residential</option>
+        <option>New Construction</option>
+        <option>Luxury Estate</option>
+        <option>Commercial</option>
+      </select>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Beds / Baths</label>
+      <input type="text" class="sp-in" id="s-bed" placeholder="4 bed / 3.5 bath"/>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Square Footage</label>
+      <input type="text" class="sp-in" id="s-sqft" placeholder="3,800 sq ft"/>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Lot Size</label>
+      <input type="text" class="sp-in" id="s-lot" placeholder="1.2 acres"/>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Year Built</label>
+      <input type="text" class="sp-in" id="s-year" placeholder="2018"/>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Garage / Parking</label>
+      <input type="text" class="sp-in" id="s-garage" placeholder="3-car attached"/>
+    </div>
+    <div class="sp-field full">
+      <label class="sp-lbl">Key Features & Upgrades</label>
+      <textarea class="sp-ta" id="s-feat" placeholder="Mountain views, chef's kitchen, heated floors, smart home, wine cellar..."></textarea>
+    </div>
+    <div class="sp-field full">
+      <label class="sp-lbl">Special Circumstances</label>
+      <textarea class="sp-ta" id="s-circ" style="min-height:48px;" placeholder="Estate sale, relocation, STR-permitted, seller financing..."></textarea>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Seller Timeline</label>
+      <select class="sp-sel" id="s-time">
+        <option value="ASAP">ASAP — maximum urgency</option>
+        <option value="30 days">30 days</option>
+        <option value="60 days">60 days</option>
+        <option value="90+ days">90+ days</option>
+      </select>
+    </div>
+    <div class="sp-field">
+      <label class="sp-lbl">Brief Depth</label>
+      <select class="sp-sel" id="s-depth">
+        <option value="thorough">Thorough</option>
+        <option value="exhaustive">Exhaustive</option>
+        <option value="focused">Focused</option>
+      </select>
+    </div>
 
-  <!-- GENERATE -->
-  <div class="gen-row">
-    <button class="gen-btn" id="gen-btn" onclick="runBrief()">Generate Brief</button>
-    <p class="gen-note">The AI searches live data and writes a complete intelligence brief. Takes 45–90 seconds.</p>
-  </div>
-
-  <!-- OUTPUT -->
-  <div class="out-section" id="out-section">
-    <div class="out-header">
-      <div class="out-title" id="out-title">Generating Intelligence Brief...</div>
-      <div class="out-actions">
-        <button class="out-btn" id="copy-btn" onclick="copyBrief()">Copy</button>
-        <button class="out-btn" onclick="printBrief()">Print / PDF</button>
+    <div class="sp-field full">
+      <span class="chip-label">Research & Data</span>
+      <div class="chips" id="m-res">
+        <div class="chip on" data-val="cadastral">🏔 Cadastral</div>
+        <div class="chip on" data-val="zoning">📐 Zoning</div>
+        <div class="chip on" data-val="tax">💰 Tax</div>
+        <div class="chip on" data-val="flood">🌊 Flood</div>
+        <div class="chip on" data-val="permits">🔧 Permits</div>
+        <div class="chip on" data-val="comps">📊 Comps</div>
       </div>
     </div>
-    <div class="gold-line-anim" id="gold-anim"></div>
-    <div id="brief-out">Initializing research engine...</div>
-    <div class="status-bar">
-      <div class="dot" id="dot"></div>
-      <span id="status-txt"></span>
+    <div class="sp-field full">
+      <span class="chip-label">Buyer Intelligence</span>
+      <div class="chips" id="m-buy">
+        <div class="chip on" data-val="demographics">👥 Demographics</div>
+        <div class="chip on" data-val="idealbuyer">🎯 Ideal Buyer</div>
+        <div class="chip on" data-val="lifestyle">🏔 Lifestyle</div>
+        <div class="chip on" data-val="schools">🏫 Schools</div>
+        <div class="chip on" data-val="commute">🚗 Commute</div>
+        <div class="chip on" data-val="amenities">☕ Amenities</div>
+      </div>
+    </div>
+    <div class="sp-field full">
+      <span class="chip-label">Marketing & Strategy</span>
+      <div class="chips" id="m-mkt">
+        <div class="chip on" data-val="cons">⚠️ Cons</div>
+        <div class="chip on" data-val="objections">🛡 Objections</div>
+        <div class="chip on" data-val="headlines">✍️ Headlines</div>
+        <div class="chip on" data-val="mlsdesc">📝 MLS Copy</div>
+        <div class="chip on" data-val="email">📧 Email Campaign</div>
+        <div class="chip on" data-val="social">📱 Social</div>
+        <div class="chip on" data-val="farming">🏘 Farming</div>
+        <div class="chip on" data-val="openhouse">🏠 Open House</div>
+        <div class="chip on" data-val="offermax">🔥 Max Offer</div>
+        <div class="chip on" data-val="lender">💳 Loan Angles</div>
+      </div>
+    </div>
+    <div class="sp-field full">
+      <span class="chip-label">Likely Buyer Types</span>
+      <div class="chips" id="m-bt">
+        <div class="chip" data-val="relocators">Out-of-State</div>
+        <div class="chip" data-val="remote">Remote Workers</div>
+        <div class="chip" data-val="families">Families</div>
+        <div class="chip" data-val="retirees">Retirees</div>
+        <div class="chip" data-val="investors">Investors / STR</div>
+        <div class="chip" data-val="luxury">Luxury / 2nd Home</div>
+        <div class="chip" data-val="moveup">Move-Up</div>
+        <div class="chip" data-val="outdoor">Outdoor Lifestyle</div>
+        <div class="chip" data-val="msu">MSU-Connected</div>
+      </div>
+    </div>
+    <div class="sp-field full">
+      <label class="sp-lbl">Agent Notes</label>
+      <textarea class="sp-ta" id="s-notes" placeholder="Competing listings, seller story, neighborhood nuances, anything ELA should factor in..."></textarea>
+    </div>
+    <div class="sp-field full">
+      <button class="run-btn" onclick="runFromSettings()">Run Intelligence Brief</button>
     </div>
   </div>
+</div>
 
-</main>
+<!-- BRIEF PANEL -->
+<div id="brief-panel">
+  <div class="bp-top">
+    <div class="bp-left">
+      <div class="bp-ela">ELA · Elite Listing Application · Mr. Cribbes</div>
+      <div class="bp-addr" id="bp-addr">Intelligence Brief</div>
+    </div>
+    <div class="bp-acts">
+      <button class="bp-btn g" onclick="downloadPDF()">⬇ Download PDF</button>
+      <button class="bp-btn g" onclick="newBrief()">+ New Brief</button>
+      <button class="bp-btn o" onclick="closeBrief()">✕ Close</button>
+    </div>
+  </div>
+  <div id="bp-progress"></div>
+  <div id="brief-scroll">
+    <div id="brief-text"></div>
+  </div>
+  <div class="bp-bottom">
+    <div class="bp-status-dot"></div>
+    <div class="bp-status-txt" id="bp-status">Brief complete</div>
+  </div>
+</div>
 
-<footer>
-  Engel &amp; Völkers · Bozeman, Montana · Listing Intelligence Platform
-</footer>
+<!-- TOAST -->
+<div id="toast"></div>
 
 <script>
-// ── CHIPS ────────────────────────────────────────────
-document.querySelectorAll('.chip').forEach(c =>
-  c.addEventListener('click', () => c.classList.toggle('on'))
-);
-function on(gid) {
-  return [...document.querySelectorAll(`#${gid} .chip.on`)].map(c => c.dataset.val);
-}
-function onLabels(gid) {
-  return [...document.querySelectorAll(`#${gid} .chip.on`)].map(c => c.textContent.trim());
-}
+// ── STATE ─────────────────────────────────────────────
+let appState='idle';
+let recognition=null;
+let currentBrief='';
+let currentAddress='';
 
-// ── PROMPT ───────────────────────────────────────────
-function buildPrompt() {
-  const v = id => document.getElementById(id).value.trim();
-  const modules = on('g-research').concat(on('g-buyer')).concat(on('g-marketing'));
-  const buyerTypes = onLabels('g-buyertypes');
-  const inc = key => modules.includes(key);
+// ── GREETING ──────────────────────────────────────────
+const h=new Date().getHours();
+const greetEl=document.getElementById('greeting');
+greetEl.textContent=h<12?'Good morning, Mr. Cribbes.':h<17?'Good afternoon, Mr. Cribbes.':'Good evening, Mr. Cribbes.';
+greetEl.style.cssText='opacity:0;transform:translateY(10px);transition:opacity 2s ease 1s,transform 2s ease 1s;';
+setTimeout(()=>{greetEl.style.opacity='1';greetEl.style.transform='translateY(0)';},100);
 
-  const propBlock = [
-    `Address: ${v('address')}`,
-    v('price') && `List Price: ${v('price')}`,
-    v('proptype') && `Type: ${v('proptype')}`,
-    v('mls') && `MLS #: ${v('mls')}`,
-    v('bedbath') && `Beds/Baths: ${v('bedbath')}`,
-    v('sqft') && `Sq Ft: ${v('sqft')}`,
-    v('lot') && `Lot: ${v('lot')}`,
-    v('yearbuilt') && `Year Built: ${v('yearbuilt')}`,
-    v('garage') && `Parking: ${v('garage')}`,
-    v('neighborhood') && `Neighborhood: ${v('neighborhood')}`,
-    v('features') && `Key Features: ${v('features')}`,
-    v('circumstances') && `Special Circumstances: ${v('circumstances')}`,
-    `Seller Timeline: ${v('timeline') || 'ASAP'}`,
-    buyerTypes.length && `Target Buyer Types: ${buyerTypes.join(', ')}`,
-    v('extra') && `Agent Notes: ${v('extra')}`,
-  ].filter(Boolean).join('\n');
+// ── CHIPS ─────────────────────────────────────────────
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
+const onVals=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.val);
+const onLabels=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.textContent.trim());
 
-  return `You are acting as three experts simultaneously:
-1. A Montana real estate data analyst specializing in Gallatin County cadastral records, zoning, and market data
-2. A top-producing Bozeman listing agent and marketer with 300+ closed Montana transactions, currently with Engel & Völkers
-3. An elite real estate copywriter and digital strategist specializing in luxury and lifestyle properties
-
-Produce the most comprehensive, specific, and actionable listing intelligence brief possible for the property below. Use web search aggressively — search for real, current data before writing each section. Do not generalize or pad. Flag any data you cannot verify rather than guessing.
-
-PROPERTY DETAILS
-────────────────
-${propBlock}
-
-RESEARCH SOURCES — search each before writing:
-• Montana Cadastral: svc.mt.gov/msl/mtcadastral — parcel ID, ownership, assessed value, last sale
-• Bozeman GIS Planning Viewer: gisweb.bozeman.net/Html5Viewer/?viewer=planning — zoning, overlays, flood zone
-• Montana DOR: mtrevenue.gov/property — tax history, taxable value, mill levy
-• GreatSchools.org — assigned school ratings for this address
-• Walk Score — walkability, transit, bike scores
-• Census Reporter: censusreporter.org — demographics for this zip/census tract
-• Redfin — recent comps, days on market, list-to-sale ratio, active inventory
-• Local Montana news — upcoming developments, zoning changes near this address
-
-DEPTH: ${v('depth') || 'thorough'}
-
-SECTIONS TO WRITE:
-══════════════════
-
-${inc('cadastral') ? `▸ CADASTRAL & OWNERSHIP ANALYSIS
-Search Montana Cadastral. Report: parcel ID, legal description, owner of record, assessed market value vs. list price, last arms-length sale date and price, 3-year taxable value trend, estimated annual taxes, any liens, deed restrictions, easements, or red flags.
-` : ''}
-${inc('zoning') ? `▸ ZONING & DEVELOPMENT POTENTIAL
-Current zoning in plain English. Permitted uses by-right and conditional. ADU eligibility under BMC 38.360.040. STR restrictions. Min lot size, max height, setbacks, coverage. Pending rezones or growth policy changes. Highest-and-best use conclusion.
-` : ''}
-${inc('tax') ? `▸ TAX & ASSESSMENT ANALYSIS
-3-year taxable value trend. Effective tax rate as % of list price. Any SID, LID, or TIF assessments. Comparison to similar properties at this price point.
-` : ''}
-${inc('flood') ? `▸ FLOOD & HAZARD ZONE
-FEMA flood zone. Flood insurance requirement and estimated cost. Wildfire hazard overlay or WUI designation. Radon risk. Known geologic hazards.
-` : ''}
-${inc('permits') ? `▸ PERMIT HISTORY
-Known permits on record. Open or expired permits. Signs of unpermitted work. Code enforcement history.
-` : ''}
-${inc('comps') ? `▸ COMPARABLE SALES & MARKET POSITION
-5–7 relevant recent solds: address | beds/baths | SF | price | $/SF | DOM | date. Price range vs. list price. Active competition and absorption rate. Avg DOM last 90 days. List-to-sale ratio trend. Market temperature verdict.
-` : ''}
-${inc('demographics') ? `▸ NEIGHBORHOOD DEMOGRAPHICS
-From Census Reporter: median household income, age distribution, owner vs. renter rate, education, top employment sectors, population growth, in-migration patterns. What this tells us about who lives here and who's moving in.
-` : ''}
-${inc('idealbuyer') ? `▸ IDEAL BUYER PROFILES (2–3 personas)
-For each: name/archetype, age/income/family status, origin, what they value, biggest fears, media consumption, messaging that resonates, how to reach them, conversion probability ranking.
-` : ''}
-${inc('lifestyle') ? `▸ LIFESTYLE ANALYSIS — "IF I LIVED HERE"
-Specific daily life: morning spots, weekday commutes to downtown/MSU/airport, weekend outdoor activities within 30–45 min, dining/nightlife, neighborhood character, all four seasons, the hidden gem angle most listings miss.
-` : ''}
-${inc('schools') ? `▸ SCHOOLS & FAMILY APPEAL
-Assigned schools with GreatSchools ratings. Test scores vs. state/national. Specialty programs. Distance to private options. MSU proximity. Overall strength as a marketing asset.
-` : ''}
-${inc('commute') || inc('amenities') ? `▸ COMMUTE, WALKABILITY & AMENITIES
-Walk/Transit/Bike scores and what's walkable. Drive times to: downtown Bozeman, BZN airport, MSU, Bridger Bowl, Big Sky. Nearest grocery, pharmacy, hospital. Parks and trails. Any negatives: noise, industrial, view impacts.
-` : ''}
-${inc('cons') ? `▸ HONEST CONS ANALYSIS
-Every realistic negative — property-specific, neighborhood-level, market-level, Montana-specific. Ranked most to least likely to be raised by a serious buyer. Do not sugarcoat.
-` : ''}
-${inc('objections') ? `▸ OBJECTION HANDLERS
-For each con:
-OBJECTION: [Exact concern buyer raises]
-HANDLER: [Acknowledge → reframe with data → redirect to value → forward-moving close]
-Be honest. Use data. Build a "despite this, here's why buyers still win" case where needed.
-` : ''}
-${inc('headlines') ? `▸ LISTING HEADLINES (8 variations)
-Specific to THIS property. Vary angles: lifestyle, investment, aspiration, urgency, community, FOMO, data-driven, emotional. No generic Montana language. Tone should reflect Engel & Völkers luxury positioning.
-` : ''}
-${inc('mlsdesc') ? `▸ MLS LISTING DESCRIPTION
-Full 250–350 word MLS-ready description: vivid specific opening hook, features, neighborhood/lifestyle, practical details woven in naturally, strong CTA. Confident, sophisticated, zero clichés. Tone befitting an Engel & Völkers listing. Plus a 100-word social teaser version.
-` : ''}
-${inc('email') ? `▸ 3-PART EMAIL DRIP CAMPAIGN
-Email 1 "The Discovery" (launch day): 3 subject lines + full body
-Email 2 "The Deep Dive" (days 4–5): 3 subject lines + full body
-Email 3 "The Last Call" (pre-deadline): 3 subject lines + full body
-` : ''}
-${inc('social') ? `▸ SOCIAL MEDIA CONTENT PLAN
-Instagram: launch carousel + caption + hashtags; Reel 15-sec script; 5-frame Story arc
-Facebook: launch post + neighborhood spotlight
-TikTok: 30–45 sec script with hook, b-roll, CTA
-25 targeted hashtags (local + lifestyle + property type)
-` : ''}
-${inc('openhouse') ? `▸ OPEN HOUSE STRATEGY
-Timing and rationale. Pre-event marketing. Physical setup: atmosphere, materials, staging. Conversation openers and qualifying questions. Follow-up: 2hr / 24hr / 72hr. Broker open strategy.
-` : ''}
-${inc('offermax') ? `▸ MAXIMUM OFFER STRATEGY
-Pre-market outreach. Offer deadline recommendation. Ethical competition tactics. Escalation clause guidance. Terms beyond price that matter. Multiple offer protocol. What the perfect offer looks like.
-` : ''}
-${inc('farming') ? `▸ 90-DAY NEIGHBORHOOD FARMING PLAN
-Farm area definition. Database build. 5-touch sequence: Just Listed mailer, door knock script, market update, referral ask, Just Sold announcement. Digital layer: Facebook groups, Nextdoor, geo-ads. Long-game: 3–5 additional listings over 12 months. Script for "I've been thinking about selling..."
-` : ''}
-${inc('lender') ? `▸ LOAN PROGRAM ANGLES
-FHA/VA/USDA eligibility. Conforming vs. jumbo threshold. DSCR potential if investor angle exists. Montana down payment assistance. Seller-paid 2-1 buydown math and talking points. Seller financing viability. Co-marketing collateral ideas.
-` : ''}
-
-▸ EXECUTIVE SUMMARY
-- TOP 5 SELLING POINTS (specific, not generic)
-- TOP 3 RISKS TO MONITOR + mitigation
-- 30-DAY AGENT ACTION CHECKLIST in priority order
-- WEEKLY METRICS TO TRACK
-- ONE SENTENCE LISTING THESIS
-
-FORMAT: Clear section headers. Confident expert prose — no hedging, no filler. Note unavailable data in one sentence and move on. This brief is used by an Engel & Völkers agent in Bozeman, Montana. Every word matters.`;
+// ── KEY ───────────────────────────────────────────────
+function updateKey(){
+  const k=document.getElementById('key-in').value.trim();
+  const p=document.getElementById('key-pill');
+  if(k.startsWith('sk-ant-')){p.textContent='✓ KEY SET';p.className='ok';}
+  else if(k.length>4){p.textContent='CHECK KEY';p.className='';}
+  else{p.textContent='NOT SET';p.className='';}
 }
 
-// ── UI HELPERS ────────────────────────────────────────
-function showErr(msg) {
-  document.getElementById('err-msg').textContent = msg;
-  document.getElementById('err-box').classList.add('on');
-  document.getElementById('err-box').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-}
-function clearErr() { document.getElementById('err-box').classList.remove('on'); }
-
-const statusMessages = [
-  'Searching Montana Cadastral records...',
-  'Pulling Bozeman GIS zoning data...',
-  'Analyzing tax and assessment history...',
-  'Researching neighborhood demographics...',
-  'Fetching school ratings...',
-  'Finding comparable sales...',
-  'Building ideal buyer personas...',
-  'Writing objection handlers...',
-  'Crafting MLS description and headlines...',
-  'Building email and social campaigns...',
-  'Assembling farming strategy...',
-  'Finalizing executive summary...',
-];
-let statusTimer = null;
-let si = 0;
-
-function startStatus() {
-  si = 0;
-  document.getElementById('status-txt').textContent = statusMessages[0];
-  document.getElementById('dot').classList.add('on');
-  document.getElementById('gold-anim').classList.add('on');
-  statusTimer = setInterval(() => {
-    si = (si + 1) % statusMessages.length;
-    document.getElementById('status-txt').textContent = statusMessages[si];
-  }, 5500);
-}
-function stopStatus(msg) {
-  clearInterval(statusTimer);
-  document.getElementById('dot').classList.remove('on');
-  document.getElementById('gold-anim').classList.remove('on');
-  document.getElementById('status-txt').textContent = msg || '';
+// ── TOAST ─────────────────────────────────────────────
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ── MAIN GENERATE ─────────────────────────────────────
-async function runBrief() {
-  clearErr();
-  const address = document.getElementById('address').value.trim();
-  if (!address) {
-    showErr('Please enter a property address before generating.');
-    return;
+// ── ORB PATHS ─────────────────────────────────────────
+const P_CIRCLE='M160,55 C215,55 265,100 265,160 C265,220 215,265 160,265 C105,265 55,220 55,160 C55,100 105,55 160,55 Z';
+const P_HOME='M160,42 C160,42 170,56 188,72 L268,142 L244,142 L244,248 L198,248 L198,188 L122,188 L122,248 L76,248 L76,142 L52,142 L132,72 C150,56 160,42 160,42 Z';
+const P_PULSE='M160,50 C218,54 270,100 266,162 C262,222 214,270 160,266 C100,262 50,214 54,160 C58,100 106,46 160,50 Z';
+
+const orbPath=document.getElementById('orb-path');
+const micEl=document.querySelector('.c-mic');
+const homeEl=document.querySelector('.c-home');
+const thinkEl=document.querySelector('.c-think');
+const orbWrap=document.getElementById('orb-wrap');
+const statusLine=document.getElementById('status-line');
+const transcriptLine=document.getElementById('transcript-line');
+const waveBars=document.querySelectorAll('.wb');
+
+function setOrbState(s){
+  appState=s;orbWrap.className=s;
+  if(s==='idle'){
+    orbPath.setAttribute('d',P_CIRCLE);
+    micEl.style.cssText='opacity:1;transform:scale(1);transition:opacity 0.6s,transform 0.6s;';
+    homeEl.style.cssText='opacity:0;transform:scale(0.5);transition:opacity 0.6s,transform 0.6s;';
+    thinkEl.style.opacity='0';
+    waveBars.forEach(b=>b.classList.remove('on'));
+    statusLine.textContent='Tap to speak a property address';
+    transcriptLine.textContent='';
+  } else if(s==='listening'){
+    orbPath.setAttribute('d',P_PULSE);
+    micEl.style.cssText='opacity:1;transition:opacity 0.6s;';
+    thinkEl.style.opacity='0';
+    waveBars.forEach(b=>b.classList.add('on'));
+    statusLine.textContent='Listening...';
+  } else if(s==='thinking'){
+    orbPath.setAttribute('d',P_HOME);
+    micEl.style.cssText='opacity:0;transform:scale(0.4);transition:opacity 0.6s,transform 0.6s;';
+    homeEl.style.cssText='opacity:0;transition:opacity 0.6s;';
+    thinkEl.style.cssText='opacity:1;transition:opacity 0.6s;';
+    waveBars.forEach(b=>b.classList.remove('on'));
+    runThinkMsgs();
+  } else if(s==='done'){
+    orbPath.setAttribute('d',P_HOME);
+    micEl.style.cssText='opacity:0;transition:opacity 0.6s;';
+    homeEl.style.cssText='opacity:1;transform:scale(1);transition:opacity 0.6s,transform 0.6s;';
+    thinkEl.style.opacity='0';
+    waveBars.forEach(b=>b.classList.remove('on'));
+    statusLine.textContent='Brief ready — tap orb for another';
   }
+}
 
-  const btn = document.getElementById('gen-btn');
-  const outSection = document.getElementById('out-section');
-  const briefOut = document.getElementById('brief-out');
-  const outTitle = document.getElementById('out-title');
+let thinkTimer=null;
+function runThinkMsgs(){
+  clearInterval(thinkTimer);
+  const msgs=[
+    'Searching cadastral records...',
+    'Pulling zoning & overlay data...',
+    'Analyzing comparable sales...',
+    'Building buyer personas...',
+    'Writing objection handlers...',
+    'Crafting MLS description...',
+    'Assembling farming strategy...',
+    'Generating marketing campaigns...',
+    'Finalizing executive summary...',
+  ];
+  let i=0;statusLine.textContent=msgs[0];
+  thinkTimer=setInterval(()=>{
+    if(appState!=='thinking'){clearInterval(thinkTimer);return;}
+    i=(i+1)%msgs.length;statusLine.textContent=msgs[i];
+  },4500);
+}
 
-  btn.disabled = true;
-  btn.textContent = 'Generating...';
-  outSection.style.display = 'block';
-  briefOut.textContent = 'Launching research engine — please wait...';
-  outTitle.textContent = 'Generating Intelligence Brief...';
-  outSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  startStatus();
+// ── ORB CLICK ─────────────────────────────────────────
+function handleOrb(){
+  if(appState==='idle'||appState==='done') startListening();
+  else if(appState==='listening') stopListening();
+}
 
-  try {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 8000,
-        tools: [{ type: 'web_search_20250305', name: 'web_search' }],
-        messages: [{ role: 'user', content: buildPrompt() }],
-      }),
-    });
-
-    const rawText = await res.text();
-
-    if (!res.ok) {
-      let msg = `Server error (${res.status})`;
-      try { msg = JSON.parse(rawText).error?.message || msg; } catch(e) {}
-      throw new Error(msg);
-    }
-
-    let data;
-    try { data = JSON.parse(rawText); } catch(e) {
-      throw new Error('Could not parse response — please try again.');
-    }
-
-    let fullText = '';
-    if (Array.isArray(data.content)) {
-      for (const block of data.content) {
-        if (block.type === 'text' && block.text) {
-          fullText += (fullText ? '\n' : '') + block.text;
-        }
+// ── VOICE ─────────────────────────────────────────────
+function startListening(){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast('Use Chrome for voice — or tap ⚙ to type the address');return;}
+  recognition=new SR();
+  recognition.continuous=false;
+  recognition.interimResults=true;
+  recognition.lang='en-US';
+  recognition.onstart=()=>setOrbState('listening');
+  recognition.onresult=(e)=>{
+    let interim='';
+    for(let i=e.resultIndex;i<e.results.length;i++){
+      if(e.results[i].isFinal){
+        currentAddress=e.results[i][0].transcript;
+        transcriptLine.textContent=`"${currentAddress}"`;
+      } else {
+        interim=e.results[i][0].transcript;
+        transcriptLine.textContent=interim;
       }
     }
+  };
+  recognition.onend=()=>{
+    if(currentAddress) runBrief(currentAddress);
+    else setOrbState('idle');
+  };
+  recognition.onerror=(e)=>{
+    setOrbState('idle');
+    if(e.error==='not-allowed') toast('Microphone blocked — allow access in Chrome settings');
+    else toast('Could not hear address — tap to try again');
+  };
+  recognition.start();
+}
+function stopListening(){if(recognition)recognition.stop();}
 
-    if (!fullText) throw new Error('Empty response from AI — please try again.');
+// ── SETTINGS ──────────────────────────────────────────
+function openSettings(){
+  const p=document.getElementById('settings-panel');
+  p.style.display='flex';setTimeout(()=>p.classList.add('open'),10);
+}
+function closeSettings(){
+  const p=document.getElementById('settings-panel');
+  p.classList.remove('open');setTimeout(()=>p.style.display='none',400);
+}
+function runFromSettings(){
+  const addr=document.getElementById('s-addr').value.trim()||currentAddress;
+  if(!addr){toast('Please enter a property address');return;}
+  currentAddress=addr;
+  closeSettings();
+  setTimeout(()=>runBrief(addr),500);
+}
 
-    briefOut.textContent = fullText;
-    outTitle.textContent = `Intelligence Brief — ${address.split(',')[0]}`;
-    stopStatus(`✓ Complete — ${fullText.length.toLocaleString()} characters`);
+// ── PROMPT ────────────────────────────────────────────
+function buildPrompt(address){
+  const v=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
+  const modules=onVals('m-res').concat(onVals('m-buy')).concat(onVals('m-mkt'));
+  const buyerTypes=onLabels('m-bt');
+  const inc=k=>modules.includes(k);
 
-  } catch (err) {
-    outSection.style.display = 'none';
-    stopStatus('');
-    showErr(err.message || 'Something went wrong — please try again.');
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Generate Brief';
+  const props=[
+    `Address: ${address}`,
+    v('s-price')&&`List Price: ${v('s-price')}`,
+    v('s-type')&&`Type: ${v('s-type')}`,
+    v('s-bed')&&`Beds/Baths: ${v('s-bed')}`,
+    v('s-sqft')&&`Sq Ft: ${v('s-sqft')}`,
+    v('s-lot')&&`Lot: ${v('s-lot')}`,
+    v('s-year')&&`Year Built: ${v('s-year')}`,
+    v('s-garage')&&`Parking: ${v('s-garage')}`,
+    v('s-feat')&&`Features: ${v('s-feat')}`,
+    v('s-circ')&&`Circumstances: ${v('s-circ')}`,
+    `Timeline: ${v('s-time')||'ASAP'}`,
+    buyerTypes.length&&`Target Buyers: ${buyerTypes.join(', ')}`,
+    v('s-notes')&&`Agent Notes: ${v('s-notes')}`,
+  ].filter(Boolean).join('\n');
+
+  return `You are ELA — Elite Listing Application — a world-class real estate intelligence system built exclusively for Mr. Cribbes, a top Montana real estate professional. Be specific, authoritative, and actionable. Zero filler.
+
+PROPERTY:
+${props}
+
+RESEARCH SOURCES:
+• Montana Cadastral: svc.mt.gov/msl/mtcadastral
+• Bozeman GIS Planning: gisweb.bozeman.net/Html5Viewer/?viewer=planning
+• Montana DOR: mtrevenue.gov/property
+• GreatSchools.org — school ratings
+• Walk Score — walkability
+• Census Reporter — demographics
+• Redfin — comps, DOM, market trends
+
+DEPTH: ${v('s-depth')||'thorough'}
+
+WRITE THESE SECTIONS:
+${inc('cadastral')?'\n▸ CADASTRAL & OWNERSHIP\nParcel ID, owner of record, assessed value vs list price, last sale, 3-year tax trend, estimated annual taxes, any liens or red flags.':''}
+${inc('zoning')?'\n▸ ZONING & DEVELOPMENT POTENTIAL\nCurrent zoning in plain English. Permitted uses. ADU eligibility (BMC 38.360.040). STR restrictions. Development options. Highest-and-best use.':''}
+${inc('tax')?'\n▸ TAX & ASSESSMENT\n3-year trend. Effective rate vs list price. Any SID/LID/TIF assessments.':''}
+${inc('flood')?'\n▸ FLOOD & HAZARD\nFEMA zone. Insurance requirement and cost. Wildfire/WUI overlay. Radon risk.':''}
+${inc('permits')?'\n▸ PERMIT HISTORY\nKnown permits. Open/expired. Unpermitted work signs. Code enforcement.':''}
+${inc('comps')?'\n▸ COMPS & MARKET POSITION\n5–7 recent solds: address|beds/baths|SF|price|$/SF|DOM|date. Price range vs list. Active competition. Avg DOM. List-to-sale ratio. Market temperature.':''}
+${inc('demographics')?'\n▸ NEIGHBORHOOD DEMOGRAPHICS\nMedian income, age distribution, owner vs renter, education, employers, population growth, in-migration.':''}
+${inc('idealbuyer')?'\n▸ IDEAL BUYER PROFILES (2–3 personas)\nEach: archetype, age/income/family, origin, values, fears, media, messaging, how to reach, probability ranking.':''}
+${inc('lifestyle')?'\n▸ LIFESTYLE — IF I LIVED HERE\nMorning spots. Commutes to downtown/MSU/airport. Weekend outdoor activities within 45 min. Dining/nightlife. Neighborhood character. All four seasons. The hidden gem angle.':''}
+${inc('schools')?'\n▸ SCHOOLS & FAMILY APPEAL\nAssigned schools with ratings. Test scores vs state/national. Specialty programs. Private options. Marketing strength.':''}
+${(inc('commute')||inc('amenities'))?'\n▸ COMMUTE, WALKABILITY & AMENITIES\nWalk/Transit/Bike scores. Times to: downtown, BZN airport, MSU, Bridger Bowl, Big Sky. Grocery, pharmacy, hospital. Parks/trails. Any negatives.':''}
+${inc('cons')?'\n▸ HONEST CONS\nEvery realistic negative — property, neighborhood, market, Montana-specific. Ranked by likelihood. No sugarcoating.':''}
+${inc('objections')?'\n▸ OBJECTION HANDLERS\nFor each con:\nOBJECTION: [exact concern]\nHANDLER: [acknowledge → reframe → redirect → close forward]':''}
+${inc('headlines')?'\n▸ LISTING HEADLINES (8 variations)\nSpecific to this property. Vary: lifestyle, investment, aspiration, urgency, FOMO, data, emotional. Zero generic language.':''}
+${inc('mlsdesc')?'\n▸ MLS DESCRIPTION\n250–300 words. Vivid hook, features, lifestyle, strong CTA. Confident, zero clichés. Plus 100-word social teaser.':''}
+${inc('email')?'\n▸ 3-PART EMAIL CAMPAIGN\nEmail 1 "The Discovery" (launch): 3 subjects + full body\nEmail 2 "The Deep Dive" (days 4–5): 3 subjects + full body\nEmail 3 "The Last Call" (pre-deadline): 3 subjects + full body':''}
+${inc('social')?'\n▸ SOCIAL MEDIA PLAN\nInstagram: carousel + caption + hashtags; Reel 15-sec script; 5-frame Story arc\nFacebook: launch post + neighborhood spotlight\nTikTok: 30–45 sec script\n25 targeted hashtags':''}
+${inc('openhouse')?'\n▸ OPEN HOUSE STRATEGY\nTiming. Pre-event marketing. Setup: atmosphere, materials, staging. Qualifying questions. Follow-up: 2hr/24hr/72hr. Broker open.':''}
+${inc('offermax')?'\n▸ MAXIMUM OFFER STRATEGY\nPre-market outreach. Offer deadline. Ethical competition creation. Escalation guidance. Perfect offer profile.':''}
+${inc('farming')?'\n▸ 90-DAY FARMING PLAN\nFarm area. 5-touch sequence: Just Listed mailer, door knock script, market update, referral ask, Just Sold. Digital layer. Long-game 3–5 listings. "I\'ve been thinking about selling..." script.':''}
+${inc('lender')?'\n▸ LOAN PROGRAM ANGLES\nFHA/VA/USDA eligibility. Conforming vs jumbo. DSCR potential. Montana DPA programs. 2-1 buydown math. Seller financing viability.':''}
+
+▸ EXECUTIVE SUMMARY
+TOP 5 SELLING POINTS (specific, not generic)
+TOP 3 RISKS + mitigation plan
+30-DAY ACTION CHECKLIST in priority order
+ONE SENTENCE LISTING THESIS
+
+Write with authority. Mr. Cribbes is a professional — every line must be immediately actionable.`;
+}
+
+// ── RUN BRIEF ─────────────────────────────────────────
+async function runBrief(address){
+  setOrbState('thinking');
+  document.getElementById('bp-addr').textContent=address;
+  const apiKey=document.getElementById('key-in').value.trim();
+  if(!apiKey||!apiKey.startsWith('sk-ant-')){
+    toast('API key required — enter it at the bottom of the screen');
+    setOrbState('idle');return;
+  }
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key':apiKey,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true',
+      },
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:6000,
+        messages:[{role:'user',content:buildPrompt(address)}],
+      }),
+    });
+    const data=await res.json();
+    if(!res.ok)throw new Error(data.error?.message||`Error ${res.status}`);
+    let text='';
+    if(Array.isArray(data.content))for(const b of data.content)if(b.type==='text')text+=b.text;
+    if(!text)throw new Error('Empty response');
+    currentBrief=text;currentAddress=address;
+    document.getElementById('brief-text').textContent=text;
+    document.getElementById('bp-status').textContent=`Brief complete · ${text.length.toLocaleString()} characters · ${address}`;
+    const bp=document.getElementById('brief-panel');
+    bp.style.display='flex';
+    setTimeout(()=>bp.classList.add('open'),10);
+    setOrbState('done');
+    toast('Brief ready — download PDF or run another');
+  }catch(err){
+    setOrbState('idle');
+    toast(`Error: ${err.message}`);
   }
 }
 
-// ── COPY & PRINT ──────────────────────────────────────
-function copyBrief() {
-  const text = document.getElementById('brief-out').textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = document.getElementById('copy-btn');
-    btn.textContent = '✓ Copied';
-    btn.classList.add('done');
-    setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('done'); }, 2500);
-  });
+// ── BRIEF ACTIONS ─────────────────────────────────────
+function closeBrief(){
+  const bp=document.getElementById('brief-panel');
+  bp.classList.remove('open');
+  setTimeout(()=>bp.style.display='none',500);
+}
+function newBrief(){
+  closeBrief();
+  currentAddress='';
+  setTimeout(()=>setOrbState('idle'),500);
 }
 
-function printBrief() {
-  const address = document.getElementById('address').value.trim() || 'Property Brief';
-  const content = document.getElementById('brief-out').textContent;
-  const win = window.open('', '_blank');
+function downloadPDF(){
+  if(!currentBrief)return;
+  const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
+  const win=window.open('','_blank');
   win.document.write(`<!DOCTYPE html><html><head>
-  <title>${address} — E&V Listing Brief</title>
-  <style>
-    body{font-family:Georgia,serif;font-size:13px;line-height:1.85;max-width:860px;margin:40px auto;padding:0 40px;color:#1a1a1a;}
-    h1{font-size:22px;border-bottom:2px solid #c9a84c;padding-bottom:10px;margin-bottom:20px;font-family:Georgia,serif;}
-    pre{white-space:pre-wrap;word-break:break-word;font-family:Georgia,serif;font-size:13px;line-height:1.85;}
-    .ev{font-size:11px;color:#999;letter-spacing:0.15em;text-transform:uppercase;margin-bottom:6px;}
-    @media print{body{margin:20px;padding:0;}}
-  </style></head><body>
-  <div class="ev">Engel &amp; Völkers · Bozeman, Montana</div>
-  <h1>Listing Intelligence Brief<br/><span style="font-size:14px;color:#666;font-weight:normal;">${address}</span></h1>
-  <pre>${content.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
-  </body></html>`);
+<meta charset="UTF-8"/>
+<title>${currentAddress} — ELA Intelligence Brief</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,200;1,300&family=DM+Mono:wght@400&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cormorant Garamond',Georgia,serif;font-size:12.5pt;line-height:2;color:#130f05;background:#fff;padding:70px 80px;max-width:940px;margin:0 auto;}
+.cover{text-align:center;padding:80px 0 60px;border-bottom:2px solid #c9a84c;margin-bottom:56px;page-break-after:always;}
+.c-rule{width:48px;height:1px;background:#c9a84c;margin:20px auto;}
+.c-ela{font-family:'DM Mono',monospace;font-size:9pt;letter-spacing:0.35em;text-transform:uppercase;color:#c9a84c;margin-bottom:20px;}
+.c-title{font-size:34pt;font-weight:200;font-style:italic;color:#130f05;line-height:1.15;margin-bottom:12px;}
+.c-addr{font-size:16pt;font-weight:300;color:#5a3e0a;margin-bottom:8px;}
+.c-date{font-family:'DM Mono',monospace;font-size:8.5pt;letter-spacing:0.16em;color:#bbb;}
+.c-for{font-family:'DM Mono',monospace;font-size:8pt;letter-spacing:0.12em;text-transform:uppercase;color:#c9a84c;margin-top:20px;}
+pre{font-family:'Cormorant Garamond',Georgia,serif;font-size:12.5pt;line-height:2;white-space:pre-wrap;word-break:break-word;color:#130f05;}
+.footer{text-align:center;margin-top:64px;padding-top:22px;border-top:1px solid #c9a84c;font-family:'DM Mono',monospace;font-size:8pt;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;}
+@media print{body{padding:48px 56px;}@page{margin:0.75in;}}
+</style></head><body>
+<div class="cover">
+<div class="c-ela">E · L · A</div>
+<div class="c-rule"></div>
+<div class="c-title">Listing Intelligence<br/>Brief</div>
+<div class="c-rule"></div>
+<div class="c-addr">${currentAddress}</div>
+<div class="c-date">${date}</div>
+<div class="c-for">Prepared exclusively for Mr. Cribbes · Confidential</div>
+</div>
+<pre>${currentBrief.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</pre>
+<div class="footer">ELA · Elite Listing Application · Prepared exclusively for Mr. Cribbes · Confidential</div>
+</body></html>`);
   win.document.close();
-  setTimeout(() => win.print(), 400);
+  setTimeout(()=>win.print(),700);
 }
+
+// ── AMBIENT ORB BREATHE ───────────────────────────────
+let bD=1,bS=1;
+setInterval(()=>{
+  if(appState!=='idle'&&appState!=='done')return;
+  bS+=bD*0.002;if(bS>1.01)bD=-1;if(bS<0.992)bD=1;
+  const r=105*bS,c=160;
+  orbPath.setAttribute('d',
+    `M${c},${c-r} C${c+r*0.74},${c-r} ${c+r},${c-r*0.74} ${c+r},${c} C${c+r},${c+r*0.74} ${c+r*0.74},${c+r} ${c},${c+r} C${c-r*0.74},${c+r} ${c-r},${c+r*0.74} ${c-r},${c} C${c-r},${c-r*0.74} ${c-r*0.74},${c-r} ${c},${c-r} Z`
+  );
+},50);
 </script>
 </body>
 </html>
+
