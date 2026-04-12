@@ -30,69 +30,68 @@ html,body{width:100%;height:100%;background:var(--black);color:var(--white);font
 .ela-mark{display:flex;flex-direction:column;gap:3px;}
 .ela-letters{font-family:'DM Mono',monospace;font-size:13px;letter-spacing:0.44em;color:var(--gold);text-transform:uppercase;}
 .ela-sub{font-size:11px;font-style:italic;font-weight:200;color:rgba(201,168,76,0.3);letter-spacing:0.08em;}
-.top-btn{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;background:transparent;border:1px solid var(--goldBorder);color:var(--goldMid);padding:7px 18px;cursor:pointer;transition:all 0.25s;}
-.top-btn:hover{border-color:var(--gold);color:var(--gold);background:var(--goldDim);}
-#main{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-#orb-wrap{position:relative;width:300px;height:300px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:32px;}
-#orb-svg{position:absolute;width:300px;height:300px;overflow:visible;}
-.ring1{fill:none;stroke:rgba(201,168,76,0.1);stroke-width:1;stroke-dasharray:2 12;animation:spin 28s linear infinite;transform-origin:150px 150px;}
-.ring2{fill:none;stroke:rgba(201,168,76,0.06);stroke-width:1;stroke-dasharray:1 22;animation:spin 18s linear infinite reverse;transform-origin:150px 150px;}
+
+/* MAIN */
+#main{position:fixed;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;}
+
+/* ORB */
+#orb-wrap{position:relative;width:260px;height:260px;display:flex;align-items:center;justify-content:center;margin-bottom:40px;}
+#orb-svg{position:absolute;width:260px;height:260px;overflow:visible;}
+.ring1{fill:none;stroke:rgba(201,168,76,0.1);stroke-width:1;stroke-dasharray:2 12;animation:spin 28s linear infinite;transform-origin:130px 130px;}
+.ring2{fill:none;stroke:rgba(201,168,76,0.06);stroke-width:1;stroke-dasharray:1 22;animation:spin 18s linear infinite reverse;transform-origin:130px 130px;}
 @keyframes spin{to{transform:rotate(360deg);}}
-#orb-path{transition:d 1.6s cubic-bezier(0.34,1.4,0.64,1);}
-#orb-center{position:absolute;display:flex;align-items:center;justify-content:center;pointer-events:none;}
-.c-mic{transition:opacity 0.6s,transform 0.6s;}
-.c-home{position:absolute;transition:opacity 0.6s,transform 0.6s;opacity:0;transform:scale(0.5);}
-.c-think{position:absolute;transition:opacity 0.6s;opacity:0;}
-.think-dots{display:flex;gap:6px;align-items:center;}
-.td{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:tdP 1.4s ease-in-out infinite;}
+#orb-path{transition:d 1.4s cubic-bezier(0.34,1.4,0.64,1);}
+.td{width:5px;height:5px;border-radius:50%;background:var(--gold);animation:tdP 1.4s ease-in-out infinite;display:inline-block;}
 .td:nth-child(1){animation-delay:0s;}.td:nth-child(2){animation-delay:0.2s;}.td:nth-child(3){animation-delay:0.4s;}
 @keyframes tdP{0%,100%{opacity:0.2;transform:scale(0.7);}50%{opacity:1;transform:scale(1.2);}}
-.pr{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.2);pointer-events:none;display:none;top:50%;left:50%;transform:translate(-50%,-50%);}
-.listening .pr,.thinking .pr{display:block;}
-.pr:nth-child(1){animation:prOut 3s ease-out infinite 0s;}
-.pr:nth-child(2){animation:prOut 3s ease-out infinite 1s;}
-.pr:nth-child(3){animation:prOut 3s ease-out infinite 2s;}
-@keyframes prOut{0%{width:170px;height:170px;opacity:0.6;}100%{width:360px;height:360px;opacity:0;}}
-#wave{display:flex;align-items:center;gap:4px;height:30px;}
-.wb{display:inline-block;width:2px;background:linear-gradient(180deg,var(--gold2),var(--gold));border-radius:2px;opacity:0;transition:opacity 0.3s;}
-.wb.on{opacity:1;}
-.wb:nth-child(1){height:8px;animation:wv 1s ease-in-out infinite 0s;}
-.wb:nth-child(2){height:16px;animation:wv 1s ease-in-out infinite 0.1s;}
-.wb:nth-child(3){height:22px;animation:wv 1s ease-in-out infinite 0.2s;}
-.wb:nth-child(4){height:28px;animation:wv 1s ease-in-out infinite 0.15s;}
-.wb:nth-child(5){height:22px;animation:wv 1s ease-in-out infinite 0.25s;}
-.wb:nth-child(6){height:16px;animation:wv 1s ease-in-out infinite 0.1s;}
-.wb:nth-child(7){height:8px;animation:wv 1s ease-in-out infinite 0s;}
-@keyframes wv{0%,100%{transform:scaleY(0.3);}50%{transform:scaleY(1);}}
-#status-area{text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px;min-height:90px;}
-#greeting{font-size:26px;font-weight:200;font-style:italic;color:var(--gold2);letter-spacing:0.03em;}
+#orb-dots{position:absolute;display:none;align-items:center;gap:6px;}
+#orb-dots.show{display:flex;}
+
+/* STATUS */
+#status-area{text-align:center;margin-bottom:32px;}
+#greeting{font-size:26px;font-weight:200;font-style:italic;color:var(--gold2);letter-spacing:0.03em;margin-bottom:8px;}
 #status-line{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(201,168,76,0.4);transition:all 0.5s;}
-#transcript-line{font-size:17px;font-style:italic;font-weight:300;color:rgba(201,168,76,0.6);min-height:26px;transition:all 0.4s;max-width:480px;line-height:1.4;}
+
+/* ADDRESS INPUT */
+#address-form{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:560px;padding:0 24px;}
+#address-input{
+  width:100%;
+  background:rgba(201,168,76,0.05);
+  border:1px solid rgba(201,168,76,0.25);
+  border-radius:0;
+  color:var(--white);
+  font-family:'Cormorant Garamond',serif;
+  font-size:18px;
+  font-style:italic;
+  padding:16px 22px;
+  outline:none;
+  text-align:center;
+  letter-spacing:0.02em;
+  transition:border-color 0.25s,background 0.25s;
+  -webkit-appearance:none;
+}
+#address-input:focus{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+#address-input::placeholder{color:rgba(250,248,242,0.2);}
+#run-btn{
+  font-family:'DM Mono',monospace;
+  font-size:10px;
+  letter-spacing:0.18em;
+  text-transform:uppercase;
+  background:transparent;
+  border:1px solid var(--gold);
+  color:var(--gold);
+  padding:12px 44px;
+  cursor:pointer;
+  transition:all 0.2s;
+}
+#run-btn:hover{background:var(--gold);color:var(--black);}
+#run-btn:disabled{opacity:0.35;cursor:not-allowed;}
+
+/* TOAST */
 #toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:rgba(10,8,2,0.95);border:1px solid var(--goldBorder);padding:11px 22px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);z-index:100;white-space:nowrap;opacity:0;transition:opacity 0.3s;pointer-events:none;}
 #toast.show{opacity:1;}
-#settings-panel{position:fixed;inset:0;z-index:50;background:rgba(5,5,5,0.97);display:none;flex-direction:column;opacity:0;transition:opacity 0.4s;overflow-y:auto;}
-#settings-panel.open{display:flex;opacity:1;}
-.sp-top{padding:34px 52px 26px;border-bottom:1px solid var(--goldBorder);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.sp-eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;}
-.sp-title{font-size:26px;font-weight:200;font-style:italic;}
-.sp-x{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;background:transparent;border:1px solid var(--goldBorder);color:var(--goldMid);padding:8px 20px;cursor:pointer;transition:all 0.2s;}
-.sp-x:hover{border-color:var(--gold);color:var(--gold);}
-.sp-body{padding:38px 52px 80px;display:grid;grid-template-columns:1fr 1fr;gap:22px 44px;max-width:1020px;}
-.sp-field{display:flex;flex-direction:column;gap:5px;}
-.sp-field.full{grid-column:1/-1;}
-.sp-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(201,168,76,0.4);}
-.sp-in,.sp-sel,.sp-ta{background:rgba(201,168,76,0.03);border:1px solid var(--goldBorder);color:var(--white);font-family:'Cormorant Garamond',serif;font-size:15px;padding:10px 14px;outline:none;transition:border-color 0.2s;border-radius:0;-webkit-appearance:none;width:100%;}
-.sp-in:focus,.sp-sel:focus,.sp-ta:focus{border-color:var(--gold);}
-.sp-in::placeholder,.sp-ta::placeholder{color:rgba(250,248,242,0.15);}
-.sp-ta{resize:vertical;min-height:58px;line-height:1.6;}
-.sp-sel option{background:#0a0a05;}
-.chip-lbl{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.15em;text-transform:uppercase;color:rgba(201,168,76,0.4);margin-bottom:7px;display:block;}
-.chips{display:flex;flex-wrap:wrap;gap:6px;}
-.chip{font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.06em;padding:5px 12px;border:1px solid rgba(201,168,76,0.12);background:transparent;color:rgba(201,168,76,0.3);cursor:pointer;user-select:none;transition:all 0.15s;}
-.chip:hover{border-color:var(--goldMid);color:var(--goldMid);}
-.chip.on{background:rgba(201,168,76,0.1);border-color:var(--gold);color:var(--gold);}
-.run-btn{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;font-style:italic;letter-spacing:0.08em;text-transform:uppercase;background:transparent;border:1px solid var(--gold);color:var(--gold);padding:16px 52px;cursor:pointer;transition:all 0.25s;width:100%;margin-top:8px;}
-.run-btn:hover{background:var(--gold);color:var(--black);}
+
+/* BRIEF PANEL */
 #brief-panel{position:fixed;inset:0;z-index:60;background:rgba(5,5,5,0.98);display:none;flex-direction:column;opacity:0;transition:opacity 0.5s;}
 #brief-panel.open{display:flex;opacity:1;}
 .bp-top{background:linear-gradient(135deg,#060503,#0c0902);border-bottom:1px solid var(--goldBorder);padding:26px 48px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
@@ -119,18 +118,20 @@ html,body{width:100%;height:100%;background:var(--black);color:var(--white);font
 <div class="bg-canvas"><div class="bg-ring"></div><div class="bg-ring"></div><div class="bg-ring"></div><div class="bg-ring"></div><div class="bg-ring"></div></div>
 <div class="bg-grid"></div><div class="scan"></div>
 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
+
 <div class="top-bar">
   <div class="ela-mark"><div class="ela-letters">E · L · A</div><div class="ela-sub">Elite Listing Application</div></div>
-  <button class="top-btn" onclick="openSettings()">⚙ Property Details</button>
 </div>
+
 <div id="main">
-  <div id="orb-wrap" onclick="handleOrb()">
-    <div class="pr"></div><div class="pr"></div><div class="pr"></div>
-    <svg id="orb-svg" viewBox="0 0 300 300">
+  <div id="orb-wrap">
+    <svg id="orb-svg" viewBox="0 0 260 260">
       <defs>
         <radialGradient id="og" cx="35%" cy="30%" r="70%">
-          <stop offset="0%" stop-color="#f2e4b8"/><stop offset="30%" stop-color="#e8d5a3"/>
-          <stop offset="65%" stop-color="#c9a84c"/><stop offset="100%" stop-color="#2a1805"/>
+          <stop offset="0%" stop-color="#f2e4b8"/>
+          <stop offset="30%" stop-color="#e8d5a3"/>
+          <stop offset="65%" stop-color="#c9a84c"/>
+          <stop offset="100%" stop-color="#2a1805"/>
         </radialGradient>
         <radialGradient id="gg" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stop-color="#c9a84c" stop-opacity="0.32"/>
@@ -141,171 +142,127 @@ html,body{width:100%;height:100%;background:var(--black);color:var(--white);font
           <stop offset="0%" stop-color="#fff8e0" stop-opacity="0.18"/>
           <stop offset="100%" stop-color="#fff8e0" stop-opacity="0"/>
         </radialGradient>
-        <filter id="gb"><feGaussianBlur stdDeviation="22"/></filter>
+        <filter id="gb"><feGaussianBlur stdDeviation="20"/></filter>
         <filter id="sb"><feGaussianBlur stdDeviation="3"/></filter>
       </defs>
-      <circle cx="150" cy="150" r="132" fill="url(#gg)" filter="url(#gb)"/>
-      <circle class="ring1" cx="150" cy="150" r="142" stroke-dasharray="2 13"/>
-      <circle class="ring2" cx="150" cy="150" r="128" stroke-dasharray="1 21"/>
+      <circle cx="130" cy="130" r="115" fill="url(#gg)" filter="url(#gb)"/>
+      <circle class="ring1" cx="130" cy="130" r="122" stroke-dasharray="2 13"/>
+      <circle class="ring2" cx="130" cy="130" r="110" stroke-dasharray="1 21"/>
       <g stroke="rgba(201,168,76,0.22)" stroke-width="1.2">
-        <line x1="150" y1="6" x2="150" y2="18"/><line x1="150" y1="282" x2="150" y2="294"/>
-        <line x1="6" y1="150" x2="18" y2="150"/><line x1="282" y1="150" x2="294" y2="150"/>
-        <line x1="42" y1="42" x2="51" y2="51"/><line x1="249" y1="42" x2="258" y2="51"/>
-        <line x1="42" y1="258" x2="51" y2="249"/><line x1="249" y1="258" x2="258" y2="249"/>
+        <line x1="130" y1="5" x2="130" y2="16"/>
+        <line x1="130" y1="244" x2="130" y2="255"/>
+        <line x1="5" y1="130" x2="16" y2="130"/>
+        <line x1="244" y1="130" x2="255" y2="130"/>
+        <line x1="36" y1="36" x2="44" y2="44"/>
+        <line x1="216" y1="36" x2="224" y2="44"/>
+        <line x1="36" y1="224" x2="44" y2="216"/>
+        <line x1="216" y1="224" x2="224" y2="216"/>
       </g>
-      <path id="orb-path" d="M150,52 C202,52 248,98 248,150 C248,202 202,248 150,248 C98,248 52,202 52,150 C52,98 98,52 150,52 Z" fill="url(#og)" stroke="rgba(201,168,76,0.48)" stroke-width="0.8"/>
-      <path d="M150,52 C202,52 248,98 248,150 C248,202 202,248 150,248 C98,248 52,202 52,150 C52,98 98,52 150,52 Z" fill="url(#ig)"/>
-      <ellipse cx="128" cy="104" rx="26" ry="15" fill="rgba(255,252,230,0.2)" transform="rotate(-28,128,104)" filter="url(#sb)"/>
-      <ellipse cx="120" cy="97" rx="10" ry="6" fill="rgba(255,252,230,0.36)" transform="rotate(-28,120,97)"/>
+      <path id="orb-path"
+        d="M130,45 C178,45 215,82 215,130 C215,178 178,215 130,215 C82,215 45,178 45,130 C45,82 82,45 130,45 Z"
+        fill="url(#og)" stroke="rgba(201,168,76,0.48)" stroke-width="0.8"/>
+      <path
+        d="M130,45 C178,45 215,82 215,130 C215,178 178,215 130,215 C82,215 45,178 45,130 C45,82 82,45 130,45 Z"
+        fill="url(#ig)"/>
+      <ellipse cx="112" cy="92" rx="22" ry="13" fill="rgba(255,252,230,0.2)" transform="rotate(-28,112,92)" filter="url(#sb)"/>
+      <ellipse cx="106" cy="86" rx="9" ry="5" fill="rgba(255,252,230,0.36)" transform="rotate(-28,106,86)"/>
     </svg>
-    <div id="orb-center">
-      <div class="c-mic">
-        <svg width="34" height="34" viewBox="0 0 34 34" fill="none">
-          <rect x="11" y="3" width="12" height="17" rx="6" fill="rgba(201,168,76,0.95)"/>
-          <path d="M5.5 17c0 6.3 5.1 11.5 11.5 11.5S28.5 23.3 28.5 17" stroke="rgba(201,168,76,0.8)" stroke-width="1.8" fill="none" stroke-linecap="round"/>
-          <line x1="17" y1="28.5" x2="17" y2="32" stroke="rgba(201,168,76,0.8)" stroke-width="1.8" stroke-linecap="round"/>
-          <line x1="11" y1="32" x2="23" y2="32" stroke="rgba(201,168,76,0.8)" stroke-width="1.8" stroke-linecap="round"/>
-        </svg>
-      </div>
-      <div class="c-home">
-        <svg width="38" height="36" viewBox="0 0 38 36" fill="none">
-          <path d="M19 3L1 17h5v16h10v-10h6v10h10V17h5L19 3Z" fill="rgba(201,168,76,0.95)" stroke="rgba(232,213,163,0.45)" stroke-width="0.8"/>
-        </svg>
-      </div>
-      <div class="c-think"><div class="think-dots"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>
-    </div>
+    <div id="orb-dots"><div class="td"></div><div class="td"></div><div class="td"></div></div>
   </div>
+
   <div id="status-area">
     <div id="greeting"></div>
-    <div id="status-line">Tap to speak a property address</div>
-    <div id="transcript-line"></div>
-    <div id="wave"><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div><div class="wb"></div></div>
+    <div id="status-line">Enter a property address below</div>
   </div>
-</div>
-<div id="toast"></div>
 
-<!-- SETTINGS -->
-<div id="settings-panel">
-  <div class="sp-top">
-    <div><div class="sp-eyebrow">Property Intelligence</div><div class="sp-title">Refine ELA's Brief</div></div>
-    <button class="sp-x" onclick="closeSettings()">✕ Close</button>
-  </div>
-  <div class="sp-body">
-    <div class="sp-field"><label class="sp-lbl">Property Address</label><input type="text" class="sp-in" id="s-addr" placeholder="123 Bridger Canyon Rd, Bozeman, MT"/></div>
-    <div class="sp-field"><label class="sp-lbl">List Price</label><input type="text" class="sp-in" id="s-price" placeholder="$1,250,000"/></div>
-    <div class="sp-field"><label class="sp-lbl">Property Type</label>
-      <select class="sp-sel" id="s-type"><option value="">Select</option><option>Single Family Residential</option><option>Condo / Townhome</option><option>Multi-Family</option><option>Vacant Land / Lot</option><option>Acreage / Rural Residential</option><option>New Construction</option><option>Luxury Estate</option><option>Commercial</option></select>
-    </div>
-    <div class="sp-field"><label class="sp-lbl">Beds / Baths</label><input type="text" class="sp-in" id="s-bed" placeholder="4 bed / 3.5 bath"/></div>
-    <div class="sp-field"><label class="sp-lbl">Square Footage</label><input type="text" class="sp-in" id="s-sqft" placeholder="3,800 sq ft"/></div>
-    <div class="sp-field"><label class="sp-lbl">Lot Size</label><input type="text" class="sp-in" id="s-lot" placeholder="1.2 acres"/></div>
-    <div class="sp-field"><label class="sp-lbl">Year Built</label><input type="text" class="sp-in" id="s-year" placeholder="2018"/></div>
-    <div class="sp-field"><label class="sp-lbl">Garage / Parking</label><input type="text" class="sp-in" id="s-garage" placeholder="3-car attached"/></div>
-    <div class="sp-field full"><label class="sp-lbl">Key Features & Upgrades</label><textarea class="sp-ta" id="s-feat" placeholder="Mountain views, chef's kitchen, heated floors, smart home, wine cellar..."></textarea></div>
-    <div class="sp-field full"><label class="sp-lbl">Special Circumstances</label><textarea class="sp-ta" id="s-circ" style="min-height:46px;" placeholder="Estate sale, relocation, STR-permitted, seller financing..."></textarea></div>
-    <div class="sp-field"><label class="sp-lbl">Seller Timeline</label>
-      <select class="sp-sel" id="s-time"><option value="ASAP">ASAP — maximum urgency</option><option value="30 days">30 days</option><option value="60 days">60 days</option><option value="90+ days">90+ days</option></select>
-    </div>
-    <div class="sp-field"><label class="sp-lbl">Brief Depth</label>
-      <select class="sp-sel" id="s-depth"><option value="thorough">Thorough</option><option value="exhaustive">Exhaustive</option><option value="focused">Focused</option></select>
-    </div>
-    <div class="sp-field full"><span class="chip-lbl">Research & Data</span>
-      <div class="chips" id="m-res">
-        <div class="chip on" data-val="cadastral">🏔 Cadastral</div><div class="chip on" data-val="zoning">📐 Zoning</div>
-        <div class="chip on" data-val="tax">💰 Tax</div><div class="chip on" data-val="flood">🌊 Flood</div>
-        <div class="chip on" data-val="permits">🔧 Permits</div><div class="chip on" data-val="comps">📊 Comps</div>
-      </div>
-    </div>
-    <div class="sp-field full"><span class="chip-lbl">Buyer Intelligence</span>
-      <div class="chips" id="m-buy">
-        <div class="chip on" data-val="demographics">👥 Demographics</div><div class="chip on" data-val="idealbuyer">🎯 Ideal Buyer</div>
-        <div class="chip on" data-val="lifestyle">🏔 Lifestyle</div><div class="chip on" data-val="schools">🏫 Schools</div>
-        <div class="chip on" data-val="commute">🚗 Commute</div><div class="chip on" data-val="amenities">☕ Amenities</div>
-      </div>
-    </div>
-    <div class="sp-field full"><span class="chip-lbl">Marketing & Strategy</span>
-      <div class="chips" id="m-mkt">
-        <div class="chip on" data-val="cons">⚠️ Cons</div><div class="chip on" data-val="objections">🛡 Objections</div>
-        <div class="chip on" data-val="headlines">✍️ Headlines</div><div class="chip on" data-val="mlsdesc">📝 MLS Copy</div>
-        <div class="chip on" data-val="email">📧 Email Campaign</div><div class="chip on" data-val="social">📱 Social</div>
-        <div class="chip on" data-val="farming">🏘 Farming</div><div class="chip on" data-val="openhouse">🏠 Open House</div>
-        <div class="chip on" data-val="offermax">🔥 Max Offer</div><div class="chip on" data-val="lender">💳 Loan Angles</div>
-      </div>
-    </div>
-    <div class="sp-field full"><span class="chip-lbl">Likely Buyer Types</span>
-      <div class="chips" id="m-bt">
-        <div class="chip" data-val="relocators">Out-of-State</div><div class="chip" data-val="remote">Remote Workers</div>
-        <div class="chip" data-val="families">Families</div><div class="chip" data-val="retirees">Retirees</div>
-        <div class="chip" data-val="investors">Investors / STR</div><div class="chip" data-val="luxury">Luxury / 2nd Home</div>
-        <div class="chip" data-val="moveup">Move-Up</div><div class="chip" data-val="outdoor">Outdoor Lifestyle</div>
-        <div class="chip" data-val="msu">MSU-Connected</div>
-      </div>
-    </div>
-    <div class="sp-field full"><label class="sp-lbl">Agent Notes</label><textarea class="sp-ta" id="s-notes" placeholder="Competing listings, seller story, neighborhood nuances, anything ELA should factor in..."></textarea></div>
-    <div class="sp-field full"><button class="run-btn" onclick="runFromSettings()">Run Intelligence Brief</button></div>
+  <div id="address-form">
+    <input type="text" id="address-input" placeholder="123 Bridger Canyon Rd, Bozeman, MT" autocomplete="off"
+      onkeydown="if(event.key==='Enter')submitAddress()"/>
+    <button id="run-btn" onclick="submitAddress()">Generate Brief</button>
   </div>
 </div>
+
+<div id="toast"></div>
 
 <!-- BRIEF PANEL -->
 <div id="brief-panel">
   <div class="bp-top">
-    <div><div class="bp-ela">ELA · Elite Listing Application · Mr. Cribbes</div><div class="bp-addr" id="bp-addr">Intelligence Brief</div></div>
+    <div>
+      <div class="bp-ela">ELA · Elite Listing Application · Mr. Cribbes</div>
+      <div class="bp-addr" id="bp-addr">Intelligence Brief</div>
+    </div>
     <div class="bp-acts">
-      <button class="bp-btn g" onclick="downloadPDF()">⬇ Download PDF</button>
+      <button class="bp-btn g" onclick="downloadPDF()">Download PDF</button>
       <button class="bp-btn g" onclick="newBrief()">+ New Brief</button>
-      <button class="bp-btn o" onclick="closeBrief()">✕ Close</button>
+      <button class="bp-btn o" onclick="closeBrief()">Close</button>
     </div>
   </div>
   <div class="stream-bar" id="stream-bar"></div>
   <div id="brief-scroll"><div id="brief-text"></div></div>
-  <div class="bp-bottom"><div class="bp-dot" id="bp-dot"></div><div class="bp-status" id="bp-status">Ready</div></div>
+  <div class="bp-bottom">
+    <div class="bp-dot" id="bp-dot"></div>
+    <div class="bp-status" id="bp-status">Ready</div>
+  </div>
 </div>
 
 <script>
-let appState='idle',recognition=null,currentBrief='',currentAddress='',currentPD={};
+let currentBrief='',currentAddress='';
+
+// GREETING
 const greetEl=document.getElementById('greeting');
 const h=new Date().getHours();
 greetEl.textContent=h<12?'Good morning, Mr. Cribbes.':h<17?'Good afternoon, Mr. Cribbes.':'Good evening, Mr. Cribbes.';
-greetEl.style.cssText='opacity:0;transform:translateY(10px);transition:opacity 2s ease 0.8s,transform 2s ease 0.8s;';
+greetEl.style.cssText='opacity:0;transform:translateY(8px);transition:opacity 1.8s ease 0.5s,transform 1.8s ease 0.5s;';
 setTimeout(()=>{greetEl.style.opacity='1';greetEl.style.transform='translateY(0)';},100);
-document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('on')));
-const onVals=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.dataset.val);
-const onLabels=id=>[...document.querySelectorAll(`#${id} .chip.on`)].map(c=>c.textContent.trim());
-function toast(msg,dur=3200){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);}
-const P_CIRCLE='M150,52 C202,52 248,98 248,150 C248,202 202,248 150,248 C98,248 52,202 52,150 C52,98 98,52 150,52 Z';
-const P_HOME='M150,38 C150,38 160,52 176,66 L248,130 L226,130 L226,230 L186,230 L186,178 L114,178 L114,230 L74,230 L74,130 L52,130 L124,66 C140,52 150,38 150,38 Z';
-const P_PULSE='M150,47 C205,51 252,96 248,152 C244,206 198,252 150,248 C96,244 49,198 53,150 C57,96 99,43 150,47 Z';
-const orbPath=document.getElementById('orb-path');
-const micEl=document.querySelector('.c-mic');
-const homeEl=document.querySelector('.c-home');
-const thinkEl=document.querySelector('.c-think');
-const orbWrap=document.getElementById('orb-wrap');
-const statusLine=document.getElementById('status-line');
-const transcriptLine=document.getElementById('transcript-line');
-const waveBars=document.querySelectorAll('.wb');
-function setOrbState(s){
-  appState=s;orbWrap.className=s;
-  const T='opacity 0.6s,transform 0.6s';
-  if(s==='idle'){orbPath.setAttribute('d',P_CIRCLE);micEl.style.cssText=`opacity:1;transform:scale(1);transition:${T};`;homeEl.style.cssText=`opacity:0;transform:scale(0.5);transition:${T};`;thinkEl.style.cssText='opacity:0;transition:opacity 0.6s;';waveBars.forEach(b=>b.classList.remove('on'));statusLine.textContent='Tap to speak a property address';transcriptLine.textContent='';}
-  else if(s==='listening'){orbPath.setAttribute('d',P_PULSE);micEl.style.cssText=`opacity:1;transition:${T};`;thinkEl.style.cssText='opacity:0;';waveBars.forEach(b=>b.classList.add('on'));statusLine.textContent='Listening...';}
-  else if(s==='thinking'){orbPath.setAttribute('d',P_HOME);micEl.style.cssText=`opacity:0;transform:scale(0.4);transition:${T};`;homeEl.style.cssText=`opacity:0;transition:${T};`;thinkEl.style.cssText='opacity:1;transition:opacity 0.6s;';waveBars.forEach(b=>b.classList.remove('on'));runThinkMsgs();}
-  else if(s==='done'){orbPath.setAttribute('d',P_HOME);micEl.style.cssText=`opacity:0;transition:${T};`;homeEl.style.cssText=`opacity:1;transform:scale(1);transition:${T};`;thinkEl.style.cssText='opacity:0;';waveBars.forEach(b=>b.classList.remove('on'));statusLine.textContent='Brief ready — tap orb for another';}
-}
-let thinkTimer=null;
-function runThinkMsgs(){clearInterval(thinkTimer);const msgs=['Searching cadastral records...','Pulling zoning data...','Analyzing comparable sales...','Building buyer personas...','Writing objection handlers...','Crafting MLS description...','Assembling farming strategy...','Generating email campaigns...','Finalizing executive summary...'];let i=0;statusLine.textContent=msgs[0];thinkTimer=setInterval(()=>{if(appState!=='thinking'){clearInterval(thinkTimer);return;}i=(i+1)%msgs.length;statusLine.textContent=msgs[i];},4500);}
-function handleOrb(){if(appState==='idle'||appState==='done')startListening();else if(appState==='listening')stopListening();}
-function startListening(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){toast('Use Chrome for voice — or tap ⚙ to type the address');return;}recognition=new SR();recognition.continuous=false;recognition.interimResults=true;recognition.lang='en-US';recognition.onstart=()=>setOrbState('listening');recognition.onresult=(e)=>{let interim='';for(let i=e.resultIndex;i<e.results.length;i++){if(e.results[i].isFinal){currentAddress=e.results[i][0].transcript;transcriptLine.textContent=`"${currentAddress}"`;} else {interim=e.results[i][0].transcript;transcriptLine.textContent=interim;}}};recognition.onend=()=>{if(currentAddress)runBrief(currentAddress);else setOrbState('idle');};recognition.onerror=(e)=>{setOrbState('idle');if(e.error==='not-allowed')toast('Microphone blocked — allow access in Chrome settings');else toast('Could not hear address — tap to try again');};recognition.start();}
-function stopListening(){if(recognition)recognition.stop();}
-function openSettings(){const p=document.getElementById('settings-panel');p.style.display='flex';setTimeout(()=>p.classList.add('open'),10);}
-function closeSettings(){const p=document.getElementById('settings-panel');p.classList.remove('open');setTimeout(()=>p.style.display='none',400);}
-function runFromSettings(){const addr=document.getElementById('s-addr').value.trim()||currentAddress;if(!addr){toast('Please enter a property address');return;}currentAddress=addr;currentPD={address:addr,price:document.getElementById('s-price').value.trim(),type:document.getElementById('s-type').value,bed:document.getElementById('s-bed').value.trim(),sqft:document.getElementById('s-sqft').value.trim(),lot:document.getElementById('s-lot').value.trim(),year:document.getElementById('s-year').value.trim(),garage:document.getElementById('s-garage').value.trim()};closeSettings();setTimeout(()=>runBrief(addr),500);}
-function buildPrompt(address){
-  const v=id=>{const el=document.getElementById(id);return el?el.value.trim():'';};
-  const modules=onVals('m-res').concat(onVals('m-buy')).concat(onVals('m-mkt'));
-  const buyerTypes=onLabels('m-bt');
-  const inc=k=>modules.includes(k);
-  const props=[`Address: ${address}`,v('s-price')&&`List Price: ${v('s-price')}`,v('s-type')&&`Type: ${v('s-type')}`,v('s-bed')&&`Beds/Baths: ${v('s-bed')}`,v('s-sqft')&&`Sq Ft: ${v('s-sqft')}`,v('s-lot')&&`Lot: ${v('s-lot')}`,v('s-year')&&`Year Built: ${v('s-year')}`,v('s-garage')&&`Parking: ${v('s-garage')}`,v('s-feat')&&`Features: ${v('s-feat')}`,v('s-circ')&&`Circumstances: ${v('s-circ')}`,`Timeline: ${v('s-time')||'ASAP'}`,buyerTypes.length&&`Target Buyers: ${buyerTypes.join(', ')}`,v('s-notes')&&`Agent Notes: ${v('s-notes')}`].filter(Boolean).join('\n');
 
+// TOAST
+function toast(msg,dur=3200){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),dur);}
+
+// ORB PATHS
+const P_CIRCLE='M130,45 C178,45 215,82 215,130 C215,178 178,215 130,215 C82,215 45,178 45,130 C45,82 82,45 130,45 Z';
+const P_HOME='M130,32 C130,32 139,44 152,56 L215,112 L197,112 L197,198 L163,198 L163,155 L97,155 L97,198 L63,198 L63,112 L45,112 L108,56 C121,44 130,32 130,32 Z';
+const P_THINK='M130,40 C180,44 218,80 215,132 C212,182 174,218 130,215 C80,212 42,174 45,130 C48,80 84,36 130,40 Z';
+const orbPath=document.getElementById('orb-path');
+const orbDots=document.getElementById('orb-dots');
+const statusLine=document.getElementById('status-line');
+const runBtn=document.getElementById('run-btn');
+const addrInput=document.getElementById('address-input');
+
+// BREATHING ANIMATION
+let bD=1,bS=1;
+setInterval(()=>{
+  if(document.getElementById('brief-panel').classList.contains('open'))return;
+  if(orbDots.classList.contains('show'))return;
+  bS+=bD*0.002;if(bS>1.01)bD=-1;if(bS<0.992)bD=1;
+  const r=85*bS,c=130;
+  orbPath.setAttribute('d',`M${c},${c-r} C${c+r*0.74},${c-r} ${c+r},${c-r*0.74} ${c+r},${c} C${c+r},${c+r*0.74} ${c+r*0.74},${c+r} ${c},${c+r} C${c-r*0.74},${c+r} ${c-r},${c+r*0.74} ${c-r},${c} C${c-r},${c-r*0.74} ${c-r*0.74},${c-r} ${c},${c-r} Z`);
+},50);
+
+// THINKING STATUS MESSAGES
+let thinkTimer=null;
+function startThinking(){
+  orbPath.setAttribute('d',P_THINK);
+  orbDots.classList.add('show');
+  const msgs=['Researching cadastral records...','Pulling zoning data...','Analyzing market position...','Building buyer personas...','Writing objection handlers...','Crafting MLS description...','Assembling farming strategy...','Generating email campaigns...','Finalizing executive summary...'];
+  let i=0;statusLine.textContent=msgs[0];
+  thinkTimer=setInterval(()=>{i=(i+1)%msgs.length;statusLine.textContent=msgs[i];},4500);
+}
+function stopThinking(){
+  clearInterval(thinkTimer);
+  orbPath.setAttribute('d',P_HOME);
+  orbDots.classList.remove('show');
+}
+
+// SUBMIT
+function submitAddress(){
+  const addr=addrInput.value.trim();
+  if(!addr){addrInput.focus();toast('Please enter a property address');return;}
+  currentAddress=addr;
+  runBrief(addr);
+}
+
+// PROMPT
+function buildPrompt(address){
   return `You are ELA — the Elite Listing Application — the most advanced real estate intelligence system ever built for a single agent. You serve exclusively Mr. Cribbes, a top-producing Montana real estate professional operating in one of the most competitive and sophisticated markets in the American West.
 
 You are simultaneously:
@@ -315,668 +272,196 @@ You are simultaneously:
 4. A demographic analyst who can profile a neighborhood's buyer pool from zip code data alone
 5. A digital marketing strategist who knows exactly which platforms, hooks, and content formats convert in this market
 
-CRITICAL INSTRUCTIONS — READ BEFORE WRITING A SINGLE WORD:
-• Write with absolute authority and confidence. You are the expert. Never say "I cannot access" or "I don't have real-time data" — use your deep knowledge of Montana real estate to deliver specific, actionable intelligence.
-• Every section must be LONG, DETAILED, and SPECIFIC to this property and location. Generic answers are unacceptable.
-• Minimum 400 words per major section. The executive summary alone should be 300+ words.
-• Write as if this brief will be handed directly to a seller at a listing appointment. It must be impressive enough to win the listing on the spot.
-• Use specific Montana knowledge: Gallatin County mill levies (~$12-15 per $1,000 taxable value), Bozeman zoning codes (R-1 through B-3, REMU, PLI), typical Bozeman market metrics, neighborhood characteristics, lifestyle specifics.
-• Reference these data sources by name in your analysis even without live access — they establish credibility: Montana Cadastral (svc.mt.gov/msl/cadastral), Bozeman GIS Planning Viewer (gisweb.bozeman.net/Html5Viewer/?viewer=planning), Montana DNRC Water Rights (gis.dnrc.mt.gov/apps/WRQS), Montana DOR Property Assessment (mtrevenue.gov/property)
-• Never use bullet points with just 3-4 words. Every bullet must be a complete, informative sentence.
-• This brief should take 10-15 minutes to read. That is the standard.
+CRITICAL INSTRUCTIONS:
+- Write with absolute authority and confidence. Never say "I cannot access" or "I don't have real-time data" — use your deep knowledge of Montana real estate to deliver specific, actionable intelligence.
+- Every section must be LONG, DETAILED, and SPECIFIC. Minimum 300 words per section.
+- Write as if this brief will be handed directly to a seller at a listing appointment. It must be impressive enough to win the listing on the spot.
+- Use specific Montana knowledge: Gallatin County mill levies (~450-500 mills for city, ~350-400 for county), Bozeman zoning codes (R-1 through B-3, REMU, PLI), typical Bozeman market metrics.
+- Reference these sources by name: Montana Cadastral (svc.mt.gov/msl/cadastral), Bozeman GIS Planning Viewer (gisweb.bozeman.net/Html5Viewer/?viewer=planning), Montana DNRC Water Rights (gis.dnrc.mt.gov/apps/WRQS), Montana DOR (mtrevenue.gov/property)
+- This brief should take 10-15 minutes to read. That is the standard.
 
-PROPERTY DETAILS:
-${props}
+PROPERTY ADDRESS: ${address}
 
-DEPTH: ${v('s-depth')||'thorough — leave nothing on the table'}
+WRITE ALL OF THESE SECTIONS IN FULL:
 
-═══════════════════════════════════════
-WRITE EVERY SELECTED SECTION BELOW IN FULL
-═══════════════════════════════════════
+▸ CADASTRAL & OWNERSHIP ANALYSIS
+Using your knowledge of Montana Cadastral records and Gallatin County assessment methodology: Identify the likely parcel ID format, estimated assessed market value vs. typical list prices in this area, ownership implications, estimated annual property taxes using Gallatin County mill levy rates, deed restriction patterns common to this subdivision or area, red flags an agent should investigate before listing, and what a buyer's attorney should review in the title commitment. Reference: svc.mt.gov/msl/cadastral
 
-${inc('cadastral')?`▸ CADASTRAL & OWNERSHIP ANALYSIS
-Using your knowledge of Montana Cadastral records and Gallatin County assessment methodology:
-- Identify the likely parcel ID format for this address and what the cadastral record would contain
-- Estimate the assessed market value vs. list price spread based on typical Gallatin County assessment ratios (Montana assesses at 100% market value but taxable value is a percentage of that)
-- Analyze the ownership implications — is this a long-term hold, recent acquisition, estate situation?
-- Calculate estimated annual property taxes using Gallatin County mill levy rates (~450-500 mills total for city properties, ~350-400 for county)
-- Identify any deed restriction patterns common to this subdivision or area
-- Flag any red flags an agent should investigate before listing: unpermitted additions, easements, water rights issues, HOA compliance
-- Note what a buyer's attorney should specifically review in the title commitment for this property type and location
-- Provide the exact Montana Cadastral URL path an agent would use to pull this record: svc.mt.gov/msl/cadastral/
-`:''
-}
-${inc('zoning')?`▸ ZONING, DEVELOPMENT POTENTIAL & REGULATORY ANALYSIS
-Using your deep knowledge of Bozeman Municipal Code and Gallatin County zoning:
-- Identify the most likely zoning designation for this address (R-1, R-2, R-3, R-4, REMU, B-1, B-2, B-3, PLI, or county RR/RA/SAG) and explain exactly what that means for a buyer
-- List ALL permitted uses by-right under this zoning — be specific and complete
-- List conditional uses that require a CUP (Conditional Use Permit) — this is often where hidden value lives
-- ADU Analysis: Under Bozeman's current code (BMC 38.360.040 as amended), is this parcel eligible for an Accessory Dwelling Unit? What are the size limits, setback requirements, and owner-occupancy requirements? What would an ADU add to the property's value and rental income potential?
-- Short-Term Rental (STR) Analysis: What are the current STR regulations in this zone? Is a STR license obtainable? What is the estimated STR revenue potential for this property based on Bozeman's STR market?
-- Development Potential: Could the lot be subdivided? What are the minimum lot size requirements? Could additional dwelling units be added?
-- Setbacks, height limits, lot coverage maximums — and how does this property's current footprint compare?
-- Is the property in any overlay district? (Historic, NCOD, Entryway Corridor, Affordable Housing Overlay?)
-- Growth Policy designation and what it signals about the area's future
-- Highest and best use conclusion: Is the current use optimal, or is there an angle a sophisticated buyer should know about?
-- Reference: Bozeman GIS Planning Viewer at gisweb.bozeman.net/Html5Viewer/?viewer=planning for verification
-`:''
-}
-${inc('tax')?`▸ TAX, ASSESSMENT & FINANCIAL ANALYSIS
-- Estimate the property's taxable value using Montana's current residential assessment rate
-- Calculate estimated annual property taxes broken down by: county general, city general, school district, special districts
-- Identify if this property is likely in any Special Improvement District (SID) or Local Improvement District (LID) — common in newer Bozeman subdivisions — and estimate annual SID payments
-- Compare the effective tax rate (taxes/purchase price) to the Bozeman market average
-- Tax trajectory analysis: Given Gallatin County's rapid appreciation, how have assessments been trending and what should a buyer expect at the next reappraisal cycle (Montana reassesses every 2 years)?
-- Are there any tax advantage strategies relevant to this buyer? (Primary residence exemption, agricultural classification if applicable, 1031 exchange considerations for investors)
-- Reference: Montana DOR Property Assessment at mtrevenue.gov/property
-`:''
-}
-${inc('flood')?`▸ FLOOD, HAZARD & ENVIRONMENTAL ANALYSIS
-- FEMA flood zone analysis for this location — is it in Zone X (minimal), Zone AE (100-year floodplain), or Zone A?
-- If in a flood zone: estimated annual flood insurance cost, lender requirements, and how to present this to buyers
-- Wildfire Hazard: Montana's WUI (Wildland-Urban Interface) designation for this area — is this property in a moderate, high, or very high fire hazard severity zone?
-- Radon: Montana is a high-radon state. What is the radon risk level for this county/area? Has testing been done?
-- Water rights: Using knowledge of Montana DNRC Water Rights system (gis.dnrc.mt.gov/apps/WRQS) — does this property have any water rights appurtenant? This is significant for rural/acreage properties.
-- Soil and geologic considerations: Any known expansive soils, landslide risk, or subsidence issues in this area?
-- Environmental history: Any known contamination, underground storage tanks, or brownfield issues nearby?
-- How to present these factors to buyers as context rather than dealbreakers
-`:''
-}
-${inc('permits')?`▸ PERMIT HISTORY & COMPLIANCE ANALYSIS
-- What permits should exist for this property based on its age, size, and features?
-- What are the red flags that suggest unpermitted work? (Finished basement not on original plans, additions visible in satellite vs. original footprint, etc.)
-- Bozeman Building Division records to pull and what to look for
-- How to advise the seller on proactive permit resolution before listing
-- Impact of open or expired permits on financing — which lenders will call these out?
-- How to handle permit issues in the listing disclosure and purchase agreement
-- Cost estimates for resolving common permit issues in this property type
-`:''
-}
-${inc('comps')?`▸ MARKET POSITION & COMPETITIVE ANALYSIS
-Note: Mr. Cribbes will provide specific MLS comp data. This section provides the analytical framework and market context.
+▸ ZONING & DEVELOPMENT POTENTIAL
+Using your deep knowledge of Bozeman Municipal Code and Gallatin County zoning: Identify the most likely zoning designation and explain what it means for a buyer. List ALL permitted uses by-right and conditional uses requiring a CUP. Full ADU analysis under BMC 38.360.040. STR regulations and revenue potential. Development potential including subdivision possibilities. Setbacks, height limits, lot coverage. Any overlay districts. Growth Policy designation. Highest and best use conclusion. Reference: gisweb.bozeman.net/Html5Viewer/?viewer=planning
 
-BOZEMAN MARKET OVERVIEW (current):
-- Gallatin County has been one of the fastest-appreciating markets in the US, driven by remote work migration, MSU growth, and outdoor lifestyle demand
-- Provide current market temperature assessment: inventory levels, days on market trends, list-to-sale price ratios
-- Price per square foot benchmarks for this property type and neighborhood
-- Seasonal market patterns in Bozeman and how they affect this listing's timing
+▸ TAX & FINANCIAL ANALYSIS
+Estimate taxable value, annual taxes broken down by county/city/school/special districts. Identify likely SID or LID assessments common in this area. Compare effective tax rate to Bozeman market average. Tax trajectory analysis given Gallatin County appreciation rates. Tax advantage strategies for this buyer type. Reference: mtrevenue.gov/property
 
-COMPETITIVE POSITIONING FRAMEWORK:
-- What price per square foot should this property command vs. neighborhood average and why?
-- What are the 3 most important value drivers for this specific property?
-- What are the 3 most significant value detractors that will affect pricing?
-- Recommended pricing strategy: at market, slight premium, or aggressive? Why?
-- Days on market target based on this pricing strategy
-- Price reduction triggers: if no offer by X days, reduce by Y%
+▸ FLOOD, HAZARD & ENVIRONMENTAL
+FEMA flood zone analysis. Wildfire WUI designation. Montana radon risk. Water rights analysis using DNRC system (gis.dnrc.mt.gov/apps/WRQS). Soil and geologic considerations. Environmental history. How to present these factors to buyers.
 
-ABSORPTION ANALYSIS:
-- Estimated months of inventory in this price range and property type
-- Competition analysis: what else is a buyer looking at when they look at this home?
-- How to differentiate from the competition in marketing and presentation
-`:''
-}
-${inc('demographics')?`▸ NEIGHBORHOOD DEMOGRAPHIC INTELLIGENCE
-Deep demographic analysis of this neighborhood and zip code:
+▸ PERMIT HISTORY & COMPLIANCE
+What permits should exist for this property type and age. Red flags suggesting unpermitted work. Bozeman Building Division records to pull. How to advise seller on proactive permit resolution. Impact on financing. Cost estimates for common permit issues.
 
-POPULATION PROFILE:
-- Median household income range and income distribution
-- Age distribution — what generation dominates this neighborhood?
-- Educational attainment — percentage with college and graduate degrees
-- Household composition — families vs. singles vs. couples without children
-- Owner-occupancy rate vs. renter rate — what does this say about neighborhood stability?
+▸ MARKET POSITION & COMPETITIVE ANALYSIS
+Bozeman market overview: inventory levels, DOM trends, list-to-sale ratios, price per SF benchmarks, seasonal patterns. Competitive positioning framework: price per SF this property should command and why, top 3 value drivers, top 3 value detractors, pricing strategy recommendation. Absorption analysis. How to differentiate from competition.
 
-ECONOMIC PROFILE:
-- Top employers drawing residents to this area (MSU, Bozeman Health, tech sector, outdoor industry)
-- Remote worker percentage — increasingly significant in Bozeman
-- Entrepreneurial/self-employed percentage
-- Average household vehicles and commute patterns
+▸ NEIGHBORHOOD DEMOGRAPHIC INTELLIGENCE
+Population profile: median income, age distribution, education, household composition, owner vs renter rate. Economic profile: top employers, remote worker percentage, entrepreneurial percentage. Migration patterns: where buyers are coming from, what they're seeking, how long residents stay. Cultural and lifestyle profile. What this means for marketing strategy.
 
-MIGRATION PATTERNS:
-- Where are new residents coming from? (California, Colorado, Pacific Northwest are primary feeder markets)
-- What are they leaving behind and what are they seeking?
-- How long do residents typically stay? (Turnover rate)
-- What life events trigger moves in this neighborhood?
+▸ IDEAL BUYER PROFILES — DEEP PSYCHOLOGICAL ANALYSIS
+Top 3 buyer personas. For each: persona name and archetype, demographics, origin, financial profile, what they value most (specific to this property), biggest fears, decision trigger, media and information diet, messaging that resonates, how to reach them, conversion probability ranking, negotiation profile.
 
-CULTURAL & LIFESTYLE PROFILE:
-- What does the weekend look like for someone living here?
-- Political/social character of the neighborhood
-- Community engagement level — HOA activity, neighborhood associations
-- Pet ownership, outdoor recreation participation rates
-- What this demographic profile means for marketing strategy and buyer targeting
-`:''
-}
-${inc('idealbuyer')?`▸ IDEAL BUYER PROFILES — DEEP PSYCHOLOGICAL ANALYSIS
-Identify and fully develop the top 3 buyer personas for this specific property:
+▸ LIFESTYLE ANALYSIS — THE FULL MONTANA EXPERIENCE
+Morning ritual: specific coffee spots, workout options, sunrise description. Weekday life: realistic commute times to downtown Bozeman/MSU/Bozeman Health/Bridger Bowl/Belgrade/Livingston, work-from-home quality, after-work routine. Weekend warrior: specific summer hikes with names and drive times, fishing holes on Madison/Gallatin/Yellowstone rivers, winter skiing at Bridger Bowl and Big Sky, spring/fall activities. Community character: neighbor culture, dog friendliness, kids culture. Hidden gem angle. Honest seasonal reality check for all four seasons.
 
-For EACH persona provide:
-PERSONA NAME & ARCHETYPE: (e.g., "The Denver Refugee" / "The MSU Professor" / "The Montana Dreamer")
-DEMOGRAPHICS: Age range, household income, family status, education level
-ORIGIN: Where they're coming from geographically and why they're leaving
-FINANCIAL PROFILE: How they're buying (cash, conventional, jumbo), down payment range, pre-approval status
-WHAT THEY VALUE MOST: The top 5 things they're looking for — be specific to this property's features
-WHAT KEEPS THEM UP AT NIGHT: Their 3 biggest fears about this purchase
-WHAT TRIGGERS THEIR DECISION: The emotional moment that makes them write an offer
-MEDIA & INFORMATION DIET: Where do they find real estate listings? What social platforms? What news sources?
-MESSAGING THAT RESONATES: The exact language, tone, and promises that speak to them
-HOW TO REACH THEM: Specific channels, targeting parameters, timing
-CONVERSION PROBABILITY: Rank 1-3 with reasoning
-NEGOTIATION PROFILE: How do they negotiate? What terms matter most to them beyond price?
-`:''
-}
-${inc('lifestyle')?`▸ LIFESTYLE ANALYSIS — THE FULL MONTANA EXPERIENCE
-Paint the most vivid, specific, compelling picture of life at this address. This section should make someone reading it feel the pull of Montana before they've ever visited.
+▸ SCHOOLS & FAMILY INFRASTRUCTURE
+Assigned elementary/middle/high school with context on Bozeman School District quality. Specific programs: AP, dual enrollment with MSU, arts, athletics. Private and alternative options. MSU proximity and value. Childcare reality in Bozeman (be honest about shortage). Family infrastructure. How to use schools as a marketing asset.
 
-MORNING RITUAL:
-- Where does coffee happen? Name specific local options within reach.
-- Morning workout options: trails, gyms, yoga studios, CrossFit boxes
-- What does the sunrise look like from this property or neighborhood?
-- School drop-off reality if applicable — routes, times, stress level
+▸ LOCATION INTELLIGENCE
+Realistic walk score assessment. Drive time matrix: downtown Bozeman, BZN airport, MSU, Bridger Bowl, Big Sky, Costco/major grocery, Bozeman Health, Belgrade, Livingston, Yellowstone North Entrance. Essential services within 5 minutes. Dining and entertainment within 15 minutes with specific Bozeman restaurant and bar names. Negative proximity factors to address proactively.
 
-WEEKDAY LIFE:
-- Realistic commute times and routes to: Downtown Bozeman, MSU campus, Bozeman Health Deaconess, Bridger Bowl, Belgrade, Livingston
-- Work-from-home quality: cell coverage, ISP options, coffee shop alternatives
-- Lunch options within reach
-- After-work decompression — what's the after-5pm routine?
+▸ HONEST CONS ANALYSIS
+Every realistic negative organized by category: property-specific, location, market, neighborhood, Montana-specific, financial. For each: likelihood a buyer raises it (High/Medium/Low) and deal-impact (Deal-killer/Negotiating chip/Minor concern).
 
-WEEKEND WARRIOR:
-- Summer: Specific hikes with names and drive times, fishing holes (Madison, Gallatin, Yellowstone rivers), mountain biking trails, camping spots, Yellowstone access
-- Winter: Bridger Bowl specifics (vertical, terrain variety, drive time), Big Sky access, Nordic skiing at Crosscut Mountain Sports Center, snowmobiling
-- Spring/Fall: shoulder season activities, hunting access, farmers markets
-- Year-round: the downtown Bozeman experience, Main Street, brewery scene, arts and culture
+▸ OBJECTION HANDLER PLAYBOOK
+For every con: OBJECTION (exact words), UNDERLYING FEAR, ACKNOWLEDGE, REFRAME (with data), REDIRECT, CLOSE FORWARD, LEAVE-BEHIND DATA. Write as actual scripts Mr. Cribbes can memorize and deliver naturally.
 
-COMMUNITY CHARACTER:
-- What kind of neighbors? What's the block party culture?
-- Dog friendliness of the neighborhood
-- Kids playing outside culture vs. privacy culture
-- The unwritten rules of this neighborhood
+▸ LISTING HEADLINE ARSENAL
+12 distinct headlines organized by angle: 3 lifestyle, 2 investment/value, 2 aspiration, 2 urgency, 2 feature-specific, 1 community. Each with platform recommendation and target persona.
 
-HIDDEN GEM ANGLE:
-- The one thing about this location that most listings never mention but buyers who move here always rave about
-- The local secret that makes residents feel like insiders
+▸ LISTING COPY SUITE
+Full MLS description (300-350 words): opening hook, property highlights, location/lifestyle paragraph, practical details, investment/value paragraph if applicable, closing CTA. Social media caption (150 words, no emojis, luxury brand). Text message version (50 words). Voicemail script (30 seconds).
 
-SEASONAL REALITY CHECK (honest):
-- Summer: perfection months, specific highlights
-- Fall: arguably the best season in Montana — why
-- Winter: cold truth about Montana winters and why residents love it anyway
-- Spring: "mud season" reality and how locals cope
-`:''
-}
-${inc('schools')?`▸ SCHOOLS, EDUCATION & FAMILY INFRASTRUCTURE
-ASSIGNED PUBLIC SCHOOLS:
-- Elementary, Middle, and High School for this address
-- GreatSchools ratings context and what they actually measure
-- Student-to-teacher ratios and class sizes
-- Specific programs worth highlighting: AP courses, dual enrollment with MSU, arts programs, athletics
-- School culture and parent involvement level
-- Walking/biking distance or bus route availability
+▸ EMAIL CAMPAIGN — 3-PART SEQUENCE
+Email 1 THE DISCOVERY (launch day): 5 subject options, preview text, full body 250-350 words, P.S. line.
+Email 2 THE DEEP DIVE (days 4-5): 5 subject options, preview text, full body 200-300 words, P.S. line.
+Email 3 THE LAST CALL (48 hours before deadline): 5 subject options, preview text, full body 150-200 words, P.S. line.
 
-BOZEMAN SCHOOL DISTRICT CONTEXT:
-- Bozeman School District is consistently one of Montana's highest-performing — use this as a marketing asset
-- Recent bond measures and facility investments
-- The district's relationship with MSU — unique educational opportunities
+▸ SOCIAL MEDIA CONTENT MACHINE
+Instagram: 10-frame carousel breakdown with captions, 30-45 second Reel script, 7-frame Story sequence. Facebook: 400-word launch post, neighborhood spotlight post. LinkedIn: professional/investment angle post. TikTok: 60-second script with hook and CTA. 30 targeted hashtags organized by category. Pinterest board strategy.
 
-PRIVATE & ALTERNATIVE OPTIONS:
-- Private schools within reasonable distance
-- Montessori, charter, or alternative education options
-- Homeschool community strength in the area
+▸ OPEN HOUSE STRATEGY
+Pre-event (7 days out): neighbor invitation script, agent outreach email, social timeline, signage strategy. Setup and atmosphere: arrival experience, music, scent, temperature, lighting, printed materials. During: greeter script, 5 qualifying questions, room-by-room tour story, handling different visitor types. Post-event follow-up: 2-hour text, 24-hour email template, Day 3 call script, Day 7 cold lead follow-up. Broker open strategy.
 
-HIGHER EDUCATION:
-- Montana State University proximity and its effect on property values, rental demand, and community culture
-- MSU as an employer — professors, administrators, and staff as likely buyers
-- University town amenities: performing arts, sports events, lectures, extension programs
+▸ MAXIMUM OFFER STRATEGY
+Pre-market campaign: who to call first, teaser strategy, Coming Soon MLS strategy, building a waiting list. Offer structure: review date psychology, agent communication, offer instructions for competitive tension, escalation clause guidance, terms beyond price. Multiple offer management: what to share, best and final guidance, counter-offer strategy. Perfect offer profile. Fallback strategy with day-by-day response plan.
 
-CHILDCARE & EARLY EDUCATION:
-- Daycare and preschool availability in the area (critical for young family buyers — Bozeman has a significant childcare shortage, be honest)
-- Cost context for childcare in Bozeman
+▸ 90-DAY FARMING MASTER PLAN
+Farm definition: primary streets and boundaries, home count, secondary farm. Database build: sources, tools, 30-day target. 5-touch sequence with complete scripts: Just Listed mailer (full copy front and back), Door knock (full conversation script for every scenario including "I'm thinking about selling"), Market update mailer (full copy), Referral ask (complete email and direct mail), Just Sold announcement (full copy with pivot to valuation CTA). Digital farming: Facebook groups strategy, Nextdoor, Instagram geo-targeting, Google Ads. Long-game conversion system. Metrics to track.
 
-FAMILY INFRASTRUCTURE:
-- Pediatric healthcare options
-- Youth sports leagues and recreational programs
-- Family-friendly community events and traditions
-
-SCHOOL QUALITY AS A MARKETING ASSET:
-- How to lead with schools in buyer conversations
-- Which buyer personas care most about schools and why
-`:''
-}
-${(inc('commute')||inc('amenities'))?`▸ LOCATION INTELLIGENCE — COMMUTE, WALKABILITY & ESSENTIAL SERVICES
-WALKABILITY & ACTIVE TRANSPORTATION:
-- Realistic Walk Score assessment for this specific address
-- What is actually walkable vs. what requires a car
-- Bike infrastructure: dedicated lanes, trails, safety of cycling routes
-- E-bike viability for commuting
-
-DRIVE TIME MATRIX (realistic, not Google Maps best case):
-- Downtown Bozeman Main Street: X minutes
-- Bozeman Yellowstone International Airport (BZN): X minutes
-- Montana State University main entrance: X minutes
-- Bridger Bowl ski area: X minutes
-- Big Sky ski resort: X minutes
-- Costco/Walmart/major grocery: X minutes
-- Bozeman Health Deaconess Hospital: X minutes
-- Belgrade (for cost-of-living comparison): X minutes
-- Livingston (alternative market): X minutes
-- Yellowstone National Park North Entrance: X minutes
-
-ESSENTIAL SERVICES WITHIN 5 MINUTES:
-- Grocery stores (name specific options)
-- Pharmacy
-- Urgent care / medical
-- Gas stations
-- Hardware / home improvement
-
-DINING & ENTERTAINMENT WITHIN 15 MINUTES:
-- Highlight specific Bozeman restaurants and bars that define the local culture
-- Coffee culture — name specific roasters and cafes
-- Brewery scene — Bozeman's craft beer culture is a marketing asset
-- Live music, arts, culture venues
-
-NEGATIVE PROXIMITY FACTORS (be honest):
-- Railroad crossings that affect commute
-- Highway noise or flight path impact
-- Industrial or commercial neighbors
-- Future development that could impact views, traffic, or character
-- Anything a buyer will discover on their own that you should address proactively
-`:''
-}
-${inc('cons')?`▸ HONEST CONS ANALYSIS — KNOW YOUR OBJECTIONS BEFORE BUYERS DO
-This section is Mr. Cribbes' competitive intelligence. Every con listed here is an objection he can prepare for and address before it becomes a dealbreaker.
-
-List EVERY realistic negative, organized by category:
-
-PROPERTY-SPECIFIC CONS:
-(Based on property type, age, size, features provided — be specific)
-
-LOCATION CONS:
-(Distance from amenities, traffic patterns, noise, views, neighbors)
-
-MARKET CONS:
-(Current inventory levels, competing listings, price position, market direction)
-
-NEIGHBORHOOD CONS:
-(HOA restrictions if applicable, parking, density, development pressure)
-
-MONTANA-SPECIFIC CONS:
-(Winter access, distance from major metro, limited services, wildfire risk, hard winters, property tax trends given appreciation)
-
-FINANCIAL CONS:
-(Carrying costs, insurance costs, maintenance costs specific to this property type)
-
-For each con: Rate the likelihood a buyer raises it (High/Medium/Low) and the potential deal-impact (Deal-killer/Negotiating chip/Minor concern)
-`:''
-}
-${inc('objections')?`▸ OBJECTION HANDLER PLAYBOOK
-For EVERY con identified above, provide a complete objection handling script:
-
-FORMAT FOR EACH:
-OBJECTION: "[Exact words a buyer or buyer's agent might use]"
-UNDERLYING FEAR: [What they're really worried about beneath the surface]
-ACKNOWLEDGE: [Validate the concern without agreeing it's a dealbreaker — 1-2 sentences]
-REFRAME: [The data, context, or perspective that changes how they see this — specific and substantive]
-REDIRECT: [Turn the conversation toward value — what does this property offer that addresses their real need?]
-CLOSE FORWARD: [The statement that moves them toward a decision]
-LEAVE-BEHIND DATA: [A specific fact, stat, or proof point they can take home and think about]
-
-Write these as actual scripts Mr. Cribbes can memorize and deliver naturally. The language should be warm, confident, and non-defensive.
-`:''
-}
-${inc('headlines')?`▸ LISTING HEADLINE ARSENAL — 12 VARIATIONS
-Write 12 distinct listing headlines for different contexts, platforms, and buyer personas. Each must be specific to THIS property — not generic Montana language. No "stunning," "charming," or "don't miss this one."
-
-Organize by angle:
-LIFESTYLE HEADLINES (3): Lead with the life, not the house
-INVESTMENT/VALUE HEADLINES (2): For the analytical buyer
-ASPIRATION HEADLINES (2): The Montana dream made real
-URGENCY HEADLINES (2): Create FOMO without desperation
-FEATURE-SPECIFIC HEADLINES (2): Lead with the property's single strongest attribute
-COMMUNITY HEADLINES (1): Sell the neighborhood, not just the house
-
-For each headline also provide: The platform it works best on and the buyer persona it targets.
-`:''
-}
-${inc('mlsdesc')?`▸ LISTING COPY SUITE
-FULL MLS DESCRIPTION (300-350 words):
-Write a complete, publication-ready MLS description. Structure:
-- Opening hook (2-3 sentences): Put the buyer IN the property emotionally. Specific, sensory, evocative.
-- Property highlights (4-5 sentences): The features that matter most, woven naturally into the narrative
-- Location and lifestyle paragraph (3-4 sentences): Why HERE, not just why this house
-- Practical details paragraph: Beds, baths, SF, lot, garage — integrated naturally, not listed robotically
-- Investment/value paragraph if applicable: The financial case for this purchase
-- Closing CTA (1-2 sentences): Create urgency without desperation
-
-Tone: Sophisticated, confident, specific. Read like it was written by someone who actually loves Montana real estate.
-
-SOCIAL MEDIA CAPTION (150 words):
-Hook-driven, emoji-free (Mr. Cribbes' brand is luxury — no emojis), platform-agnostic version that works for Instagram, Facebook, and LinkedIn.
-
-TEXT MESSAGE VERSION (50 words):
-For Mr. Cribbes to text to his database. Conversational, personal, creates curiosity.
-
-VOICEMAIL SCRIPT (30 seconds):
-For prospecting calls to potential buyers in his database.
-`:''
-}
-${inc('email')?`▸ EMAIL CAMPAIGN — 3-PART SEQUENCE
-Write complete, ready-to-send emails. Subject lines that get opened. Bodies that get read. CTAs that get clicked.
-
-EMAIL 1 — THE DISCOVERY (Send: Listing launch day, 9 AM)
-SUBJECT LINE OPTIONS (write 5, ranked by predicted open rate):
-PREVIEW TEXT (the line after the subject in the inbox):
-FULL EMAIL BODY:
-[Write the complete email — 250-350 words. Personal, story-driven, creates desire without hard-selling. End with a soft but clear CTA.]
-P.S. LINE: [Every great email has a P.S. — write one that adds value or urgency]
-
-EMAIL 2 — THE DEEP DIVE (Send: Day 4-5 after launch)
-SUBJECT LINE OPTIONS (write 5):
-PREVIEW TEXT:
-FULL EMAIL BODY:
-[Go deeper on the neighborhood, lifestyle, or a specific feature. New angle from Email 1. Include a data point or market insight. 200-300 words.]
-P.S. LINE:
-
-EMAIL 3 — THE LAST CALL (Send: 48 hours before offer deadline or open house)
-SUBJECT LINE OPTIONS (write 5):
-PREVIEW TEXT:
-FULL EMAIL BODY:
-[Urgency-driven but not desperate. Reference showing activity. Open house or deadline details. 150-200 words.]
-P.S. LINE:
-`:''
-}
-${inc('social')?`▸ SOCIAL MEDIA CONTENT MACHINE
-Complete content plan across all relevant platforms:
-
-INSTAGRAM LAUNCH CAROUSEL (10 frames):
-Frame 1: Cover — hook that makes people swipe
-Frames 2-8: Property story, neighborhood story, lifestyle story — describe each frame's visual and caption
-Frame 9: About the neighborhood — community angle
-Frame 10: CTA frame — how to schedule a showing
-Caption (write the full caption, 150 words):
-Hashtag strategy (30 tags, organized by category):
-
-INSTAGRAM REEL SCRIPT (30-45 seconds):
-Hook (first 3 seconds — critical):
-Scene-by-scene shot list:
-Voiceover script:
-Music direction:
-CTA:
-
-INSTAGRAM STORY SEQUENCE (7 frames):
-Frame-by-frame breakdown with visual direction and copy for each
-
-FACEBOOK LISTING POST:
-Long-form caption (400 words) targeting local community and buyers in feeder markets. Include community angle, lifestyle angle, and property highlights.
-
-LINKEDIN POST:
-Professional angle — investment thesis, market data, neighborhood story. Targets remote workers, executives, and professional relocators.
-
-TIKTOK/REELS SCRIPT (60 seconds):
-Hook that stops the scroll:
-Story arc:
-Property showcase moments:
-Neighborhood moments:
-CTA:
-Trending audio direction:
-
-PINTEREST BOARD STRATEGY:
-Board name and description, 5 pin concepts that drive traffic to the listing
-`:''
-}
-${inc('openhouse')?`▸ OPEN HOUSE STRATEGY — THE FULL PLAYBOOK
-PRE-EVENT (7 days out):
-- Neighbor invitations: Script for personal notes to 50 surrounding homes
-- Agent outreach: Email to top 25 buyer's agents in the market
-- Social promotion timeline and content
-- Database email (use Email 3 from campaign above)
-- Signage strategy: Number of signs, placement locations, directional sign plan
-
-SETUP & ATMOSPHERE:
-- Arrival experience: What buyers see, smell, hear in the first 10 seconds
-- Music playlist direction (specific genre/energy level for this property type)
-- Scent strategy: What to bake, diffuse, or avoid
-- Temperature setting
-- Lighting optimization room by room
-- What to put OUT (fresh flowers, lifestyle props) and what to put AWAY
-- Printed materials: Feature sheets, neighborhood guide, one-pager on the lifestyle
-
-DURING THE OPEN HOUSE:
-- Greeter script: First words out of Mr. Cribbes' mouth when someone walks in
-- Qualifying questions woven naturally into conversation (5 specific questions)
-- The tour: Which rooms to show first, what stories to tell about each space
-- How to handle the "just looking" visitor
-- How to handle the serious buyer
-- How to handle the nosy neighbor (turn them into a referral source)
-- Sign-in strategy: How to capture contact info without being awkward
-
-POST-EVENT FOLLOW-UP SEQUENCE:
-- Within 2 hours: Text to every attendee (write the text)
-- Within 24 hours: Personalized email (write the template)
-- Day 3: Follow-up call script for hot leads
-- Day 7: Final follow-up for cold leads
-
-BROKER OPEN STRATEGY:
-- Separate event or same day?
-- What to offer agents (food, market data, referral conversation)
-- How to get agents to bring their buyers
-`:''
-}
-${inc('offermax')?`▸ MAXIMUM OFFER STRATEGY — THE COMPLETE PLAYBOOK
-PRE-MARKET CAMPAIGN (before MLS launch):
-- Who to call first and in what order (past clients, active buyers, agent network)
-- The pre-market teaser: What to share and what to hold back to create anticipation
-- Coming Soon MLS strategy: Maximize the pre-market window without violating MLS rules
-- How to build a pre-launch waiting list
-
-OFFER STRUCTURE STRATEGY:
-- Recommended offer review date and time (and the psychology behind the choice)
-- How to communicate the offer process to buyer's agents
-- What to include in the offer instructions to maximize competitive tension
-- Escalation clause guidance: How to advise sellers on evaluating escalation clauses
-- Terms beyond price that matter for THIS seller (based on circumstances provided)
-
-MULTIPLE OFFER MANAGEMENT:
-- How to handle calls from buyer's agents during the offer window
-- What information to share and what to protect
-- Best and final offer: When to use it and when to avoid it
-- How to present multiple offers to the seller — decision framework
-- Counter-offer strategy: When to counter vs. accept vs. reject
-
-THE PERFECT OFFER PROFILE:
-Based on the seller's circumstances, describe the ideal offer in detail:
-- Price point and justification
-- Financing terms (cash vs. conventional vs. VA/FHA)
-- Inspection contingency approach
-- Appraisal contingency approach
-- Possession and closing timeline
-- Personal property inclusions/exclusions
-- Earnest money amount
-- Any other terms that matter
-
-FALLBACK STRATEGY:
-- If no offers at review date: Day-by-day response plan
-- Price adjustment triggers and increments
-- How to relaunch after a price reduction without looking desperate
-`:''
-}
-${inc('farming')?`▸ 90-DAY NEIGHBORHOOD FARMING MASTER PLAN
-This listing is a farming opportunity. Execute this plan and generate 3-5 additional listings from this neighborhood over the next 12 months.
-
-FARM DEFINITION:
-- Primary farm: Streets and boundaries (provide specific farm area based on address)
-- Home count estimate and target database size
-- Secondary farm: Surrounding areas worth touching
-
-DATABASE BUILD STRATEGY:
-- How to compile neighbor names, addresses, phone numbers, and emails
-- Tools to use: County assessor records, skip tracing, LinkedIn, Facebook groups
-- Target: 100% of primary farm in database within 30 days
-
-5-TOUCH SEQUENCE — COMPLETE SCRIPTS AND DESIGNS:
-
-TOUCH 1 — JUST LISTED MAILER (Week 1):
-Design concept and visual direction:
-Headline:
-Full copy (front and back):
-Call to action:
-Delivery method:
-
-TOUCH 2 — DOOR KNOCK (Week 2):
-Preparation: What to bring, what to wear, best time of day
-Opening line (the first 10 words when the door opens):
-Full conversation script including:
-  - The "I'm just being nosy" response
-  - The "I'm thinking about selling" response (GOLD — full script for this)
-  - The "Not interested" response
-  - The "How much did it sell for?" response
-Leave-behind piece: What it looks like and what it says
-
-TOUCH 3 — MARKET UPDATE MAILER (Weeks 3-4):
-Headline: 
-Data to include (specific to this neighborhood):
-Design concept:
-Full copy:
-
-TOUCH 4 — REFERRAL ASK (Weeks 5-6):
-Email version (complete):
-Direct mail version (complete):
-The specific ask — how to make it natural and non-pushy:
-
-TOUCH 5 — JUST SOLD ANNOUNCEMENT (Weeks 8-12, after closing):
-Headline (lead with the result — price, days on market, multiple offers if applicable):
-Full copy:
-The pivot to valuation CTA:
-
-DIGITAL FARMING LAYER:
-- Facebook neighborhood groups: Which ones exist, how to join, what to post, what not to post
-- Nextdoor strategy: Profile optimization, recommended posts, event sponsorship
-- Instagram geo-targeting: Audience parameters, content strategy, budget recommendation
-- Google Ads: Local targeting, keywords, landing page concept
-
-LONG-GAME CONVERSION:
-- The "market update" annual touchpoint system
-- Birthday and anniversary recognition system
-- How to become the neighborhood's go-to resource
-- The referral conversation: how to ask for referrals naturally at the door
-
-METRICS TO TRACK:
-- Database growth
-- Response rates by touch
-- Valuation requests generated
-- Listing appointments set
-- Listings won
-`:''
-}
-${inc('lender')?`▸ LOAN PROGRAM INTELLIGENCE — LHFS COLLABORATION STRATEGY
-FINANCING LANDSCAPE FOR THIS PROPERTY:
-
-LOAN PROGRAM ANALYSIS:
-- Conventional financing: Conforming vs. jumbo threshold for this price (2024 conforming limit: $766,550 in most Montana counties) — what does this mean for the buyer pool?
-- FHA eligibility: Does this property type/condition qualify? What does FHA financing mean for seller (repairs, appraisal standards)?
-- VA eligibility: Is there a significant veteran buyer pool in this area? VA entitlement considerations.
-- USDA eligibility: Is this location within USDA rural development boundaries? (Check usda.gov eligibility map)
-- Jumbo market: If above conforming, which lenders are competitive in Montana's jumbo market?
-
-INVESTOR FINANCING ANGLES:
-- DSCR (Debt Service Coverage Ratio) loan analysis: Estimate market rent, calculate DSCR, identify if this works for an investor buyer
-- Short-term rental income analysis: Airbnb/VRBO potential, estimated monthly revenue, how lenders treat STR income
-
-MONTANA-SPECIFIC PROGRAMS:
-- Montana Housing (MBOH) programs: Board of Housing loan programs for first-time buyers
-- USDA Rural Development: Guaranteed loans for rural properties
-- Montana INTERCAP program: Low-interest financing for energy efficiency improvements
-- Treasure State Endowment Program: If in a rural community
-
-SELLER-PAID CONCESSIONS STRATEGY:
-- 2-1 Buydown analysis: Cost to seller, benefit to buyer in monthly savings, talking points
-  Example: On a $X purchase, seller pays $Y to buy down rate from X% to X% in year 1, X% in year 2, permanent rate in year 3
-- Rate buydown ROI: At what point does the buyer's monthly savings exceed the seller's cost?
-- Closing cost credits: When does it make more sense than a price reduction?
-
-CO-MARKETING STRATEGY WITH LOAN OFFICER:
-- Joint listing presentation materials
-- Buyer pre-approval fast track program
-- Open house financing table setup and script
-- Social media collaboration content
-- Database cross-marketing opportunity
-- The "what can you afford in today's market" calculator as a lead magnet
-`:''
-}
+▸ LOAN PROGRAM INTELLIGENCE
+Conforming vs jumbo analysis for this price point. FHA/VA/USDA eligibility. DSCR loan analysis with rent estimate. Montana Housing MBOH programs. USDA Rural Development. 2-1 buydown math with specific numbers. Closing cost credit analysis. Co-marketing strategy with loan officer: joint presentation materials, pre-approval program, open house financing table script, database cross-marketing.
 
 ▸ EXECUTIVE SUMMARY — THE BRIEF WITHIN THE BRIEF
-This section stands alone. A seller should be able to read only this and feel completely informed and ready to list with Mr. Cribbes.
+The property's story (2-3 paragraphs of prose — not lists). Top 5 selling points each with proof and exact language. Top 3 risks with probability and specific mitigation steps. Pricing recommendation with three scenarios (aggressive/market/conservative) and predicted outcomes. 30-day launch action checklist (day-by-day). Weekly metrics dashboard with target benchmarks. The one-sentence listing thesis. The competitive advantage statement: why Mr. Cribbes and ELA give this seller an unfair advantage over every other agent.
 
-THE PROPERTY'S STORY (2-3 paragraphs):
-Write a narrative overview of this property, its position in the market, and why right now is the right time to list. This is not a list — it's prose. It's the opening of the listing presentation.
-
-TOP 5 SELLING POINTS:
-For each: The point, the proof behind it, and the exact language to use when presenting it to a seller or buyer.
-
-TOP 3 RISKS AND MITIGATION STRATEGIES:
-For each: The risk, the probability it materializes, and the specific proactive steps to neutralize it before it becomes a problem.
-
-PRICING RECOMMENDATION:
-A specific, justified pricing recommendation with supporting rationale. Three scenarios: aggressive pricing, market pricing, conservative pricing — with predicted outcomes for each.
-
-30-DAY LAUNCH ACTION CHECKLIST:
-A specific, prioritized, day-by-day action plan for the first 30 days of this listing. Include: photography, staging, pre-market outreach, MLS launch, open house, price review trigger.
-
-WEEKLY METRICS DASHBOARD:
-Specific KPIs to track weekly with target benchmarks:
-- Showing requests
-- Online views and click-through rates  
-- Competitive listing changes
-- Price position vs. competition
-- Days on market vs. neighborhood average
-- Offer activity
-
-THE ONE-SENTENCE LISTING THESIS:
-The single most compelling, specific reason this property is worth its asking price. This sentence should be memorable enough that Mr. Cribbes says it in his sleep.
-
-THE COMPETITIVE ADVANTAGE STATEMENT:
-Why Mr. Cribbes and ELA give this seller an unfair advantage over every other agent who walks through that door.
-
-Write every word of this brief as if a listing appointment — and the trust of a seller — depends on it. Because it does.`;
+Write every word as if a listing appointment and the trust of a seller depends on it. Because it does.`;
 }
-}
+
+// RUN BRIEF
 async function runBrief(address){
-  setOrbState('thinking');
+  const bp=document.getElementById('brief-panel');
   document.getElementById('bp-addr').textContent=address;
   document.getElementById('brief-text').textContent='';
   currentBrief='';
-  const bp=document.getElementById('brief-panel');
-  bp.style.display='flex';setTimeout(()=>bp.classList.add('open'),10);
+  bp.style.display='flex';
+  setTimeout(()=>bp.classList.add('open'),10);
   const streamBar=document.getElementById('stream-bar');
   const bpDot=document.getElementById('bp-dot');
   const bpStatus=document.getElementById('bp-status');
-  streamBar.classList.add('on');bpDot.classList.add('pulse');bpStatus.textContent='Generating brief...';
+  streamBar.classList.add('on');
+  bpDot.classList.add('pulse');
+  bpStatus.textContent='Generating brief...';
+  runBtn.disabled=true;
+  startThinking();
+  statusLine.textContent='Researching '+address+'...';
+
   try{
-    const res=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:8000,messages:[{role:'user',content:buildPrompt(address)}]})});
+    const res=await fetch('/api/generate',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:8000,
+        messages:[{role:'user',content:buildPrompt(address)}]
+      })
+    });
     const rawText=await res.text();
-    if(!res.ok){let msg=`Server error ${res.status}`;try{msg=JSON.parse(rawText).error?.message||msg;}catch(e){}throw new Error(msg);}
-    let data;try{data=JSON.parse(rawText);}catch(e){throw new Error('Could not parse response');}
+    if(!res.ok){
+      let msg=`Server error ${res.status}`;
+      try{msg=JSON.parse(rawText).error?.message||msg;}catch(e){}
+      throw new Error(msg);
+    }
+    let data;
+    try{data=JSON.parse(rawText);}catch(e){throw new Error('Could not parse response');}
     let text='';
     if(Array.isArray(data.content)){for(const b of data.content){if(b.type==='text')text+=b.text;}}
     if(!text)throw new Error('Empty response from API');
     currentBrief=text;
-    const briefTextEl=document.getElementById('brief-text');
-    const briefScroll=document.getElementById('brief-scroll');
-    briefTextEl.textContent=text;
-    briefScroll.scrollTop=0;
+    document.getElementById('brief-text').textContent=text;
+    document.getElementById('brief-scroll').scrollTop=0;
     streamBar.classList.remove('on');
     bpDot.classList.remove('pulse');
-    bpStatus.textContent=`Complete · ${text.length.toLocaleString()} characters · ${address}`;
-    setOrbState('done');
-    toast('Brief complete — tap ⬇ Download PDF');
-  }catch(err){streamBar.classList.remove('on');bpDot.classList.remove('pulse');bpStatus.textContent='Error — please try again';setOrbState('idle');toast(`Error: ${err.message}`);}
+    bpStatus.textContent='Complete · '+text.length.toLocaleString()+' characters · '+address;
+    stopThinking();
+    statusLine.textContent='Brief complete — enter another address to run again';
+    toast('Brief complete — tap Download PDF');
+  }catch(err){
+    streamBar.classList.remove('on');
+    bpDot.classList.remove('pulse');
+    bpStatus.textContent='Error — please try again';
+    stopThinking();
+    orbPath.setAttribute('d',P_CIRCLE);
+    statusLine.textContent='Enter a property address below';
+    bp.classList.remove('open');
+    setTimeout(()=>bp.style.display='none',500);
+    toast('Error: '+err.message,5000);
+  }finally{
+    runBtn.disabled=false;
+  }
 }
-function closeBrief(){const bp=document.getElementById('brief-panel');bp.classList.remove('open');setTimeout(()=>bp.style.display='none',500);}
-function newBrief(){closeBrief();currentAddress='';setTimeout(()=>setOrbState('idle'),500);}
+
+function closeBrief(){
+  const bp=document.getElementById('brief-panel');
+  bp.classList.remove('open');
+  setTimeout(()=>bp.style.display='none',500);
+  orbPath.setAttribute('d',P_CIRCLE);
+  statusLine.textContent='Enter a property address below';
+}
+
+function newBrief(){
+  closeBrief();
+  currentAddress='';
+  addrInput.value='';
+  setTimeout(()=>addrInput.focus(),600);
+}
+
 function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function parseSections(text){const lines=text.split('\n');const sections=[];let current=null;for(const line of lines){const match=line.match(/^▸\s+(.+)$/);if(match){if(current)sections.push(current);const title=match[1].trim();current={title,body:'',isExec:title.toUpperCase().includes('EXECUTIVE')};}else if(current){current.body+=(current.body?'\n':'')+line;}}if(current)sections.push(current);if(sections.length===0){sections.push({title:'Intelligence Brief',body:text,isExec:false});}sections.forEach(s=>s.body=s.body.trim());return sections;}
+
+function parseSections(text){
+  const lines=text.split('\n');
+  const sections=[];
+  let current=null;
+  for(const line of lines){
+    const match=line.match(/^▸\s+(.+)$/);
+    if(match){
+      if(current)sections.push(current);
+      const title=match[1].trim();
+      current={title,body:'',isExec:title.toUpperCase().includes('EXECUTIVE')};
+    }else if(current){
+      current.body+=(current.body?'\n':'')+line;
+    }
+  }
+  if(current)sections.push(current);
+  if(sections.length===0)sections.push({title:'Intelligence Brief',body:text,isExec:false});
+  sections.forEach(s=>s.body=s.body.trim());
+  return sections;
+}
+
 function downloadPDF(){
   if(!currentBrief){toast('No brief to download yet');return;}
   const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  const pd=currentPD.address?currentPD:{address:currentAddress};
+  const pd={address:currentAddress};
   const sections=parseSections(currentBrief);
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/><title>${currentAddress} — ELA Brief</title>
+  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
+<title>${escHtml(currentAddress)} — ELA Brief</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,200;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -995,19 +480,8 @@ body{font-family:'Cormorant Garamond',Georgia,serif;font-size:11.5pt;line-height
 .c-addr{font-size:19pt;font-weight:300;color:#e8d5a3;margin-bottom:6px;}
 .c-rule2{width:38px;height:1px;background:rgba(201,168,76,0.35);margin:26px auto;}
 .c-meta{font-family:'DM Mono',monospace;font-size:8pt;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,168,76,0.38);line-height:2.2;}
-.snap{padding:60px 72px;page-break-after:always;}
-.snap-hd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:36px;padding-bottom:22px;border-bottom:2px solid #c9a84c;}
-.snap-ela{font-family:'DM Mono',monospace;font-size:8pt;letter-spacing:0.22em;text-transform:uppercase;color:#c9a84c;margin-bottom:5px;}
-.snap-addr{font-size:22pt;font-weight:300;font-style:italic;line-height:1.2;}
-.snap-date{font-family:'DM Mono',monospace;font-size:7.5pt;letter-spacing:0.1em;text-transform:uppercase;color:#bbb;text-align:right;margin-top:4px;}
-.pg{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid #e8e0d0;}
-.pc{padding:17px 20px;border-right:1px solid #e8e0d0;border-bottom:1px solid #e8e0d0;}
-.pc:nth-child(3n){border-right:none;}.pc:nth-last-child(-n+3){border-bottom:none;}
-.pcl{font-family:'DM Mono',monospace;font-size:7pt;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;margin-bottom:4px;}
-.pcv{font-size:13pt;font-weight:300;color:#120e04;}
-.pcv.lg{font-size:20pt;font-style:italic;}
-.content{padding:48px 72px;}
-.sec{margin-bottom:40px;page-break-inside:avoid;}
+.content{padding:52px 72px;}
+.sec{margin-bottom:44px;page-break-inside:avoid;}
 .sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid #ede6d8;}
 .sec-n{font-family:'DM Mono',monospace;font-size:8pt;color:#c9a84c;letter-spacing:0.1em;min-width:26px;}
 .sec-t{font-family:'DM Mono',monospace;font-size:8.5pt;letter-spacing:0.18em;text-transform:uppercase;color:#c9a84c;}
@@ -1018,7 +492,7 @@ body{font-family:'Cormorant Garamond',Georgia,serif;font-size:11.5pt;line-height
 .page-footer{position:fixed;bottom:24px;left:72px;right:72px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e8e0d0;padding-top:9px;}
 .pfl{font-family:'DM Mono',monospace;font-size:7pt;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;}
 .pfr{font-family:'DM Mono',monospace;font-size:7pt;letter-spacing:0.1em;text-transform:uppercase;color:#ccc;}
-@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.cover{min-height:100vh;}.sec{page-break-inside:avoid;}.page-footer{position:fixed;bottom:20px;}@page{margin:0.6in;}}
+@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.cover{min-height:100vh;}.sec{page-break-inside:avoid;}@page{margin:0.6in;}}
 </style></head><body>
 <div class="cover">
 <div class="cbr"></div><div class="cbr"></div><div class="cbr"></div><div class="cbr"></div>
@@ -1031,22 +505,6 @@ body{font-family:'Cormorant Garamond',Georgia,serif;font-size:11.5pt;line-height
 <div class="c-rule2"></div>
 <div class="c-meta">Prepared ${date}<br/>Prepared exclusively for Mr. Cribbes<br/>Confidential — Not for Distribution</div>
 </div></div>
-<div class="snap">
-<div class="snap-hd">
-<div><div class="snap-ela">ELA · Elite Listing Application</div><div class="snap-addr">${escHtml(currentAddress)}</div></div>
-<div class="snap-date">Prepared ${date}<br/>Confidential · Mr. Cribbes</div>
-</div>
-<div class="pg">
-${pd.price?`<div class="pc"><div class="pcl">List Price</div><div class="pcv lg">${escHtml(pd.price)}</div></div>`:''}
-${pd.type?`<div class="pc"><div class="pcl">Property Type</div><div class="pcv">${escHtml(pd.type)}</div></div>`:''}
-${pd.bed?`<div class="pc"><div class="pcl">Beds / Baths</div><div class="pcv">${escHtml(pd.bed)}</div></div>`:''}
-${pd.sqft?`<div class="pc"><div class="pcl">Square Footage</div><div class="pcv">${escHtml(pd.sqft)}</div></div>`:''}
-${pd.lot?`<div class="pc"><div class="pcl">Lot Size</div><div class="pcv">${escHtml(pd.lot)}</div></div>`:''}
-${pd.year?`<div class="pc"><div class="pcl">Year Built</div><div class="pcv">${escHtml(pd.year)}</div></div>`:''}
-${pd.garage?`<div class="pc"><div class="pcl">Parking</div><div class="pcv">${escHtml(pd.garage)}</div></div>`:''}
-<div class="pc"><div class="pcl">Prepared By</div><div class="pcv">Mr. Cribbes</div></div>
-<div class="pc"><div class="pcl">Date</div><div class="pcv">${date}</div></div>
-</div></div>
 <div class="content">
 ${sections.map((s,i)=>s.isExec?
 `<div class="exec sec"><div class="sec-hd"><span class="sec-n">${String(i+1).padStart(2,'0')}</span><span class="sec-t">${escHtml(s.title)}</span><div class="sec-r"></div></div><div class="sec-b">${escHtml(s.body)}</div></div>`:
@@ -1055,10 +513,11 @@ ${sections.map((s,i)=>s.isExec?
 </div>
 <div class="page-footer"><div class="pfl">ELA · Elite Listing Application</div><div class="pfr">Confidential · Mr. Cribbes · ${date}</div></div>
 </body></html>`;
-  const win=window.open('','_blank');win.document.write(html);win.document.close();setTimeout(()=>win.print(),800);
+  const win=window.open('','_blank');
+  win.document.write(html);
+  win.document.close();
+  setTimeout(()=>win.print(),800);
 }
-let bD=1,bS=1;
-setInterval(()=>{if(appState!=='idle'&&appState!=='done')return;bS+=bD*0.002;if(bS>1.01)bD=-1;if(bS<0.992)bD=1;const r=98*bS,c=150;orbPath.setAttribute('d',`M${c},${c-r} C${c+r*0.74},${c-r} ${c+r},${c-r*0.74} ${c+r},${c} C${c+r},${c+r*0.74} ${c+r*0.74},${c+r} ${c},${c+r} C${c-r*0.74},${c+r} ${c-r},${c+r*0.74} ${c-r},${c} C${c-r},${c-r*0.74} ${c-r*0.74},${c-r} ${c},${c-r} Z`);},50);
 </script>
 </body>
 </html>
