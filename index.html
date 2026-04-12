@@ -455,68 +455,313 @@ function parseSections(text){
   return sections;
 }
 
+function formatBody(text){
+  // Convert markdown-style content to clean HTML with bullet points
+  const lines=text.split('\n');
+  let html='';
+  let inList=false;
+  for(let i=0;i<lines.length;i++){
+    const line=lines[i];
+    const trimmed=line.trim();
+    // Detect bullet/list lines
+    const isBullet=trimmed.startsWith('- ')||trimmed.startsWith('• ')||trimmed.startsWith('* ');
+    const isNumbered=/^\d+\.\s/.test(trimmed);
+    const isEmpty=trimmed==='';
+    // Remove markdown headers
+    const cleaned=trimmed.replace(/^#{1,4}\s*/,'').replace(/\*\*(.*?)\*\*/g,'<strong>$1</strong>').replace(/\*(.*?)\*/g,'<em>$1</em>');
+    if(isEmpty){
+      if(inList){html+='</ul>';inList=false;}
+      html+='<br/>';
+    } else if(isBullet||isNumbered){
+      if(!inList){html+='<ul>';inList=true;}
+      const content=cleaned.replace(/^[-•*]\s*/,'').replace(/^\d+\.\s*/,'');
+      html+=`<li>${content}</li>`;
+    } else {
+      if(inList){html+='</ul>';inList=false;}
+      if(cleaned&&!cleaned.match(/^---+$/)){
+        html+=`<p>${cleaned}</p>`;
+      }
+    }
+  }
+  if(inList)html+='</ul>';
+  return html;
+}
+
 function downloadPDF(){
   if(!currentBrief){toast('No brief to download yet');return;}
   const date=new Date().toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
-  const pd={address:currentAddress};
   const sections=parseSections(currentBrief);
-  const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"/>
-<title>${escHtml(currentAddress)} — ELA Brief</title>
+
+  const pdfHtml=`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8"/>
+<title>${escHtml(currentAddress)} — ELA Intelligence Brief</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,200;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Cormorant Garamond',Georgia,serif;font-size:11.5pt;line-height:1.9;color:#120e04;background:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-.cover{width:100%;min-height:100vh;background:#080602;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 60px;page-break-after:always;position:relative;overflow:hidden;}
-.cbr{position:absolute;border-radius:50%;border:1px solid rgba(201,168,76,0.07);}
-.cbr:nth-child(1){width:280px;height:280px;top:50%;left:50%;margin:-140px 0 0 -140px;}
-.cbr:nth-child(2){width:480px;height:480px;top:50%;left:50%;margin:-240px 0 0 -240px;}
-.cbr:nth-child(3){width:680px;height:680px;top:50%;left:50%;margin:-340px 0 0 -340px;}
-.cbr:nth-child(4){width:900px;height:900px;top:50%;left:50%;margin:-450px 0 0 -450px;}
-.cc{position:relative;z-index:1;}
-.c-ela{font-family:'DM Mono',monospace;font-size:10pt;letter-spacing:0.4em;text-transform:uppercase;color:#c9a84c;margin-bottom:28px;}
-.c-rule{width:56px;height:1px;background:#c9a84c;margin:0 auto 28px;}
-.c-title{font-size:40pt;font-weight:200;font-style:italic;color:#faf8f2;line-height:1.1;margin-bottom:10px;}
-.c-sub{font-size:15pt;font-weight:300;font-style:italic;color:rgba(250,248,242,0.4);margin-bottom:32px;}
-.c-addr{font-size:19pt;font-weight:300;color:#e8d5a3;margin-bottom:6px;}
-.c-rule2{width:38px;height:1px;background:rgba(201,168,76,0.35);margin:26px auto;}
-.c-meta{font-family:'DM Mono',monospace;font-size:8pt;letter-spacing:0.16em;text-transform:uppercase;color:rgba(201,168,76,0.38);line-height:2.2;}
-.content{padding:52px 72px;}
-.sec{margin-bottom:44px;page-break-inside:avoid;}
-.sec-hd{display:flex;align-items:center;gap:14px;margin-bottom:14px;padding-bottom:9px;border-bottom:1px solid #ede6d8;}
-.sec-n{font-family:'DM Mono',monospace;font-size:8pt;color:#c9a84c;letter-spacing:0.1em;min-width:26px;}
-.sec-t{font-family:'DM Mono',monospace;font-size:8.5pt;letter-spacing:0.18em;text-transform:uppercase;color:#c9a84c;}
-.sec-r{flex:1;height:1px;background:linear-gradient(90deg,#ede6d8,transparent);}
-.sec-b{font-size:11.5pt;line-height:1.9;color:#1a1408;white-space:pre-wrap;word-break:break-word;}
-.exec{background:#080602;padding:36px 48px;margin:0 -72px;page-break-before:always;}
-.exec .sec-t{color:#c9a84c;}.exec .sec-b{color:rgba(250,248,242,0.85);}.exec .sec-hd{border-bottom-color:rgba(201,168,76,0.2);}
-.page-footer{position:fixed;bottom:24px;left:72px;right:72px;display:flex;align-items:center;justify-content:space-between;border-top:1px solid #e8e0d0;padding-top:9px;}
-.pfl{font-family:'DM Mono',monospace;font-size:7pt;letter-spacing:0.14em;text-transform:uppercase;color:#c9a84c;}
-.pfr{font-family:'DM Mono',monospace;font-size:7pt;letter-spacing:0.1em;text-transform:uppercase;color:#ccc;}
-@media print{body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}.cover{min-height:100vh;}.sec{page-break-inside:avoid;}@page{margin:0.6in;}}
-</style></head><body>
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:'Cormorant Garamond',Georgia,serif;
+    font-size:11pt;line-height:1.85;
+    color:#1a1a1a;background:#fff;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+
+  /* COVER PAGE */
+  .cover{
+    width:100%;min-height:100vh;
+    background:#ffffff;
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    text-align:center;
+    padding:80px 60px;
+    page-break-after:always;
+    position:relative;
+    border-top:8px solid #8b0000;
+  }
+  .cover-top-rule{
+    position:absolute;top:0;left:0;right:0;
+    height:8px;background:#8b0000;
+  }
+  .cover-side-accent{
+    position:absolute;left:60px;top:80px;bottom:80px;
+    width:3px;background:#8b0000;opacity:0.15;
+  }
+  .cover-logo-area{
+    margin-bottom:48px;
+  }
+  .cover-ev{
+    font-family:'DM Mono',monospace;
+    font-size:11pt;letter-spacing:0.5em;
+    text-transform:uppercase;color:#8b0000;
+    margin-bottom:4px;
+  }
+  .cover-ev-full{
+    font-family:'Cormorant Garamond',serif;
+    font-size:11pt;font-style:italic;font-weight:300;
+    color:#888;letter-spacing:0.1em;
+  }
+  .cover-rule{
+    width:64px;height:2px;
+    background:#8b0000;
+    margin:36px auto;
+  }
+  .cover-title{
+    font-size:44pt;font-weight:200;
+    font-style:italic;color:#1a1a1a;
+    line-height:1.05;margin-bottom:8px;
+  }
+  .cover-subtitle{
+    font-family:'DM Mono',monospace;
+    font-size:9pt;letter-spacing:0.22em;
+    text-transform:uppercase;color:#888;
+    margin-bottom:48px;
+  }
+  .cover-address-block{
+    background:#f7f7f7;
+    border-left:4px solid #8b0000;
+    padding:20px 36px;
+    margin:0 auto 48px;
+    max-width:500px;
+    text-align:left;
+  }
+  .cover-address-label{
+    font-family:'DM Mono',monospace;
+    font-size:8pt;letter-spacing:0.18em;
+    text-transform:uppercase;color:#8b0000;
+    margin-bottom:6px;
+  }
+  .cover-address-text{
+    font-size:17pt;font-weight:300;
+    font-style:italic;color:#1a1a1a;
+    line-height:1.3;
+  }
+  .cover-meta{
+    font-family:'DM Mono',monospace;
+    font-size:8pt;letter-spacing:0.14em;
+    text-transform:uppercase;color:#aaa;
+    line-height:2.2;
+  }
+  .cover-bottom-rule{
+    position:absolute;bottom:0;left:0;right:0;
+    height:3px;background:#8b0000;opacity:0.2;
+  }
+
+  /* CONTENT */
+  .content{padding:52px 68px 80px;}
+
+  .sec{
+    margin-bottom:48px;
+    page-break-inside:avoid;
+  }
+  .sec-header{
+    display:flex;align-items:center;
+    gap:16px;
+    margin-bottom:18px;
+    padding-bottom:10px;
+    border-bottom:2px solid #8b0000;
+  }
+  .sec-num{
+    font-family:'DM Mono',monospace;
+    font-size:22pt;font-weight:400;
+    color:#8b0000;opacity:0.25;
+    line-height:1;min-width:44px;
+  }
+  .sec-title{
+    font-family:'DM Mono',monospace;
+    font-size:9pt;letter-spacing:0.2em;
+    text-transform:uppercase;color:#1a1a1a;
+    font-weight:500;
+  }
+
+  .sec-body p{
+    font-size:11pt;line-height:1.85;
+    color:#2a2a2a;margin-bottom:10px;
+  }
+  .sec-body ul{
+    margin:10px 0 14px 20px;
+    list-style:none;
+    padding:0;
+  }
+  .sec-body ul li{
+    font-size:11pt;line-height:1.75;
+    color:#2a2a2a;
+    padding:4px 0 4px 18px;
+    position:relative;
+    border-bottom:1px solid #f0f0f0;
+  }
+  .sec-body ul li::before{
+    content:'';
+    position:absolute;left:0;top:13px;
+    width:6px;height:6px;
+    background:#8b0000;
+    border-radius:50%;
+  }
+  .sec-body strong{
+    font-weight:600;color:#1a1a1a;
+  }
+  .sec-body em{
+    font-style:italic;
+  }
+
+  /* EXECUTIVE SUMMARY */
+  .exec-sec{
+    background:#1a1a1a;
+    padding:40px 52px;
+    margin:0 -68px;
+    page-break-before:always;
+  }
+  .exec-sec .sec-header{border-bottom-color:rgba(139,0,0,0.4);}
+  .exec-sec .sec-num{color:#8b0000;opacity:0.4;}
+  .exec-sec .sec-title{color:#ffffff;}
+  .exec-sec .sec-body p{color:rgba(255,255,255,0.82);}
+  .exec-sec .sec-body ul li{color:rgba(255,255,255,0.82);border-bottom-color:rgba(255,255,255,0.06);}
+  .exec-sec .sec-body ul li::before{background:#8b0000;}
+  .exec-sec .sec-body strong{color:#ffffff;}
+
+  /* FOOTER */
+  .page-footer{
+    position:fixed;
+    bottom:0;left:0;right:0;
+    background:#fff;
+    padding:10px 68px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    border-top:2px solid #8b0000;
+  }
+  .footer-left{
+    font-family:'DM Mono',monospace;
+    font-size:7pt;letter-spacing:0.14em;
+    text-transform:uppercase;color:#8b0000;
+  }
+  .footer-right{
+    font-family:'DM Mono',monospace;
+    font-size:7pt;letter-spacing:0.1em;
+    text-transform:uppercase;color:#999;
+  }
+
+  @media print{
+    body{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+    .cover{min-height:100vh;page-break-after:always;}
+    .sec{page-break-inside:avoid;}
+    .page-footer{position:fixed;bottom:0;}
+    @page{margin:0;}
+  }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
 <div class="cover">
-<div class="cbr"></div><div class="cbr"></div><div class="cbr"></div><div class="cbr"></div>
-<div class="cc">
-<div class="c-ela">E · L · A</div><div class="c-rule"></div>
-<div class="c-title">Listing Intelligence<br/>Brief</div>
-<div class="c-sub">Property Research &amp; Marketing Strategy</div>
-<div class="c-rule"></div>
-<div class="c-addr">${escHtml(currentAddress)}</div>
-<div class="c-rule2"></div>
-<div class="c-meta">Prepared ${date}<br/>Prepared exclusively for Mr. Cribbes<br/>Confidential — Not for Distribution</div>
-</div></div>
-<div class="content">
-${sections.map((s,i)=>s.isExec?
-`<div class="exec sec"><div class="sec-hd"><span class="sec-n">${String(i+1).padStart(2,'0')}</span><span class="sec-t">${escHtml(s.title)}</span><div class="sec-r"></div></div><div class="sec-b">${escHtml(s.body)}</div></div>`:
-`<div class="sec"><div class="sec-hd"><span class="sec-n">${String(i+1).padStart(2,'0')}</span><span class="sec-t">${escHtml(s.title)}</span><div class="sec-r"></div></div><div class="sec-b">${escHtml(s.body)}</div></div>`
-).join('')}
+  <div class="cover-top-rule"></div>
+  <div class="cover-side-accent"></div>
+
+  <div class="cover-logo-area">
+    <div class="cover-ev">Engel &amp; Völkers</div>
+    <div class="cover-ev-full">Bozeman, Montana</div>
+  </div>
+
+  <div class="cover-rule"></div>
+
+  <div class="cover-title">Listing Intelligence<br/>Brief</div>
+  <div class="cover-subtitle">Property Research &amp; Marketing Strategy</div>
+
+  <div class="cover-address-block">
+    <div class="cover-address-label">Property Address</div>
+    <div class="cover-address-text">${escHtml(currentAddress)}</div>
+  </div>
+
+  <div class="cover-meta">
+    Prepared ${date}<br/>
+    Prepared exclusively for Mr. Cribbes<br/>
+    Confidential — Not for Distribution
+  </div>
+
+  <div class="cover-bottom-rule"></div>
 </div>
-<div class="page-footer"><div class="pfl">ELA · Elite Listing Application</div><div class="pfr">Confidential · Mr. Cribbes · ${date}</div></div>
-</body></html>`;
-  const win=window.open('','_blank');
-  win.document.write(html);
+
+<!-- CONTENT -->
+<div class="content">
+${sections.map((s,i)=>{
+  const num=String(i+1).padStart(2,'0');
+  const bodyHtml=formatBody(s.body);
+  if(s.isExec){
+    return `<div class="exec-sec sec">
+      <div class="sec-header">
+        <span class="sec-num">${num}</span>
+        <span class="sec-title">${escHtml(s.title)}</span>
+      </div>
+      <div class="sec-body">${bodyHtml}</div>
+    </div>`;
+  }
+  return `<div class="sec">
+    <div class="sec-header">
+      <span class="sec-num">${num}</span>
+      <span class="sec-title">${escHtml(s.title)}</span>
+    </div>
+    <div class="sec-body">${bodyHtml}</div>
+  </div>`;
+}).join('')}
+</div>
+
+<!-- FOOTER -->
+<div class="page-footer">
+  <div class="footer-left">ELA · Elite Listing Application · Engel &amp; Völkers Bozeman</div>
+  <div class="footer-right">Confidential · Mr. Cribbes · ${date}</div>
+</div>
+
+</body>
+</html>`;
+
+  // Open in new named window to avoid about:blank
+  const win=window.open('','ELA_Brief_'+Date.now(),'width=1000,height=800');
+  win.document.open();
+  win.document.write(pdfHtml);
   win.document.close();
-  setTimeout(()=>win.print(),800);
+  win.focus();
+  setTimeout(()=>win.print(),1200);
 }
 </script>
 </body>
