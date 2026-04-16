@@ -957,11 +957,7 @@ async function runBrief(address){
     const res=await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:8000,
-        messages:[{role:'user',content:buildPrompt(address)}]
-      })
+      body:JSON.stringify({address})
     });
     const rawText=await res.text();
     if(!res.ok){
