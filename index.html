@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ROUX — Listing Intelligence</title>
+<title>MISE — Listing Intelligence</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,200;0,300;0,400;0,600;1,200;1,300;1,400;1,600&family=Jost:wght@200;300;400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -40,9 +40,9 @@ html,body{width:100%;height:100%;background:#ffffff;color:#1a1a1a;font-family:'C
 
 /* ── TOP BAR ── */
 .top-bar{position:fixed;top:0;left:0;right:0;padding:22px 48px;display:flex;align-items:center;justify-content:space-between;z-index:20;border-bottom:1px solid rgba(139,0,0,0.15);background:rgba(255,255,255,0.97);backdrop-filter:blur(8px);}
-.roux-mark{display:flex;flex-direction:column;gap:3px;}
-.roux-letters{font-family:'Jost',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.46em;color:#8b0000;text-transform:uppercase;}
-.roux-sub{font-size:11px;font-style:italic;font-weight:300;color:#999999;letter-spacing:0.06em;}
+.mise-mark{display:flex;flex-direction:column;gap:3px;}
+.mise-letters{font-family:'Jost',sans-serif;font-size:11px;font-weight:400;letter-spacing:0.46em;color:#8b0000;text-transform:uppercase;}
+.mise-sub{font-size:11px;font-style:italic;font-weight:300;color:#999999;letter-spacing:0.06em;}
 .top-ev{font-family:'Jost',sans-serif;font-size:9px;font-weight:300;letter-spacing:0.32em;text-transform:uppercase;color:#999999;}
 
 /* ── MAIN ── */
@@ -114,7 +114,7 @@ canvas#elaOrb{display:block;width:240px;height:240px;}
 #brief-panel{position:fixed;inset:0;z-index:60;background:#ffffff;display:none;flex-direction:column;opacity:0;transition:opacity 0.5s;}
 #brief-panel.open{display:flex;opacity:1;}
 .bp-top{background:#ffffff;border-bottom:1px solid rgba(139,0,0,0.15);padding:22px 44px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
-.bp-roux{font-family:'Jost',sans-serif;font-size:8px;font-weight:400;letter-spacing:0.28em;text-transform:uppercase;color:#8b0000;margin-bottom:6px;}
+.bp-mise{font-family:'Jost',sans-serif;font-size:8px;font-weight:400;letter-spacing:0.28em;text-transform:uppercase;color:#8b0000;margin-bottom:6px;}
 .bp-addr{font-size:22px;font-weight:200;font-style:italic;color:#1a1a1a;}
 .bp-acts{display:flex;gap:10px;}
 .bp-btn{font-family:'Jost',sans-serif;font-size:9px;font-weight:300;letter-spacing:0.14em;text-transform:uppercase;background:transparent;cursor:pointer;padding:8px 18px;transition:all 0.2s;}
@@ -174,9 +174,9 @@ canvas#briefOrb{display:block;width:320px;height:320px;}
 <div class="corner tl"></div><div class="corner tr"></div><div class="corner bl"></div><div class="corner br"></div>
 
 <div class="top-bar">
-  <div class="roux-mark">
-    <div class="roux-letters">R · O · U · X</div>
-    <div class="roux-sub">Listing Intelligence</div>
+  <div class="mise-mark">
+    <div class="mise-letters">M · I · S · E</div>
+    <div class="mise-sub">Listing Intelligence</div>
   </div>
   <div class="top-ev">Engel &amp; Völkers · Bozeman</div>
 </div>
@@ -212,7 +212,7 @@ canvas#briefOrb{display:block;width:320px;height:320px;}
 <div id="brief-panel">
   <div class="bp-top">
     <div>
-      <div class="bp-roux">ROUX · Listing Intelligence · Mr. Cribbes</div>
+      <div class="bp-mise">MISE · Listing Intelligence · Mr. Cribbes</div>
       <div class="bp-addr" id="bp-addr">Intelligence Brief</div>
     </div>
     <div class="bp-acts">
@@ -852,7 +852,7 @@ function submitAddress(){
 }
 
 function buildPrompt(address){
-  return `You are ROUX — the Listing Intelligence — the most advanced real estate intelligence system ever built for a single agent. You serve exclusively Mr. Cribbes, a top-producing Montana real estate professional operating in one of the most competitive and sophisticated markets in the American West.
+  return `You are MISE — the Listing Intelligence — the most advanced real estate intelligence system ever built for a single agent. You serve exclusively Mr. Cribbes, a top-producing Montana real estate professional operating in one of the most competitive and sophisticated markets in the American West.
 
 You are simultaneously:
 1. A Montana real estate data analyst with encyclopedic knowledge of Gallatin County zoning codes, cadastral systems, tax assessment methodology, and development regulations
@@ -939,7 +939,7 @@ Farm definition, database build, 5-touch sequence with complete scripts: Just Li
 Conforming vs jumbo analysis. FHA/VA/USDA eligibility. DSCR loan analysis with rent estimate. Montana Housing MBOH programs. 2-1 buydown math. Co-marketing strategy with loan officer.
 
 ▸ EXECUTIVE SUMMARY — THE BRIEF WITHIN THE BRIEF
-The property's story (2-3 paragraphs). Top 5 selling points with proof and exact language. Top 3 risks with mitigation. Pricing recommendation: three scenarios (aggressive/market/conservative). 30-day launch checklist. The one-sentence listing thesis. Why Mr. Cribbes and ROUX give this seller an unfair advantage.
+The property's story (2-3 paragraphs). Top 5 selling points with proof and exact language. Top 3 risks with mitigation. Pricing recommendation: three scenarios (aggressive/market/conservative). 30-day launch checklist. The one-sentence listing thesis. Why Mr. Cribbes and MISE give this seller an unfair advantage.
 
 Write every word as if a listing appointment and the trust of a seller depends on it. Because it does.`;
 }
@@ -1088,7 +1088,7 @@ function downloadPDF(){
 <html>
 <head>
 <meta charset="UTF-8"/>
-<title>${escHtml(currentAddress)} — ROUX Intelligence Brief</title>
+<title>${escHtml(currentAddress)} — MISE Intelligence Brief</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,200;1,300;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -1159,7 +1159,7 @@ ${sections.map((s,i)=>{
 }).join('')}
 </div>
 <div class="page-footer">
-  <div class="footer-left">ROUX · Engel &amp; Völkers Bozeman</div>
+  <div class="footer-left">MISE · Engel &amp; Völkers Bozeman</div>
   <div class="footer-right">Confidential · Mr. Cribbes · ${date}</div>
 </div>
 </body>
