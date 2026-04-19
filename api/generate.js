@@ -13,8 +13,9 @@ export default async function handler(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) { return res.status(500).json({ error: 'API key not configured.' }); }
 
-  const { address } = req.body;
+  const { address, compBlock } = req.body;
   if (!address) { return res.status(400).json({ error: 'No address provided.' }); }
+  const compSection = compBlock || '';
 
   const headers = {
     'Content-Type': 'application/json',
@@ -37,7 +38,7 @@ CRITICAL INSTRUCTIONS:
 - Use specific Montana knowledge: Gallatin County mill levies, Bozeman zoning codes, typical Bozeman market metrics.
 - Reference these sources by name: Montana Cadastral (svc.mt.gov/msl/cadastral), Bozeman GIS Planning Viewer (gisweb.bozeman.net/Html5Viewer/?viewer=planning), Montana DNRC Water Rights (gis.dnrc.mt.gov/apps/WRQS), Montana DOR (mtrevenue.gov/property)`;
 
-  const part1Prompt = `PROPERTY ADDRESS: ${address}
+  const part1Prompt = `PROPERTY ADDRESS: ${address}${compSection}
 
 Write the following sections in full. Each section must be at minimum 300 words and extremely detailed and specific:
 
