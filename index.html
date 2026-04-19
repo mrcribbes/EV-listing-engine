@@ -56,7 +56,7 @@ html,body{width:100%;height:100%;background:#ffffff;color:#1a1a1a;font-family:'C
 .orb-ring2::before{content:'';position:absolute;width:3px;height:3px;background:rgba(139,0,0,0.45);border-radius:50%;bottom:0;left:50%;transform:translateX(-50%);}
 @keyframes spin1{to{transform:rotate(360deg);}}
 @keyframes spin2{to{transform:rotate(-360deg);}}
-.orb-canvas-clip{position:absolute;inset:0;border-radius:50%;overflow:hidden;}
+.orb-canvas-clip{position:absolute;inset:0;}
 canvas#elaOrb{display:block;width:240px;height:240px;}
 
 /* ── HOME LABEL ── */
@@ -106,6 +106,25 @@ canvas#elaOrb{display:block;width:240px;height:240px;}
 .prog-fill{height:100%;background:linear-gradient(90deg,transparent,var(--red) 80%,var(--red3));width:0%;transition:width .7s ease;position:relative;}
 .prog-fill::after{content:'';position:absolute;right:0;top:-2.5px;width:5px;height:6px;background:var(--red);border-radius:1px;box-shadow:0 0 8px rgba(139,0,0,.8);}
 
+/* ── CMA DROP ── */
+#cma-zone{width:100%;max-width:520px;padding:0 24px;margin-top:-4px;}
+#cma-toggle{font-family:'Jost',sans-serif;font-size:9px;font-weight:300;letter-spacing:0.22em;text-transform:uppercase;color:#aaa;background:none;border:none;cursor:pointer;padding:4px 0;transition:color .2s;}
+#cma-toggle:hover{color:#8b0000;}
+#cma-drop-area{display:none;margin-top:10px;border:1px dashed rgba(139,0,0,0.25);padding:14px 18px;text-align:center;cursor:pointer;transition:all .2s;background:#fafafa;position:relative;}
+#cma-drop-area:hover,#cma-drop-area.dragover{border-color:#8b0000;background:#fff5f5;}
+#cma-drop-label{font-family:'Jost',sans-serif;font-size:10px;font-weight:300;letter-spacing:0.16em;color:#bbb;}
+#cma-drop-label span{color:#8b0000;}
+#cma-file-input{position:absolute;inset:0;opacity:0;cursor:pointer;}
+#cma-preview{display:none;margin-top:10px;}
+#cma-preview-title{font-family:'Jost',sans-serif;font-size:9px;font-weight:400;letter-spacing:0.22em;text-transform:uppercase;color:#8b0000;margin-bottom:8px;}
+#cma-table{width:100%;border-collapse:collapse;font-family:'Jost',sans-serif;font-size:10px;}
+#cma-table th{font-weight:400;letter-spacing:0.1em;text-transform:uppercase;color:#999;padding:4px 6px;border-bottom:1px solid rgba(139,0,0,0.1);text-align:left;}
+#cma-table td{padding:4px 6px;color:#333;border-bottom:1px solid #f0f0f0;font-size:10px;}
+#cma-table tr:last-child td{border-bottom:none;}
+#cma-clear{font-family:'Jost',sans-serif;font-size:9px;font-weight:300;letter-spacing:0.16em;color:#bbb;background:none;border:none;cursor:pointer;margin-top:6px;padding:2px 0;}
+#cma-clear:hover{color:#8b0000;}
+#cma-parsing{font-family:'Jost',sans-serif;font-size:10px;font-weight:300;letter-spacing:0.14em;color:#8b0000;margin-top:8px;display:none;}
+
 /* ── TOAST ── */
 #toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid rgba(139,0,0,0.3);box-shadow:0 4px 24px rgba(0,0,0,0.1);padding:10px 22px;font-family:'Jost',sans-serif;font-size:10px;font-weight:400;letter-spacing:0.12em;text-transform:uppercase;color:#8b0000;z-index:100;white-space:nowrap;opacity:0;transition:opacity 0.3s;pointer-events:none;}
 #toast.show{opacity:1;}
@@ -147,7 +166,7 @@ canvas#elaOrb{display:block;width:240px;height:240px;}
 .bl-ring1{position:absolute;inset:-22px;border-radius:50%;border:.5px solid rgba(139,0,0,0.16);animation:spin1 15s linear infinite;}
 .bl-ring1::after{content:'';position:absolute;width:6px;height:6px;background:var(--red);border-radius:50%;top:50%;right:-3px;transform:translateY(-50%);box-shadow:0 0 12px var(--red),0 0 24px rgba(139,0,0,0.3);}
 .bl-ring2{position:absolute;inset:-40px;border-radius:50%;border:.5px solid rgba(139,0,0,0.06);animation:spin2 28s linear infinite;}
-.bl-canvas-clip{position:absolute;inset:0;border-radius:50%;overflow:hidden;}
+.bl-canvas-clip{position:absolute;inset:0;}
 canvas#briefOrb{display:block;width:320px;height:320px;}
 .bl-home-label{
   font-family:'Jost',sans-serif;font-weight:300;font-size:9px;
@@ -203,6 +222,23 @@ canvas#briefOrb{display:block;width:320px;height:320px;}
       onkeydown="if(event.key==='Enter')submitAddress()"/>
     <button id="run-btn" onclick="submitAddress()">Generate Brief</button>
     <div class="prog-track" id="progTrack"><div class="prog-fill" id="progFill"></div></div>
+  </div>
+
+  <div id="cma-zone">
+    <button id="cma-toggle" onclick="toggleCMA()">+ Add MLS Comps (optional)</button>
+    <div id="cma-drop-area" onclick="document.getElementById('cma-file-input').click()">
+      <input type="file" id="cma-file-input" accept=".pdf" onchange="handleCMAFile(this.files[0])"/>
+      <div id="cma-drop-label">Drop your MLS CMA PDF here or <span>browse</span></div>
+      <div id="cma-parsing">Extracting comps...</div>
+    </div>
+    <div id="cma-preview">
+      <div id="cma-preview-title">Comps loaded — MISE will use these in the brief</div>
+      <table id="cma-table">
+        <thead><tr><th>Address</th><th>Sale $</th><th>$/SF</th><th>SF</th><th>DOM</th></tr></thead>
+        <tbody id="cma-tbody"></tbody>
+      </table>
+      <button id="cma-clear" onclick="clearCMA()">Remove comps</button>
+    </div>
   </div>
 </div>
 
@@ -935,6 +971,130 @@ function stopThinking(){
 // ─────────────────────────────────────────────
 let currentBrief='', currentAddress='';
 
+// ── CMA COMP HANDLING ──
+let cmaComps = [];
+
+function toggleCMA(){
+  const btn=document.getElementById('cma-toggle');
+  const drop=document.getElementById('cma-drop-area');
+  const prev=document.getElementById('cma-preview');
+  if(drop.style.display==='block'){
+    drop.style.display='none';
+    prev.style.display='none';
+    btn.textContent='+ Add MLS Comps (optional)';
+  } else {
+    drop.style.display='block';
+    btn.textContent='− Hide Comps';
+  }
+}
+
+function clearCMA(){
+  cmaComps=[];
+  document.getElementById('cma-tbody').innerHTML='';
+  document.getElementById('cma-preview').style.display='none';
+  document.getElementById('cma-drop-area').style.display='block';
+  document.getElementById('cma-file-input').value='';
+  toast('Comps removed');
+}
+
+async function handleCMAFile(file){
+  if(!file||file.type!=='application/pdf'){toast('Please upload a PDF file');return;}
+  const parsing=document.getElementById('cma-parsing');
+  const label=document.getElementById('cma-drop-label');
+  parsing.style.display='block';
+  label.style.display='none';
+  try{
+    if(!window.pdfjsLib){
+      await new Promise((res,rej)=>{
+        const s=document.createElement('script');
+        s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+        s.onload=res;s.onerror=rej;document.head.appendChild(s);
+      });
+      pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    }
+    const arrayBuffer=await file.arrayBuffer();
+    const pdf=await pdfjsLib.getDocument({data:arrayBuffer}).promise;
+    let fullText='';
+    for(let i=1;i<=Math.min(pdf.numPages,12);i++){
+      const page=await pdf.getPage(i);
+      const tc=await page.getTextContent();
+      fullText+=tc.items.map(function(item){return item.str;}).join(' ')+' ';
+    }
+    const comps=parseCompsFromText(fullText);
+    if(comps.length===0){
+      toast('Could not find comp data — try a different CMA format',4000);
+      parsing.style.display='none';
+      label.style.display='block';
+      return;
+    }
+    cmaComps=comps;
+    renderCompTable(comps);
+    document.getElementById('cma-drop-area').style.display='none';
+    document.getElementById('cma-preview').style.display='block';
+    toast(comps.length+' comps loaded successfully');
+  }catch(err){
+    toast('Error reading PDF: '+err.message,4000);
+    parsing.style.display='none';
+    label.style.display='block';
+  }
+}
+
+function parseCompsFromText(text){
+  const comps=[];
+  const lines=text.split(/[\n\r]+/).map(function(l){return l.trim();}).filter(function(l){return l.length>4;});
+  const priceRe=/\$([0-9,]+)/g;
+  const sfRe=/([0-9,]+)\s*(?:sq\.?\s*ft|SF|sqft)/i;
+  const domRe=/([0-9]+)\s*(?:days?|DOM|Days on Market)/i;
+  const addrRe=/\d+\s+[A-Z][a-z]+/;
+  for(let i=0;i<lines.length;i++){
+    const chunk=lines.slice(i,i+5).join(' ');
+    const prices=[];
+    let m;
+    priceRe.lastIndex=0;
+    while((m=priceRe.exec(chunk))!==null){prices.push(m[1].replace(/,/g,''));}
+    if(prices.length>=1&&parseInt(prices[0])>50000){
+      const sfMatch=chunk.match(sfRe);
+      const domMatch=chunk.match(domRe);
+      let addr='';
+      for(let j=Math.max(0,i-2);j<=Math.min(lines.length-1,i+2);j++){
+        if(addrRe.test(lines[j])&&lines[j].length>6&&lines[j].length<60){addr=lines[j];break;}
+      }
+      if(!addr) addr='Comp '+(comps.length+1);
+      const salePrice=parseInt(prices[0]);
+      const sqft=sfMatch?parseInt(sfMatch[1].replace(/,/g,'')):0;
+      const ppsf=sqft>0?Math.round(salePrice/sqft):0;
+      const dom=domMatch?parseInt(domMatch[1]):0;
+      const isDupe=comps.some(function(c){return Math.abs(c.salePrice-salePrice)<1000&&c.addr===addr;});
+      if(!isDupe&&salePrice>50000){comps.push({addr:addr,salePrice:salePrice,sqft:sqft,ppsf:ppsf,dom:dom});i+=3;}
+    }
+    if(comps.length>=12) break;
+  }
+  return comps;
+}
+
+function renderCompTable(comps){
+  const tbody=document.getElementById('cma-tbody');
+  const rows=comps.map(function(c){
+    return '<tr><td>'+c.addr+'</td><td>$'+c.salePrice.toLocaleString()+'</td><td>'+(c.ppsf>0?'$'+c.ppsf:'-')+'</td><td>'+(c.sqft>0?c.sqft.toLocaleString()+' sf':'-')+'</td><td>'+(c.dom>0?c.dom+'d':'-')+'</td></tr>';
+  });
+  tbody.innerHTML=rows.join('');
+}
+
+function buildCompBlock(){
+  if(cmaComps.length===0) return '';
+  const lines=['','COMPARABLE SALES DATA (from Mr. Cribbes MLS CMA — use these exact figures in Market Valuation and Executive Summary):'];
+  cmaComps.forEach(function(c){
+    let line='- '+c.addr+': $'+c.salePrice.toLocaleString();
+    if(c.sqft>0) line+=' | '+c.sqft.toLocaleString()+' sf';
+    if(c.ppsf>0) line+=' | $'+c.ppsf+'/sf';
+    if(c.dom>0) line+=' | '+c.dom+' DOM';
+    lines.push(line);
+  });
+  lines.push('');
+  return lines.join('\n');
+}
+
+// ── ADDRESS SUBMIT ──
 function submitAddress(){
   const addr=document.getElementById('address-input').value.trim();
   if(!addr){document.getElementById('address-input').focus();toast('Please enter a property address');return;}
@@ -1056,7 +1216,7 @@ async function runBrief(address){
     const res=await fetch('/api/generate',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({address})
+      body:JSON.stringify({address, compBlock:buildCompBlock()})
     });
     const rawText=await res.text();
     if(!res.ok){
